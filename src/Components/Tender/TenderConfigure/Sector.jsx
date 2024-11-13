@@ -2,9 +2,6 @@
 import { useState } from 'react';
 import { EditOutlined, CloseOutlined, SendOutlined } from '@ant-design/icons';
 
-import ApiClient from '../../../Api/ApiClient';
-
-
 // Sample data for amenities
 const amenities = [
   { name: 'Stage', status: 'Available', action: 'Edit' },
@@ -83,7 +80,7 @@ function DesignationTypeModal({ isOpen, onClose, title, currentStatus, onStatusC
 }
 
 // Main Category component with full-screen, full-width layout
-function Category() {
+function Sector() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalTitle, setModalTitle] = useState("Add Designation Type");
   const [currentStatus, setCurrentStatus] = useState("Available");
@@ -103,7 +100,7 @@ function Category() {
 
   return (
     <div className="h-screen w-full flex flex-col p-4 bg-gray-100 gap-2">
-      <h2 className="text-2xl font-semibold mb-4 text-gray-800">Category</h2>
+      <h2 className="text-2xl font-semibold mb-4 text-gray-800">Sector</h2>
 
       <button
         onClick={() => openModal("Add Designation Type")}
@@ -161,4 +158,6 @@ function Category() {
   );
 }
 
-export default Category;
+export default Sector;
+
+

@@ -1,8 +1,9 @@
 
 import { useState } from 'react';
-import { AppstoreOutlined, MailOutlined, SettingOutlined } from '@ant-design/icons';
+import { AppstoreOutlined, MailOutlined, SettingOutlined, LogoutOutlined } from '@ant-design/icons';
 import { Menu } from 'antd';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 // Define menu items with unique keys and sub-menu structure
 const items = [
@@ -17,7 +18,7 @@ const items = [
     label: 'Users',
     children: [
       { key: '2-1', label: <Link to="/create-user">Create User</Link> },
-      { key: '2-3', label: <Link to="/user-list">User List</Link> },
+      { key: '2-2', label: <Link to="/user-list">User List</Link> },
     ],
   },
   {
@@ -42,21 +43,18 @@ const items = [
         children: [
           { key: '4-3', label: <Link to="/category">Category</Link> },
           { key: '4-4', label: <Link to="/sector">Sector</Link> },
-          { key: '4-4', label: <Link to="/Sub-Sector">Sub-Sector</Link> },
-          { key: '4-4', label: <Link to="/Department">Department</Link> },
-          { key: '4-4', label: <Link to="/Sub-Department">Sub-Department</Link> },
-          { key: '4-4', label: <Link to="/Division">Division</Link> },
-          { key: '4-4', label: <Link to="/sector">District</Link> },
-          { key: '4-4', label: <Link to="/sector">Source paper</Link> },
-        
-          // Other nested links for Tender Configure...
+          { key: '4-5', label: <Link to="/subSector">SubSector</Link> },
+          { key: '4-6', label: <Link to="/department">Department</Link> },
+          { key: '4-7', label: <Link to="/sub-department">Sub Department</Link> },
+          { key: '4-8', label: <Link to="/division">Division</Link> },
+          { key: '4-9', label: <Link to="/district">District</Link> },
+          { key: '4-10', label: <Link to="/source-paper">Source Paper</Link> },
         ],
       },
       { key: '4-11', label: <Link to="/published-tender">Published Tender</Link> },
       { key: '4-12', label: <Link to="/active-tender">Active Tender</Link> },
     ],
   },
-  // Other items continue here similarly...
   {
     key: '5',
     icon: <AppstoreOutlined />,
@@ -123,29 +121,43 @@ const getLevelKeys = (items) => {
 
 const levelKeys = getLevelKeys(items);
 
-const Navbar = () => {
-  const [stateOpenKeys, setStateOpenKeys] = useState(['2']);
-  
+const Navbar = ({ onLogout }) => {
+  const [stateOpenKeys, setStateOpenKeys] = useState([]);
+
   // Manage open keys to control submenu visibility
   const onOpenChange = (openKeys) => {
     const latestOpenKey = openKeys.find((key) => !stateOpenKeys.includes(key));
-    if (latestOpenKey) {
-      setStateOpenKeys(openKeys.filter((key) => levelKeys[key] <= levelKeys[latestOpenKey]));
+    
+    if (latestOpenKey && levelKeys[latestOpenKey] === 1) {
+      // If the clicked key is a top-level key, keep only that submenu open
+      setStateOpenKeys([latestOpenKey]);
     } else {
       setStateOpenKeys(openKeys);
     }
   };
 
   return (
-    <Menu
-      mode="inline"
-      defaultSelectedKeys={['1']}
-      openKeys={stateOpenKeys}
-      onOpenChange={onOpenChange}
-      style={{ width: 256 }}
-      items={items}
-    />
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
+      <Menu
+        mode="inline"
+        defaultSelectedKeys={['1']}
+        openKeys={stateOpenKeys}
+        onOpenChange={onOpenChange}
+        style={{ width: 256, flex: '1' }}
+        items={items}
+      />
+      <div style={{ padding: '10px', textAlign: 'center', borderTop: '1px solid #f0f0f0' }}>
+        <button onClick={onLogout} style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+          <LogoutOutlined /> Logout
+        </button>
+      </div>
+    </div>
   );
 };
 
+Navbar.propTypes = {
+  onLogout: PropTypes.func.isRequired,
+};
+
 export default Navbar;
+

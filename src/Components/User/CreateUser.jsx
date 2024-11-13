@@ -38,13 +38,13 @@ const CreateUsers = () => {
   };
 
   return (
-    <div className="block mx-auto p-8" style={{ maxWidth: '700px' }}>
-      <h2 className="text-2xl font-semibold text-center mb-6 text-gray-800">Create User</h2>
-      <div className="bg-white p-8 rounded-lg shadow-lg">
+    <div className="block mx-auto p-8 w-full max-w-4xl">
+      <h2 className="text-2xl font-semibold  mb-6 text-gray-800">Create User</h2>
+      <div className="bg-white p-8 rounded-lg shadow-lg w-full">
         <h3 className="text-xl font-semibold mb-6 text-center text-blue-600">User Information</h3>
         <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            {[
+            {[ 
               { label: 'User Name', id: 'usersName', type: 'text', value: usersName, setter: setUsersName },
               { label: 'User Phone', id: 'usersPhone', type: 'tel', value: usersPhone, setter: setUsersPhone },
               { label: 'User Email', id: 'usersEmail', type: 'email', value: usersEmail, setter: setUsersEmail },
@@ -52,7 +52,7 @@ const CreateUsers = () => {
               { label: 'Re-type Password', id: 'retypePassword', type: 'password', value: retypePassword, setter: setRetypePassword },
               { label: 'Admin Type', id: 'adminType', type: 'text', value: adminType, setter: setAdminType },
             ].map(({ label, id, type, value, setter }) => (
-              <div key={id}>
+              <div key={id} className="w-full">
                 <label className="block text-gray-700 font-medium mb-1" htmlFor={id}>
                   <AiFillStar className="inline text-red-500 mr-1" /> {label}
                 </label>
@@ -71,7 +71,7 @@ const CreateUsers = () => {
           <div className="mt-8 flex justify-center">
             <button
               type="submit"
-              className="w-[200px] px-5 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full sm:w-[200px] px-5 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               Submit
             </button>
@@ -83,5 +83,3 @@ const CreateUsers = () => {
 };
 
 export default CreateUsers;
-
-

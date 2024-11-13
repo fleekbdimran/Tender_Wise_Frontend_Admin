@@ -1,48 +1,4 @@
-
-// import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-// import './App.css';
-// import ActiveUser from './Components/Stack-Holder/ActiveUser';
-// import AllUsers from './Components/Stack-Holder/AllUsers';
-// import Category from './Components/Tender/TenderConfigure/Category';
-// import CreateUsers from './Components/User/CreateUser';
-// import UserList from './Components/User/UserList';
-// import Navbar from './Dashboard/Navbar';
-// import LoginPage from './Pages/LoginPage';
-
-// function App() {
-//   return (
-//     <Router>
-        
-//       <div className="app-container flex">
-      
-      
-//         {/* Navbar is displayed consistently across all routes */}
-//         <Navbar />
-
-//         {/* Main content area to display routed components */}
-//         <div className="content-container flex justify-center items-center mx-auto">
-//           <Routes>
-//             {/* Define routes for each component */}
-//             <Route path="/" element={<LoginPage />} />
-//             <Route path="/category" element={<Category />} />
-//             <Route path="/create-user" element={<CreateUsers />} />
-//             <Route path="/user-list" element={<UserList />} />
-//             <Route path="/all-users" element={<AllUsers />} />
-//             <Route path="/active-user" element={<ActiveUser />} />
-//           </Routes>
-//         </div>
-//       </div>
-//     </Router>
-//   );
-// }
-
-// export default App;
-
-
-
-
-
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import './App.css';
 import ActiveUser from './Components/Stack-Holder/ActiveUser';
@@ -52,17 +8,33 @@ import CreateUsers from './Components/User/CreateUser';
 import UserList from './Components/User/UserList';
 import Navbar from './Dashboard/Navbar';
 import LoginPage from './Pages/LoginPage';
+import Sector from './Components/Tender/TenderConfigure/Sector';
+import SubSector from './Components/Tender/TenderConfigure/SubSector';
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(() => {
+    return localStorage.getItem('isLoggedIn') === 'true';
+  });
+
+  useEffect(() => {
+    localStorage.setItem('isLoggedIn', isLoggedIn);
+  }, [isLoggedIn]);
 
   const handleLogin = () => {
     setIsLoggedIn(true);
   };
 
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    localStorage.removeItem('isLoggedIn');
+  };
+
+  const ProtectedRoute = ({ children }) => {
+    return isLoggedIn ? children : <Navigate to="/" replace />;
+  };
+
   return (
     <Router>
-      {/* Check login status to conditionally render login or main dashboard content */}
       {!isLoggedIn ? (
         <div className="flex min-h-screen items-center justify-center bg-gray-100">
           <Routes>
@@ -71,17 +43,29 @@ function App() {
           </Routes>
         </div>
       ) : (
-        <div className="app-container flex">
-          {/* Navbar and main routes after successful login */}
-          <Navbar />
-          <div className="content-container flex justify-center items-center mx-auto">
+        <div className="app-container flex min-h-screen">
+          <Navbar onLogout={handleLogout} />
+          <div className="content-container flex-grow p-4 overflow-hidden">
             <Routes>
-              <Route path="/dashboard" element={<h1>Welcome to the Dashboard</h1>} />
-              <Route path="/category" element={<Category />} />
-              <Route path="/create-user" element={<CreateUsers />} />
-              <Route path="/user-list" element={<UserList />} />
-              <Route path="/all-users" element={<AllUsers />} />
-              <Route path="/active-user" element={<ActiveUser />} />
+              <Route
+                path="/dashboard"
+                element={
+                  <ProtectedRoute>
+                    <div className="flex justify-center items-center h-full">
+                      <h1 className="text-4xl font-bold text-center text-gray-800">
+                        Welcome to the Dashboard
+                      </h1>
+                    </div>
+                  </ProtectedRoute>
+                }
+              />
+              <Route path="/category" element={<ProtectedRoute><Category /></ProtectedRoute>} />
+              <Route path="/sector" element={<ProtectedRoute><Sector /></ProtectedRoute>} />
+              <Route path="/subSector" element={<ProtectedRoute><SubSector /></ProtectedRoute>} />
+              <Route path="/create-user" element={<ProtectedRoute><CreateUsers /></ProtectedRoute>} />
+              <Route path="/user-list" element={<ProtectedRoute><UserList /></ProtectedRoute>} />
+              <Route path="/all-users" element={<ProtectedRoute><AllUsers /></ProtectedRoute>} />
+              <Route path="/active-user" element={<ProtectedRoute><ActiveUser /></ProtectedRoute>} />
               <Route path="*" element={<Navigate to="/dashboard" replace />} />
             </Routes>
           </div>
