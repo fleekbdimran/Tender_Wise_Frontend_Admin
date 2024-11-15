@@ -45,7 +45,7 @@ const items = [
           { key: '4-4', label: <Link to="/sector">Sector</Link> },
           { key: '4-5', label: <Link to="/subSector">SubSector</Link> },
           { key: '4-6', label: <Link to="/department">Department</Link> },
-          { key: '4-7', label: <Link to="/sub-department">Sub Department</Link> },
+          { key: '4-7', label: <Link to="/subdepartment">SubDepartment</Link> },
           { key: '4-8', label: <Link to="/division">Division</Link> },
           { key: '4-9', label: <Link to="/district">District</Link> },
           { key: '4-10', label: <Link to="/source-paper">Source Paper</Link> },
@@ -136,6 +136,11 @@ const Navbar = ({ onLogout }) => {
     }
   };
 
+  const handleLogout = ()=>{
+    onLogout();
+    localStorage.removeItem('token'); // Clear the token
+  }
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
       <Menu
@@ -147,7 +152,7 @@ const Navbar = ({ onLogout }) => {
         items={items}
       />
       <div style={{ padding: '10px', textAlign: 'center', borderTop: '1px solid #f0f0f0' }}>
-        <button onClick={onLogout} style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+        <button onClick={handleLogout} style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
           <LogoutOutlined /> Logout
         </button>
       </div>

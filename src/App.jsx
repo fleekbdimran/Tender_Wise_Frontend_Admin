@@ -10,6 +10,9 @@ import Navbar from './Dashboard/Navbar';
 import LoginPage from './Pages/LoginPage';
 import Sector from './Components/Tender/TenderConfigure/Sector';
 import SubSector from './Components/Tender/TenderConfigure/SubSector';
+import Department from './Components/Tender/TenderConfigure/Department';
+import SubDepartment from './Components/Tender/TenderConfigure/SubDepartment';
+import Division from './Components/Tender/TenderConfigure/Division';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
@@ -59,6 +62,9 @@ function App() {
                   </ProtectedRoute>
                 }
               />
+              <Route path="/division" element={<ProtectedRoute><Division></Division></ProtectedRoute>} />
+              <Route path="/subdepartment" element={<ProtectedRoute><SubDepartment></SubDepartment></ProtectedRoute>} />
+              <Route path="/department" element={<ProtectedRoute><Department></Department></ProtectedRoute>} />
               <Route path="/category" element={<ProtectedRoute><Category /></ProtectedRoute>} />
               <Route path="/sector" element={<ProtectedRoute><Sector /></ProtectedRoute>} />
               <Route path="/subSector" element={<ProtectedRoute><SubSector /></ProtectedRoute>} />

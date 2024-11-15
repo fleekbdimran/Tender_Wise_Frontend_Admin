@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { EditOutlined, CloseOutlined, SendOutlined } from '@ant-design/icons';
 import ApiClient from './../../../Api/ApiClient';
@@ -24,7 +23,7 @@ function DesignationTypeModal({ isOpen, onClose, title, currentStatus, onStatusC
             </label>
             <input
               type="text"
-              placeholder="Enter Your Name"
+              placeholder="Enter Category Name"
               className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md text-sm shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
             />
           </div>
@@ -66,19 +65,20 @@ function DesignationTypeModal({ isOpen, onClose, title, currentStatus, onStatusC
   );
 }
 
-function Category() {
+function Division() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalTitle, setModalTitle] = useState('Add Designation Type');
+  const [modalTitle, setModalTitle] = useState('Add Category');
   const [currentStatus, setCurrentStatus] = useState('Available');
-  const [editingAmenity, setEditingAmenity] = useState(null);
+  const [editingCategory, setEditingCategory] = useState(null);
   const [tenderCategories, setTenderCategories] = useState([]);
 
+  // Fetch category data from the API
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await ApiClient.get('/admin/tender-config/category');
-        setTenderCategories(response.data.data);
-        console.log(response.data)
+        const response = await ApiClient.get('/admin/tender-config/division');
+        setTenderCategories(response.data.data); // Set categories in state
+        console.log(response.data); // Log response for debugging
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -87,13 +87,15 @@ function Category() {
     fetchCategories();
   }, []);
 
-  const openModal = (title, amenity) => {
+  // Open the modal with a title and optional category data for editing
+  const openModal = (title, category) => {
     setModalTitle(title);
-    setEditingAmenity(amenity);
-    setCurrentStatus(amenity ? amenity.status : 'Available');
+    setEditingCategory(category);
+    setCurrentStatus(category ? category.status : 'Available');
     setIsModalOpen(true);
   };
 
+  // Handle status change in the modal
   const handleStatusChange = (newStatus) => {
     setCurrentStatus(newStatus);
   };
@@ -102,10 +104,12 @@ function Category() {
     <div className="h-screen w-full flex flex-col p-4 bg-gray-100 gap-2">
       <h2 className="text-2xl font-semibold mb-4 text-gray-800">Category</h2>
 
-      <button onClick={() => openModal('Add Designation Type')} className="bg-teal-500 text-white px-7 py-3 rounded-lg self-start">
+      {/* Button to create a new category */}
+      <button onClick={() => openModal('Add Category')} className="bg-teal-500 text-white px-7 py-3 rounded-lg self-start">
         Create
       </button>
 
+      {/* Modal for adding or editing category status */}
       <DesignationTypeModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
@@ -114,6 +118,7 @@ function Category() {
         onStatusChange={handleStatusChange}
       />
 
+      {/* Table displaying categories */}
       <div className="flex-grow overflow-auto">
         <table className="w-full border-collapse border border-gray-200">
           <thead>
@@ -148,7 +153,4 @@ function Category() {
   );
 }
 
-export default Category;
-
-
-
+export default Division;

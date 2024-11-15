@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Lottie from 'lottie-react';
@@ -12,80 +11,55 @@ import ApiClient from "../Api/ApiClient";  // Import the ApiClient
 function LoginPage({ onLogin }) {
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
-  const [phoneError, setPhoneError] = useState('');
-  const [passwordError, setPasswordError] = useState('');
   const [loginError, setLoginError] = useState('');
   const navigate = useNavigate();
 
-  // Form submission handler
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
-    // Clear previous errors
-    setPhoneError('');
-    setPasswordError('');
-    setLoginError('');
-
-    let isValid = true;
-
-    // Validate phone number
+  // Phone and Password validation
+  const validateForm = () => {
     if (!phone) {
       toast.error('Please enter your phone number.');
-      isValid = false;
-    } else if (!/^\d{11}$/.test(phone)) {
-      toast.error('Please enter a valid 11-digit phone number.');
-      isValid = false;
+      return false;
     }
-
-    // Validate password
+    if (!/^\d{11}$/.test(phone)) {
+      toast.error('Please enter a valid 11-digit phone number.');
+      return false;
+    }
     if (!password) {
       toast.error('Please enter your password.');
-      isValid = false;
-    } else if (password.length < 8) {
-      toast.error('Password must be at least 8 characters long.');
-      isValid = false;
+      return false;
     }
+    // if (password.length < 8) {
+    //   toast.error('Password must be at least 8 characters long.');
+    //   return false;
+    // }
+    return true;
+  };
 
-    // If validation is successful, make the API call to login
-  //   if (isValid) {
-  //     try {
-  //       const response = await ApiClient.post('/v1/user/auth/login', { phone, password });
-  //       console.log( response.data);
+  // Handle Login
+  const handleLogin = async (e) => {
+    e.preventDefault(); // Prevent form submission
 
-  //       if (response && response.token) {
-  //         localStorage.setItem('Bearer', response.data.token);  // Save the token in localStorage
-  //         onLogin();
-  //         toast.success('Login successful!');
-  //         navigate('/dashboard'); // Redirect to the dashboard
-  //       } else {
-  //         setLoginError('Invalid response data from the server.');
-  //         toast.error('Unexpected response, please try again.');
-  //       }
-  //     } catch (error) {
-     
-  //       toast.error(error.message || 'Invalid credentials, please try again.');
-  //     }
-  //   }
-  // };
+    // Validate form before making the API call
+    if (!validateForm()) return;
 
-  if (isValid) {
     try {
-      const response = await ApiClient.post('/v1/user/auth/login', { phone, password });
-      console.log(response.data);
+      const response = await ApiClient.post('/admin/auth/login/', { phone, password });
+      const token = response.data.token;
+      const userRole = response.data.user_type;
 
-      if (response && response.data.token) {
-        localStorage.setItem('Bearer', response.data.token);
-        onLogin();
-        toast.success('Login successful!');
-        navigate('/dashboard');
-      } else {
-        toast.error('Unexpected response, please try again.');
-      }
+      // Store token and user role in localStorage
+      localStorage.setItem('token', token);
+      localStorage.setItem('userRole', userRole);
+      
+      // Trigger onLogin function and navigate to dashboard
+      onLogin();
+      navigate('/dashboard');
+      toast.success('Login successful!');
     } catch (error) {
-      toast.error(error.message || 'Invalid credentials, please try again.');
+      console.error('Login failed:', error);
+      toast.error(error.response?.data?.message || 'Invalid credentials, please try again.');
     }
-  }
-};
+  };
 
   // Handle Forgot Password
   const handleForgotPassword = () => {
@@ -103,7 +77,7 @@ function LoginPage({ onLogin }) {
         
         <h2 className="text-2xl font-bold text-center text-gray-800">Admin Login</h2>
 
-        <form className="space-y-4" onSubmit={handleSubmit}>
+        <form className="space-y-4" onSubmit={handleLogin}>
           <div>
             <label htmlFor="phone" className="block text-sm font-medium text-gray-700">Phone Number</label>
             <input
@@ -114,7 +88,6 @@ function LoginPage({ onLogin }) {
               onChange={(e) => setPhone(e.target.value)}
               className="block w-full px-3 py-2 mt-1 text-gray-900 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
             />
-            {phoneError && <p className="text-sm text-red-500">{phoneError}</p>}
           </div>
 
           <div>
@@ -127,7 +100,6 @@ function LoginPage({ onLogin }) {
               onChange={(e) => setPassword(e.target.value)}
               className="block w-full px-3 py-2 mt-1 text-gray-900 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
             />
-            {passwordError && <p className="text-sm text-red-500">{passwordError}</p>}
           </div>
 
           <div className="flex items-center justify-between">
@@ -169,7 +141,6 @@ LoginPage.propTypes = {
 };
 
 export default LoginPage;
-
 
 
 

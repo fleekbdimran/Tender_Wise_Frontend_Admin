@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { EditOutlined, CloseOutlined, SendOutlined } from '@ant-design/icons';
 import ApiClient from './../../../Api/ApiClient';
@@ -24,7 +23,7 @@ function DesignationTypeModal({ isOpen, onClose, title, currentStatus, onStatusC
             </label>
             <input
               type="text"
-              placeholder="Enter Your Name"
+              placeholder="Enter SubDepartment Name"
               className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md text-sm shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
             />
           </div>
@@ -66,46 +65,51 @@ function DesignationTypeModal({ isOpen, onClose, title, currentStatus, onStatusC
   );
 }
 
-function Category() {
+function SubDepartment() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalTitle, setModalTitle] = useState('Add Designation Type');
+  const [modalTitle, setModalTitle] = useState('Add SubDepartment');
   const [currentStatus, setCurrentStatus] = useState('Available');
   const [editingAmenity, setEditingAmenity] = useState(null);
-  const [tenderCategories, setTenderCategories] = useState([]);
+  const [subDepartments, setSubDepartments] = useState([]);
 
+  // Fetch SubDepartment data from the API
   useEffect(() => {
-    const fetchCategories = async () => {
+    const fetchSubDepartments = async () => {
       try {
-        const response = await ApiClient.get('/admin/tender-config/category');
-        setTenderCategories(response.data.data);
-        console.log(response.data)
+        const response = await ApiClient.get('/admin/tender-config/sub-department');
+        setSubDepartments(response.data.data); // Update the state with fetched subdepartment data
+        console.log(response.data); // Log the response to debug
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error('Error fetching SubDepartments:', error);
       }
     };
 
-    fetchCategories();
+    fetchSubDepartments();
   }, []);
 
-  const openModal = (title, amenity) => {
+  // Open the modal for adding or editing a SubDepartment
+  const openModal = (title, subDepartment) => {
     setModalTitle(title);
-    setEditingAmenity(amenity);
-    setCurrentStatus(amenity ? amenity.status : 'Available');
+    setEditingAmenity(subDepartment);
+    setCurrentStatus(subDepartment ? subDepartment.status : 'Available'); // Set current status based on subDepartment
     setIsModalOpen(true);
   };
 
+  // Handle the status change from modal
   const handleStatusChange = (newStatus) => {
     setCurrentStatus(newStatus);
   };
 
   return (
     <div className="h-screen w-full flex flex-col p-4 bg-gray-100 gap-2">
-      <h2 className="text-2xl font-semibold mb-4 text-gray-800">Category</h2>
+      <h2 className="text-2xl font-semibold mb-4 text-gray-800">SubDepartment</h2>
 
-      <button onClick={() => openModal('Add Designation Type')} className="bg-teal-500 text-white px-7 py-3 rounded-lg self-start">
+      {/* Button to create new SubDepartment */}
+      <button onClick={() => openModal('Add SubDepartment')} className="bg-teal-500 text-white px-7 py-3 rounded-lg self-start">
         Create
       </button>
 
+      {/* Modal for adding or editing SubDepartment */}
       <DesignationTypeModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
@@ -114,6 +118,7 @@ function Category() {
         onStatusChange={handleStatusChange}
       />
 
+      {/* Table displaying list of SubDepartments */}
       <div className="flex-grow overflow-auto">
         <table className="w-full border-collapse border border-gray-200">
           <thead>
@@ -124,18 +129,18 @@ function Category() {
             </tr>
           </thead>
           <tbody>
-            {tenderCategories.map((category, index) => (
+            {subDepartments.map((subDepartment, index) => (
               <tr key={index} className="hover:bg-gray-50">
-                <td className="px-4 py-2 border-b">{category.name}</td>
+                <td className="px-4 py-2 border-b">{subDepartment.name}</td>
                 <td className="px-4 py-2 border-b">
                   <span
-                    className={`px-2 py-1 rounded-full text-xs ${category.status === 'Available' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}
+                    className={`px-2 py-1 rounded-full text-xs ${subDepartment.status === 'Available' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}
                   >
-                    {category.status}
+                    {subDepartment.status}
                   </span>
                 </td>
                 <td className="px-4 py-2 border-b">
-                  <button onClick={() => openModal(`Edit ${category.name}`, category)} className="text-blue-500 hover:underline flex items-center">
+                  <button onClick={() => openModal(`Edit ${subDepartment.name}`, subDepartment)} className="text-blue-500 hover:underline flex items-center">
                     <EditOutlined className="mr-1" /> Edit
                   </button>
                 </td>
@@ -148,7 +153,6 @@ function Category() {
   );
 }
 
-export default Category;
-
+export default SubDepartment;
 
 
