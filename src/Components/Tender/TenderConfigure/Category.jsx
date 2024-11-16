@@ -16,8 +16,6 @@ function DesignationTypeModal({
     onStatusChange(e.target.value);
   };
 
-  c;
-
   // Handle form submission
   const handleCategoryChange = async e => {
     e.preventDefault(); // Prevent default form submission behavior
