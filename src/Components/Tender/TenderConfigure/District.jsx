@@ -1,34 +1,16 @@
-
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { EditOutlined, CloseOutlined, SendOutlined } from '@ant-design/icons';
+
 import ApiClient from './../../../Api/ApiClient';
-import axios from 'axios';
 
-
+// Modal component for adding/editing designation types with larger size
 function DesignationTypeModal({ isOpen, onClose, title, currentStatus, onStatusChange }) {
   if (!isOpen) return null;
 
+  // Handle radio button change
   const handleRadioChange = (e) => {
     onStatusChange(e.target.value);
   };
-
-   
-   
-    // Handle form submission
-    const handleCategoryChange = async (e) => {
-      e.preventDefault(); // Prevent default form submission behavior
-      console.log("Submitting data:", "jjjj");
-  
-      try {
-        // Sending POST request to the server
-        const response = await axios.post("/admin/tender-config/category", ); // Replace with your API endpoint
-        console.log("Category submitted successfully:", response.data);
-        // Handle success (e.g., clear form, show success message)
-        // setFormData({ name: "" });
-      } catch (error) {
-        console.error("Error submitting category:", error.response || error.message);
-      }
-    };
 
   return (
     <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50 w-full h-full">
@@ -49,7 +31,8 @@ function DesignationTypeModal({ isOpen, onClose, title, currentStatus, onStatusC
             />
           </div>
 
-          {/* <div className="flex justify-center mt-4">
+          {/* Center the radio buttons */}
+          <div className="flex justify-center mt-4">
             <label className="flex items-center mx-4">
               <input
                 type="radio"
@@ -72,47 +55,32 @@ function DesignationTypeModal({ isOpen, onClose, title, currentStatus, onStatusC
               />
               Unavailable
             </label>
-          </div> */}
+          </div>
 
           <button
-            type="submit" 
+            type="submit"
             className="bg-teal-500 text-white px-6 py-3 rounded-lg flex items-center justify-center w-full"
           >
-            <SendOutlined onSubmit={handleCategoryChange} className="mr-2" /> Submit
+            <SendOutlined className="mr-2" /> Submit
           </button>
-
-
         </form>
       </div>
     </div>
   );
 }
 
-function Category() {
+// Main Sector component
+function District() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalTitle, setModalTitle] = useState('Add Designation Type');
-  const [currentStatus, setCurrentStatus] = useState('Available');
+  const [modalTitle, setModalTitle] = useState("Add Designation Type");
+  const [currentStatus, setCurrentStatus] = useState("Available");
   const [editingAmenity, setEditingAmenity] = useState(null);
-  const [tenderCategories, setTenderCategories] = useState([]);
-
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const response = await ApiClient.get('/admin/tender-config/category');
-        setTenderCategories(response.data.data);
-        console.log(response.data)
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-
-    fetchCategories();
-  }, []);
+  const [sector, setSector] = useState([]); // Store fetched sector data
 
   const openModal = (title, amenity) => {
     setModalTitle(title);
     setEditingAmenity(amenity);
-    setCurrentStatus(amenity ? amenity.status : 'Available');
+    setCurrentStatus(amenity ? amenity.status : "Available");
     setIsModalOpen(true);
   };
 
@@ -120,11 +88,29 @@ function Category() {
     setCurrentStatus(newStatus);
   };
 
+  // Fetch data from API
+  useEffect(() => {
+    const fetchSectorData = async () => {
+      try {
+        const response = await ApiClient.get('/admin/tender-config/district?limit&skip');
+        setSector(response.data.data); // Update state with fetched data
+        console.log(response.data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchSectorData();
+  }, []);
+
   return (
     <div className="h-screen w-full flex flex-col p-4 bg-gray-100 gap-2">
-      <h2 className="text-2xl font-semibold mb-4 text-gray-800">Category</h2>
+      <h2 className="text-2xl font-semibold mb-4 text-gray-800">Sector</h2>
 
-      <button onClick={() => openModal('Add Designation Type')} className="bg-teal-500 text-white px-7 py-3 rounded-lg self-start">
+      <button
+        onClick={() => openModal("Add Designation Type")}
+        className="bg-teal-500 text-white px-7 py-3 rounded-lg self-start"
+      >
         Create
       </button>
 
@@ -146,18 +132,25 @@ function Category() {
             </tr>
           </thead>
           <tbody>
-            {tenderCategories.map((category, index) => (
+            {sector.map((amenity, index) => (
               <tr key={index} className="hover:bg-gray-50">
-                <td className="px-4 py-2 border-b">{category.name}</td>
+                <td className="px-4 py-2 border-b">{amenity.name}</td>
                 <td className="px-4 py-2 border-b">
                   <span
-                    className={`px-2 py-1 rounded-full text-xs ${category.status === 'Available' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}
+                    className={`px-2 py-1 rounded-full text-xs ${
+                      amenity.sector_status === 'Available'
+                        ? 'bg-green-100 text-green-700'
+                        : 'bg-red-100 text-red-700'
+                    }`}
                   >
-                    {category.status}
+                    {amenity.status}
                   </span>
                 </td>
                 <td className="px-4 py-2 border-b">
-                  <button onClick={() => openModal(`Edit ${category.name}`, category)} className="text-blue-500 hover:underline flex items-center">
+                  <button
+                    onClick={() => openModal(`Edit ${amenity.name}`, amenity)}
+                    className="text-blue-500 hover:underline flex items-center"
+                  >
                     <EditOutlined className="mr-1" /> Edit
                   </button>
                 </td>
@@ -170,7 +163,4 @@ function Category() {
   );
 }
 
-export default Category;
-
-
-
+export default District;

@@ -13,6 +13,9 @@ import SubSector from './Components/Tender/TenderConfigure/SubSector';
 import Department from './Components/Tender/TenderConfigure/Department';
 import SubDepartment from './Components/Tender/TenderConfigure/SubDepartment';
 import Division from './Components/Tender/TenderConfigure/Division';
+import Upazila from './Components/Tender/TenderConfigure/Upazila';
+import District from './Components/Tender/TenderConfigure/District';
+import Source from './Components/Tender/TenderConfigure/Source';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
@@ -62,6 +65,9 @@ function App() {
                   </ProtectedRoute>
                 }
               />
+              <Route path="/source" element={<ProtectedRoute><Source></Source></ProtectedRoute>} />
+              <Route path="/district" element={<ProtectedRoute><District></District></ProtectedRoute>} />
+              <Route path="/upazila" element={<ProtectedRoute><Upazila></Upazila></ProtectedRoute>} />
               <Route path="/division" element={<ProtectedRoute><Division></Division></ProtectedRoute>} />
               <Route path="/subdepartment" element={<ProtectedRoute><SubDepartment></SubDepartment></ProtectedRoute>} />
               <Route path="/department" element={<ProtectedRoute><Department></Department></ProtectedRoute>} />
