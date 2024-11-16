@@ -141,7 +141,3 @@ LoginPage.propTypes = {
 };
 
 export default LoginPage;
-
-
-
-
