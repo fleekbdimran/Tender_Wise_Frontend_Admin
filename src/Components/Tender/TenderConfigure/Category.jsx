@@ -381,9 +381,15 @@ function Category() {
         <table className="w-full border-collapse border border-gray-200">
           <thead>
             <tr>
-              <th className="px-4 py-2 bg-teal-100 text-left font-semibold border-b">Name</th>
-              <th className="px-4 py-2 bg-teal-100 text-left font-semibold border-b">Status</th>
-              <th className="px-4 py-2 bg-teal-100 text-left font-semibold border-b">Action</th>
+              <th className="px-4 py-2 bg-teal-100 text-left font-semibold border-b">
+                Name
+              </th>
+              <th className="px-4 py-2 bg-teal-100 text-left font-semibold border-b">
+                Status
+              </th>
+              <th className="px-4 py-2 bg-teal-100 text-left font-semibold border-b">
+                Action
+              </th>
             </tr>
           </thead>
           <tbody>
