@@ -1,10 +1,7 @@
 
 // import React, { useState, useEffect } from "react";
-// import { EditOutlined, CloseOutlined, SendOutlined } from "@ant-design/icons";
-
-
+// import { EditOutlined, CloseOutlined, SendOutlined, SearchOutlined } from "@ant-design/icons";
 // import ApiClient from "../../../Api/ApiClient";
-
 
 // function DesignationTypeModal({ isOpen, onClose, title, onSubmit, category }) {
 //   const [categoryName, setCategoryName] = useState(category ? category.name : "");
@@ -19,7 +16,7 @@
 
 //   const handleFormSubmit = (e) => {
 //     e.preventDefault();
-//     onSubmit(categoryName, category?.id); // Pass the input and category ID (if editing)
+//     onSubmit(categoryName, category?.id); // Pass name and ID for edit
 //     setCategoryName(""); // Reset input
 //   };
 
@@ -61,83 +58,80 @@
 
 // function Category() {
 //   const [categories, setCategories] = useState([]);
+//   const [filteredCategories, setFilteredCategories] = useState([]);
+//   const [searchTerm, setSearchTerm] = useState(""); // State for the search term
 //   const [isModalOpen, setIsModalOpen] = useState(false);
 //   const [modalTitle, setModalTitle] = useState("Add Designation Type");
 //   const [editingCategory, setEditingCategory] = useState(null);
 
-
-
-  
-
-//   // Fetch categories from the server
 //   const fetchCategories = async () => {
 //     try {
-//       const response = await ApiClient.get(
-//         "/admin/tender-config/category",
-//         {
-//           headers: {
-//             "Content-Type": "application/json",
-//             Authorization:
-//               "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiSXFiYWwiLCJlbWFpbCI6ImlxYmFsLmZsZWVrYmQ4NUBnbWFpbC5jb20iLCJwaG9uZSI6IjAxOTk2MTA1MDIwIiwic3RhdHVzIjoxLCJ1cGRhdGVkX2J5Ijo2LCJpZCI6NiwidHlwZSI6InN1cGVyLWFkbWluIiwiaWF0IjoxNzMxNzMwNjc2LCJleHAiOjE3MzE4MTcwNzZ9.sL6qlBA1ofXoFTFQMRraeHXJFh4zEQOSNDICIkQpvgc",
-//           },
-//         }
-//       );
+//       const response = await ApiClient.get("/admin/tender-config/category", {
+//         headers: {
+//           "Content-Type": "application/json",
+//           Authorization: `Bearer YOUR_TOKEN_HERE`,
+//         },
+//       });
 //       setCategories(response.data.data);
+//       setFilteredCategories(response.data.data); // Initially show all categories
 //     } catch (error) {
 //       console.error("Error fetching categories:", error);
 //     }
 //   };
 
-//   // Add a new category
 //   const handleAddCategory = async (name) => {
 //     try {
-//       const response = await ApiClient.post(
+//       await ApiClient.post(
 //         "/admin/tender-config/category",
 //         { name },
 //         {
 //           headers: {
 //             "Content-Type": "application/json",
-//             Authorization:
-//               "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiSXFiYWwiLCJlbWFpbCI6ImlxYmFsLmZsZWVrYmQ4NUBnbWFpbC5jb20iLCJwaG9uZSI6IjAxOTk2MTA1MDIwIiwic3RhdHVzIjoxLCJ1cGRhdGVkX2J5Ijo2LCJpZCI6NiwidHlwZSI6InN1cGVyLWFkbWluIiwiaWF0IjoxNzMxNzMwNjc2LCJleHAiOjE3MzE4MTcwNzZ9.sL6qlBA1ofXoFTFQMRraeHXJFh4zEQOSNDICIkQpvgc",
+//             Authorization: `Bearer YOUR_TOKEN_HERE`,
 //           },
 //         }
 //       );
-//       console.log("Category added successfully:", response.data);
 //       setIsModalOpen(false);
-//       fetchCategories(); // Refresh the list
-//     } catch (error)      {
+//       fetchCategories();
+//     } catch (error) {
 //       console.error("Error adding category:", error);
 //     }
 //   };
 
-//   // Edit an existing category
 //   const handleEditCategory = async (name, id) => {
 //     try {
-//       const response = await ApiClient.put(
+//       await ApiClient.patch(
 //         `/admin/tender-config/category/${id}`,
 //         { name },
 //         {
 //           headers: {
 //             "Content-Type": "application/json",
-//             Authorization:
-//               "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiSXFiYWwiLCJlbWFpbCI6ImlxYmFsLmZsZWVrYmQ4NUBnbWFpbC5jb20iLCJwaG9uZSI6IjAxOTk2MTA1MDIwIiwic3RhdHVzIjoxLCJ1cGRhdGVkX2J5Ijo2LCJpZCI6NiwidHlwZSI6InN1cGVyLWFkbWluIiwiaWF0IjoxNzMxNzMwNjc2LCJleHAiOjE3MzE4MTcwNzZ9.sL6qlBA1ofXoFTFQMRraeHXJFh4zEQOSNDICIkQpvgc",
+//             Authorization: `Bearer YOUR_TOKEN_HERE`,
 //           },
 //         }
 //       );
-//       console.log("Category updated successfully:", response.data);
 //       setIsModalOpen(false);
-//       fetchCategories(); // Refresh the list
+//       fetchCategories();
 //     } catch (error) {
-//       console.error("Error updating category:", error);
+//       console.error("Error editing category:", error);
 //     }
 //   };
 
-  
-//   // Toggle category name edit
 //   const handleCategoryNameEdit = (category) => {
 //     setModalTitle("Edit Designation Type");
 //     setEditingCategory(category);
 //     setIsModalOpen(true);
+//   };
+
+//   const handleSearchChange = (e) => {
+//     const value = e.target.value;
+//     setSearchTerm(value);
+
+//     // Filter categories based on the search term
+//     const filtered = categories.filter((category) =>
+//       category.name.toLowerCase().includes(value.toLowerCase())
+//     );
+//     setFilteredCategories(filtered);
 //   };
 
 //   useEffect(() => {
@@ -148,16 +142,37 @@
 //     <div className="h-screen w-full flex flex-col p-4 bg-gray-100 gap-2">
 //       <h2 className="text-2xl font-semibold mb-4 text-gray-800">Categories</h2>
 
-//       <button
-//         onClick={() => {
-//           setModalTitle("Add Designation Type");
-//           setEditingCategory(null);
-//           setIsModalOpen(true);
-//         }}
-//         className="bg-teal-500 text-white px-7 py-3 rounded-lg self-start"
-//       >
-//         Create
-//       </button>
+//       <div className="flex items-center justify-between mb-4">
+ 
+
+
+//   {/* Create Button */}
+//   <button
+//     onClick={() => {
+//       setModalTitle("Add Designation Type");
+//       setEditingCategory(null);
+//       setIsModalOpen(true);
+//     }}
+//     className="bg-teal-500 text-white px-7 py-3 rounded-lg ml-4"
+//   >
+//     Create
+//   </button>
+//  {/* Search Bar */}
+//  <div className="flex items-center mb-4  justify-end">
+//     <input
+//       type="text"
+//       value={searchTerm}
+//       onChange={handleSearchChange}
+//       placeholder="Search categories"
+//       className="px-4 py-2 border border-gray-300 rounded-l-md w-[400px]"
+//     />
+//     <button className="bg-teal-500 text-white px-4 py-2 rounded-r-md flex items-center">
+//       <SearchOutlined />
+//     </button>
+//   </div>
+
+// </div>
+
 
 //       <DesignationTypeModal
 //         isOpen={isModalOpen}
@@ -165,27 +180,27 @@
 //         title={modalTitle}
 //         category={editingCategory}
 //         onSubmit={editingCategory ? handleEditCategory : handleAddCategory}
-        
 //       />
 
-    
-
-//       {/* Category List */}
 //       <div className="flex-grow overflow-auto">
-//         {/* Tender Categories Table */}
 //         <table className="w-full border-collapse border border-gray-200">
 //           <thead>
 //             <tr>
-//               <th className="px-4 py-2 bg-teal-100 text-left font-semibold border-b">Name</th>
-//               <th className="px-4 py-2 bg-teal-100 text-left font-semibold border-b">Status</th>
-//               <th className="px-4 py-2 bg-teal-100 text-left font-semibold border-b">Action</th>
+//               <th className="px-4 py-2 bg-teal-100 text-left font-semibold border-b">
+//                 Name
+//               </th>
+//               <th className="px-4 py-2 bg-teal-100 text-left font-semibold border-b">
+//                 Status
+//               </th>
+//               <th className="px-4 py-2 bg-teal-100 text-left font-semibold border-b">
+//                 Action
+//               </th>
 //             </tr>
 //           </thead>
 //           <tbody>
-//             {categories.map((category, index) => (
+//             {filteredCategories.map((category, index) => (
 //               <tr key={index} className="hover:bg-gray-50">
 //                 <td className="px-4 py-2 border-b">
-//                   {/* Editable Category Name */}
 //                   <span
 //                     onClick={() => handleCategoryNameEdit(category)}
 //                     className="text-blue-500 hover:underline cursor-pointer"
@@ -211,7 +226,6 @@
 //                   >
 //                     <EditOutlined className="mr-1" /> Edit
 //                   </button>
-        
 //                 </td>
 //               </tr>
 //             ))}
@@ -222,15 +236,11 @@
 //   );
 // }
 
-
 // export default Category;
 
 
-
-
-
 import React, { useState, useEffect } from "react";
-import { EditOutlined, CloseOutlined, SendOutlined } from "@ant-design/icons";
+import { EditOutlined, CloseOutlined, SendOutlined, SearchOutlined } from "@ant-design/icons";
 import ApiClient from "../../../Api/ApiClient";
 
 function DesignationTypeModal({ isOpen, onClose, title, onSubmit, category }) {
@@ -288,6 +298,8 @@ function DesignationTypeModal({ isOpen, onClose, title, onSubmit, category }) {
 
 function Category() {
   const [categories, setCategories] = useState([]);
+  const [filteredCategories, setFilteredCategories] = useState([]);
+  const [searchTerm, setSearchTerm] = useState(""); // State for the search term
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalTitle, setModalTitle] = useState("Add Designation Type");
   const [editingCategory, setEditingCategory] = useState(null);
@@ -301,6 +313,7 @@ function Category() {
         },
       });
       setCategories(response.data.data);
+      setFilteredCategories(response.data.data); // Initially show all categories
     } catch (error) {
       console.error("Error fetching categories:", error);
     }
@@ -350,6 +363,17 @@ function Category() {
     setIsModalOpen(true);
   };
 
+  const handleSearchChange = (e) => {
+    const value = e.target.value;
+    setSearchTerm(value);
+
+    // Filter categories based on the search term
+    const filtered = categories.filter((category) =>
+      category.name.toLowerCase().includes(value.toLowerCase())
+    );
+    setFilteredCategories(filtered);
+  };
+
   useEffect(() => {
     fetchCategories();
   }, []);
@@ -358,16 +382,32 @@ function Category() {
     <div className="h-screen w-full flex flex-col p-4 bg-gray-100 gap-2">
       <h2 className="text-2xl font-semibold mb-4 text-gray-800">Categories</h2>
 
-      <button
-        onClick={() => {
-          setModalTitle("Add Designation Type");
-          setEditingCategory(null);
-          setIsModalOpen(true);
-        }}
-        className="bg-teal-500 text-white px-7 py-3 rounded-lg self-start"
-      >
-        Create
-      </button>
+      <div className="flex items-center justify-between mb-4">
+        {/* Create Button */}
+        <button
+          onClick={() => {
+            setModalTitle("Add Designation Type");
+            setEditingCategory(null);
+            setIsModalOpen(true);
+          }}
+          className="bg-teal-500 text-white px-7 py-3 rounded-lg ml-4"
+        >
+          Create
+        </button>
+        {/* Search Bar */}
+        <div className="flex items-center mb-4 justify-end">
+          <input
+            type="text"
+            value={searchTerm}
+            onChange={handleSearchChange}
+            placeholder="Search categories"
+            className="px-4 py-2 border border-gray-300 rounded-l-md w-[400px]"
+          />
+          <button className="bg-teal-500 text-white px-4 py-2 rounded-r-md flex items-center">
+            <SearchOutlined />
+          </button>
+        </div>
+      </div>
 
       <DesignationTypeModal
         isOpen={isModalOpen}
@@ -393,7 +433,7 @@ function Category() {
             </tr>
           </thead>
           <tbody>
-            {categories.map((category, index) => (
+            {filteredCategories.map((category, index) => (
               <tr key={index} className="hover:bg-gray-50">
                 <td className="px-4 py-2 border-b">
                   <span
@@ -406,12 +446,12 @@ function Category() {
                 <td className="px-4 py-2 border-b">
                   <span
                     className={`px-2 py-1 rounded-full text-xs ${
-                      category.status === "Available"
+                      category.status === 1
                         ? "bg-green-100 text-green-700"
                         : "bg-red-100 text-red-700"
                     }`}
                   >
-                    {category.status}
+                    {category.status === 1 ? "Available" : "Unavailable"}
                   </span>
                 </td>
                 <td className="px-4 py-2 border-b">
