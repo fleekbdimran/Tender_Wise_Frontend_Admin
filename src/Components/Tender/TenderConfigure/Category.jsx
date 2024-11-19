@@ -301,7 +301,7 @@ function Category() {
   const [filteredCategories, setFilteredCategories] = useState([]);
   const [searchTerm, setSearchTerm] = useState(""); // State for the search term
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalTitle, setModalTitle] = useState("Add Designation Type");
+  const [modalTitle, setModalTitle] = useState("Add Category");
   const [editingCategory, setEditingCategory] = useState(null);
 
   const fetchCategories = async () => {
@@ -358,7 +358,7 @@ function Category() {
   };
 
   const handleCategoryNameEdit = (category) => {
-    setModalTitle("Edit Designation Type");
+    setModalTitle("Edit Category");
     setEditingCategory(category);
     setIsModalOpen(true);
   };
@@ -386,7 +386,7 @@ function Category() {
         {/* Create Button */}
         <button
           onClick={() => {
-            setModalTitle("Add Designation Type");
+            setModalTitle("Add Category");
             setEditingCategory(null);
             setIsModalOpen(true);
           }}

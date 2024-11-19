@@ -205,7 +205,7 @@ function DesignationTypeModal({ isOpen, onClose, title, currentStatus, onStatusC
               className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md text-sm shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
             />
           </div>
-          <div className="flex justify-center mt-4">
+          {/* <div className="flex justify-center mt-4">
             <label className="flex items-center mx-4">
               <input
                 type="radio"
@@ -228,7 +228,7 @@ function DesignationTypeModal({ isOpen, onClose, title, currentStatus, onStatusC
               />
               Unavailable
             </label>
-          </div>
+          </div> */}
           <button
             type="submit"
             className="bg-teal-500 text-white px-6 py-3 rounded-lg flex items-center justify-center w-full"
@@ -259,14 +259,33 @@ function Source() {
     setCurrentStatus(newStatus);
   };
 
+  // const fetchUpazilaData = async () => {
+  //   try {
+  //     const response = await ApiClient.get("/admin/tender-config/source?key=");
+  //     setUpazilaData(response.data.data);
+  //     console.log(response.data.data);
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //   }
+  // };
+
   const fetchUpazilaData = async () => {
     try {
       const response = await ApiClient.get("/admin/tender-config/source?key=");
-      setUpazilaData(response.data.data);
+  
+      // Transform the data to make the status human-readable
+      const transformedData = response.data.data.map((source) => ({
+        ...source,
+        status: source.status === 1 ? 'Available' : 'Unavailable', // Convert status to readable format
+      }));
+  
+      setUpazilaData(transformedData); // Set the transformed data
+      // console.log(transformedData); // Log transformed data
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
+  
 
   useEffect(() => {
     fetchUpazilaData();
@@ -281,7 +300,7 @@ function Source() {
 
   return (
     <div className="h-screen w-full flex flex-col p-4 bg-gray-100 gap-4">
-      <h2 className="text-2xl font-semibold mb-4 text-gray-800">Upazila</h2>
+      <h2 className="text-2xl font-semibold mb-4 text-gray-800">Source</h2>
 
       <div className="flex items-center justify-between mb-4">
         {/* Create Button */}

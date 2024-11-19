@@ -36,7 +36,7 @@ const items = [
     icon: <AppstoreOutlined />,
     label: 'Tender',
     children: [
-      { key: '4-1', label: <Link to="/create-tender">Create Tender</Link> },
+      { key: '4-1', label: <Link to="/createtender">Create Tender</Link> },
       {
         key: '4-2',
         label: 'Tender Configure',
@@ -48,44 +48,44 @@ const items = [
           { key: '4-7', label: <Link to="/subdepartment">SubDepartment</Link> },
           { key: '4-8', label: <Link to="/division">Division</Link> },
           { key: '4-9', label: <Link to="/district">District</Link> },
-          { key: '4-10', label: <Link to="/source">Source</Link> },
           { key: '4-11', label: <Link to="/upazila">Upazila</Link> },
+          { key: '4-10', label: <Link to="/source">Source</Link> },
         ],
       },
       { key: '4-11', label: <Link to="/published-tender">Published Tender</Link> },
       { key: '4-12', label: <Link to="/active-tender">Active Tender</Link> },
     ],
   },
-  {
-    key: '5',
-    icon: <AppstoreOutlined />,
-    label: 'Courses',
-    children: [
-      { key: '5-1', label: 'Create Course' },
-      { key: '5-2', label: 'All Courses' },
-      { key: '5-3', label: 'Published Courses' },
-      { key: '5-4', label: 'Active Courses' },
-    ],
-  },
-  {
-    key: '6',
-    icon: <AppstoreOutlined />,
-    label: 'Teachers',
-    children: [
-      { key: '6-1', label: 'Create Teacher' },
-      { key: '6-2', label: 'All Teachers' },
-      { key: '6-3', label: 'Active Teacher' },
-    ],
-  },
-  {
-    key: '7',
-    icon: <AppstoreOutlined />,
-    label: 'Candidates',
-    children: [
-      { key: '7-1', label: 'All Candidates' },
-      { key: '7-2', label: 'Active Candidates' },
-    ],
-  },
+  // {
+  //   key: '5',
+  //   icon: <AppstoreOutlined />,
+  //   label: 'Courses',
+  //   children: [
+  //     { key: '5-1', label: 'Create Course' },
+  //     { key: '5-2', label: 'All Courses' },
+  //     { key: '5-3', label: 'Published Courses' },
+  //     { key: '5-4', label: 'Active Courses' },
+  //   ],
+  // },
+  // {
+  //   key: '6',
+  //   icon: <AppstoreOutlined />,
+  //   label: 'Teachers',
+  //   children: [
+  //     { key: '6-1', label: 'Create Teacher' },
+  //     { key: '6-2', label: 'All Teachers' },
+  //     { key: '6-3', label: 'Active Teacher' },
+  //   ],
+  // },
+  // {
+  //   key: '7',
+  //   icon: <AppstoreOutlined />,
+  //   label: 'Candidates',
+  //   children: [
+  //     { key: '7-1', label: 'All Candidates' },
+  //     { key: '7-2', label: 'Active Candidates' },
+  //   ],
+  // },
   {
     key: '8',
     icon: <AppstoreOutlined />,

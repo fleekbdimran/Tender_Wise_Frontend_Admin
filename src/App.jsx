@@ -16,6 +16,7 @@ import Division from './Components/Tender/TenderConfigure/Division';
 import Upazila from './Components/Tender/TenderConfigure/Upazila';
 import District from './Components/Tender/TenderConfigure/District';
 import Source from './Components/Tender/TenderConfigure/Source';
+import CreateTender from './Components/Tender/CreateTender/CreateTender';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
@@ -65,6 +66,7 @@ function App() {
                   </ProtectedRoute>
                 }
               />
+              <Route path="/createtender" element={<ProtectedRoute><CreateTender></CreateTender></ProtectedRoute>} />
               <Route path="/source" element={<ProtectedRoute><Source></Source></ProtectedRoute>} />
               <Route path="/district" element={<ProtectedRoute><District></District></ProtectedRoute>} />
               <Route path="/upazila" element={<ProtectedRoute><Upazila></Upazila></ProtectedRoute>} />
