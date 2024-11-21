@@ -17,6 +17,10 @@ import Upazila from './Components/Tender/TenderConfigure/Upazila';
 import District from './Components/Tender/TenderConfigure/District';
 import Source from './Components/Tender/TenderConfigure/Source';
 import CreateTender from './Components/Tender/CreateTender/CreateTender';
+import CreatePackage from './Components/Subscription/CreatePackage';
+import ActivePackage from './Components/Subscription/ActivePackage';
+import AllPackageList from './Components/Subscription/AllPackageList';
+
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
@@ -66,6 +70,10 @@ function App() {
                   </ProtectedRoute>
                 }
               />
+              
+              <Route path="/allpackagelist" element={<ProtectedRoute><AllPackageList></AllPackageList></ProtectedRoute>} />
+              <Route path="/activepackage" element={<ProtectedRoute><ActivePackage></ActivePackage></ProtectedRoute>} />
+              <Route path="/createpackage" element={<ProtectedRoute><CreatePackage></CreatePackage></ProtectedRoute>} />
               <Route path="/createtender" element={<ProtectedRoute><CreateTender></CreateTender></ProtectedRoute>} />
               <Route path="/source" element={<ProtectedRoute><Source></Source></ProtectedRoute>} />
               <Route path="/district" element={<ProtectedRoute><District></District></ProtectedRoute>} />

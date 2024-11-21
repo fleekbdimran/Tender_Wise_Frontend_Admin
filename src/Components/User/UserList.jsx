@@ -39,7 +39,7 @@ const UserList = () => {
         <SearchOutlined className="text-gray-500 mr-2" /> {/* Search Icon */}
         <input
           type="text"
-          placeholder="Search by Admin Name"
+          placeholder="Search by User List"
           value={searchTerm}
           onChange={handleSearch}
           className="w-full text-sm outline-none"

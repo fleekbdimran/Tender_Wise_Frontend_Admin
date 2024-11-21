@@ -1,6 +1,5 @@
 
 import { useState } from 'react';
-import { AiFillStar } from 'react-icons/ai';
 
 const CreateUsers = () => {
   const [usersName, setUsersName] = useState('');
@@ -54,7 +53,7 @@ const CreateUsers = () => {
             ].map(({ label, id, type, value, setter }) => (
               <div key={id} className="w-full">
                 <label className="block text-gray-700 font-medium mb-1" htmlFor={id}>
-                  <AiFillStar className="inline text-red-500 mr-1" /> {label}
+                  {label}
                 </label>
                 <input
                   type={type}
