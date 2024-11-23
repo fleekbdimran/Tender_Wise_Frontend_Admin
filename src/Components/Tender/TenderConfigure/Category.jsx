@@ -16,8 +16,8 @@ function DesignationTypeModal({ isOpen, onClose, title, onSubmit, category }) {
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    onSubmit(categoryName, category?.id); // Pass name and ID for edit
-    setCategoryName(""); // Reset input
+    onSubmit(categoryName, category?.id);
+    setCategoryName("");
   };
 
   return (
@@ -59,10 +59,12 @@ function DesignationTypeModal({ isOpen, onClose, title, onSubmit, category }) {
 function Category() {
   const [categories, setCategories] = useState([]);
   const [filteredCategories, setFilteredCategories] = useState([]);
-  const [searchTerm, setSearchTerm] = useState(""); // State for the search term
+  const [searchTerm, setSearchTerm] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalTitle, setModalTitle] = useState("Add Category");
   const [editingCategory, setEditingCategory] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(10);
 
   const fetchCategories = async () => {
     try {
@@ -73,7 +75,7 @@ function Category() {
         },
       });
       setCategories(response.data.data);
-      setFilteredCategories(response.data.data); // Initially show all categories
+      setFilteredCategories(response.data.data);
     } catch (error) {
       console.error("Error fetching categories:", error);
     }
@@ -127,23 +129,30 @@ function Category() {
     const value = e.target.value;
     setSearchTerm(value);
 
-    // Filter categories based on the search term
     const filtered = categories.filter((category) =>
       category.name.toLowerCase().includes(value.toLowerCase())
     );
     setFilteredCategories(filtered);
+    setCurrentPage(1);
   };
 
   useEffect(() => {
     fetchCategories();
   }, []);
 
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredCategories.slice(indexOfFirstItem, indexOfLastItem);
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
   return (
     <div className="h-screen w-full flex flex-col p-4 bg-gray-100 gap-2">
       <h2 className="text-2xl font-semibold mb-4 text-gray-800">Categories</h2>
 
       <div className="flex items-center justify-between mb-4">
-        {/* Create Button */}
         <button
           onClick={() => {
             setModalTitle("Add Category");
@@ -154,7 +163,6 @@ function Category() {
         >
           Create
         </button>
-        {/* Search Bar */}
         <div className="flex items-center mb-4 justify-end">
           <input
             type="text"
@@ -181,28 +189,18 @@ function Category() {
         <table className="w-full border-collapse border border-gray-200">
           <thead>
             <tr>
-              <th className="px-4 py-2 bg-teal-100 text-left font-semibold border-b">
-                Name
-              </th>
-              <th className="px-4 py-2 bg-teal-100 text-left font-semibold border-b">
-                Status
-              </th>
-              <th className="px-4 py-2 bg-teal-100 text-left font-semibold border-b">
-                Action
-              </th>
+              <th className="px-4 py-2 bg-teal-100 text-left font-semibold border-b">ID</th>
+              <th className="px-4 py-2 bg-teal-100 text-left font-semibold border-b">Name</th>
+              <th className="px-4 py-2 bg-teal-100 text-left font-semibold border-b">Status</th>
+              <th className="px-4 py-2 bg-teal-100 text-left font-semibold border-b">Action</th>
             </tr>
           </thead>
           <tbody>
-            {filteredCategories.map((category, index) => (
+            {currentItems.map((category, index) => (
               <tr key={index} className="hover:bg-gray-50">
-                <td className="px-4 py-2 border-b">
-                  <span
-                    onClick={() => handleCategoryNameEdit(category)}
-                    className="text-blue-500 hover:underline cursor-pointer"
-                  >
-                    {category.name}
-                  </span>
-                </td>
+                {/* Serial Number */}
+                <td className="px-4 py-2 border-b">{indexOfFirstItem + index + 1}</td>
+                <td className="px-4 py-2 border-b">{category.name}</td>
                 <td className="px-4 py-2 border-b">
                   <span
                     className={`px-2 py-1 rounded-full text-xs ${
@@ -226,6 +224,23 @@ function Category() {
             ))}
           </tbody>
         </table>
+      </div>
+
+      <div className="flex justify-center mt-4">
+        {Array.from(
+          { length: Math.ceil(filteredCategories.length / itemsPerPage) },
+          (_, i) => (
+            <button
+              key={i}
+              onClick={() => handlePageChange(i + 1)}
+              className={`px-4 py-2 mx-1 rounded ${
+                currentPage === i + 1 ? "bg-teal-500 text-white" : "bg-gray-200"
+              }`}
+            >
+              {i + 1}
+            </button>
+          )
+        )}
       </div>
     </div>
   );

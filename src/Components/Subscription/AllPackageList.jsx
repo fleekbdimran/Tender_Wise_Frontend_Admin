@@ -1,7 +1,72 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
+
+
+// API Utility for Fetching Data
+const fetchPackages = async () => {
+  const myHeaders = new Headers();
+  myHeaders.append(
+    "Authorization",
+    "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiSXFiYWwgMSIsImVtYWlsIjoiaXFiYWxAZ21haWwuY29tIiwicGhvbmUiOiI4ODAxOTk2MTA1MDIwIiwic3RhdHVzIjoxLCJ1cGRhdGVkX2J5Ijo2LCJpZCI6NiwidHlwZSI6InN1cGVyLWFkbWluIiwiaWF0IjoxNzMyMzM1NTE3LCJleHAiOjE3MzI0MjE5MTd9.IhvDJhsUmHIsUePMX8hNqmhOGUqb9ZvaaLis1awMY1Y"
+  );
+
+  const requestOptions = {
+    method: "GET",
+    headers: myHeaders,
+    redirect: "follow",
+  };
+
+  try {
+    const response = await fetch(
+      "http://192.168.0.230:9009/api/v1/admin/package",
+      requestOptions
+    );
+    const result = await response.json();
+    return result.data || [];
+  } catch (error) {
+    console.error("Error fetching packages:", error);
+    return [];
+  }
+};
+
+// API Utility for Creating a New Package
+const createPackage = async (formData) => {
+  const myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+  myHeaders.append(
+    "Authorization",
+    "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiSXFiYWwgMSIsImVtYWlsIjoiaXFiYWxAZ21haWwuY29tIiwicGhvbmUiOiI4ODAxOTk2MTA1MDIwIiwic3RhdHVzIjoxLCJ1cGRhdGVkX2J5Ijo2LCJpZCI6NiwidHlwZSI6InN1cGVyLWFkbWluIiwiaWF0IjoxNzMyMzM1NTE3LCJleHAiOjE3MzI0MjE5MTd9.IhvDJhsUmHIsUePMX8hNqmhOGUqb9ZvaaLis1awMY1Y"
+  );
+
+  const raw = JSON.stringify({
+    name: formData.name,
+    amount: formData.amount,
+    duration: formData.duration,
+  });
+
+  const requestOptions = {
+    method: "POST",
+    headers: myHeaders,
+    body: raw,
+    redirect: "follow",
+  };
+
+  try {
+    const response = await fetch(
+      "http://192.168.0.230:9009/api/v1/admin/package",
+      requestOptions
+    );
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.error("Error creating package:", error);
+    return null;
+  }
+};
 
 const AllPackageList = () => {
+  const [packages, setPackages] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [formData, setFormData] = useState({
@@ -10,10 +75,14 @@ const AllPackageList = () => {
     duration: "",
   });
 
-  const packages = [
-    { id: 91, name: "Grand", amount: "Free", duration: "12 months",Status:"Available" },
-    { id: 90, name: "Rose", amount: "Popular", duration: "6 months",Status:"Unavailable" },
-  ];
+  useEffect(() => {
+    // Fetch packages from API on component mount
+    const loadPackages = async () => {
+      const fetchedPackages = await fetchPackages();
+      setPackages(fetchedPackages);
+    };
+    loadPackages();
+  }, []);
 
   const filteredPackages = packages.filter((pkg) =>
     pkg.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -24,10 +93,18 @@ const AllPackageList = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("Submitted Data:", formData);
-    // Add further submission logic here (e.g., API call)
+
+    // Call the createPackage function
+    const result = await createPackage(formData);
+    if (result) {
+      // If package creation is successful, reload the packages list
+      const updatedPackages = await fetchPackages();
+      setPackages(updatedPackages);
+    }
+
     setShowCreateForm(false); // Close the form after submission
   };
 
@@ -79,10 +156,11 @@ const AllPackageList = () => {
                   Duration (Month)
                 </label>
                 <input
-                  // type="date"
-                  // id="duration"
-                  // name="duration"
-                  // value={formData.duration}
+                  type="number"
+                  id="duration"
+                  name="duration"
+                  placeholder="Enter Duration in Month"
+                  value={formData.duration}
                   onChange={handleChange}
                   className="p-4 border border-gray-300 rounded-lg shadow-sm text-lg focus:ring-blue-500 focus:border-blue-500"
                   required
@@ -144,7 +222,12 @@ const AllPackageList = () => {
                     <td className="px-4 py-2 text-sm text-gray-800">{pkg.name}</td>
                     <td className="px-4 py-2 text-sm text-gray-800">{pkg.amount}</td>
                     <td className="px-4 py-2 text-sm text-gray-800">{pkg.duration}</td>
-                    <td className="px-4 py-2 text-sm text-gray-800">{pkg.Status}</td>
+                    <td className="px-4 py-2 text-sm text-gray-800">
+  <span className={pkg.status === 1 ? "text-blue-500" : "text-red-500"}>
+    {pkg.status === 1 ? "Available" : "Unavailable"}
+  </span>
+</td>
+                    {/* <td className="px-4 py-2 text-sm text-gray-800">{pkg.status === 1 ? "Available" : "Unavailable"}</td> */}
                   </tr>
                 ))}
               </tbody>
@@ -170,4 +253,10 @@ const AllPackageList = () => {
 };
 
 export default AllPackageList;
+
+
+
+
+
+
 
