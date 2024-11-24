@@ -1,5 +1,6 @@
 
 import React, { useState } from "react";
+import ApiClient from '../../Api/ApiClient'; // Import ApiClient instance
 
 const CreatePackage = () => {
   const [formData, setFormData] = useState({
@@ -7,16 +8,47 @@ const CreatePackage = () => {
     amount: "",
     duration: "",
   });
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Submitted Data:", formData);
-    // Add further submission logic here (e.g., API call)
+    setLoading(true);
+    setError(null);
+
+    // Prepare the request payload
+    const payload = {
+      name: formData.name,
+      amount: formData.amount,
+      duration: formData.duration,
+    };
+
+    try {
+      // Use ApiClient to make the POST request
+      const response = await ApiClient.post("/admin/package", payload);
+
+      // If the response is successful, reset the form and show success message
+      if (response.status === 200) {
+        alert("Package created successfully!");
+        setFormData({
+          name: "",
+          amount: "",
+          duration: "",
+        });
+      } else {
+        setError(response.data.message || "Failed to create package.");
+      }
+    } catch (error) {
+      // Handle error if the API request fails
+      setError(error.response?.data?.message || "Failed to create package.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -70,13 +102,13 @@ const CreatePackage = () => {
               className="block text-lg font-medium text-gray-700 mb-2"
               htmlFor="duration"
             >
-              Duration (Month)
+              Duration (Months)
             </label>
             <input
-              // type="date"
-              // id="duration"
-              // name="duration"
-              // value={formData.duration}
+              type="number"
+              id="duration"
+              name="duration"
+              value={formData.duration}
               onChange={handleChange}
               className="p-4 border border-gray-300 rounded-lg shadow-sm text-lg focus:ring-blue-500 focus:border-blue-500"
               required
@@ -88,10 +120,18 @@ const CreatePackage = () => {
             <button
               type="submit"
               className="w-auto py-2 px-6 bg-blue-600 text-white rounded-lg text-lg font-semibold hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              disabled={loading}
             >
-              Submit
+              {loading ? "Submitting..." : "Submit"}
             </button>
           </div>
+
+          {/* Error Message */}
+          {error && (
+            <div className="text-red-500 text-center mt-4">
+              <p>{error}</p>
+            </div>
+          )}
         </form>
       </div>
     </div>
@@ -99,3 +139,4 @@ const CreatePackage = () => {
 };
 
 export default CreatePackage;
+

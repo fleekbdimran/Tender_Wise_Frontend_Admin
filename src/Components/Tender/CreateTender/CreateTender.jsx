@@ -863,6 +863,32 @@ const CreateTender = () => {
       alert("Please select a file to upload.");
     }
   };
+
+  const data = [
+    { label: "Name", value: "Imran" },
+    { label: "Earnest Money", value: "" },
+    { label: "Document Price", value: "" },
+    { label: "Published On", value: "" },
+    { label: "Opening Date", value: "" },
+    { label: "End Date", value: "" },
+    { label: "Purchase Last Date", value: "" },
+    { label: "Prebid Meeting Date", value: "" },
+    { label: "Submission Date", value: "" },
+    { label: "Tender Section", value: "" },
+    { label: "Type", value: "" },
+    { label: "Source Type", value: "" },
+    { label: "Status", value: "" },
+    { label: "Category Name", value: "" },
+    { label: "Sector Name", value: "" },
+    { label: "SubSector Name", value: "" },
+    { label: "Department Name", value: "" },
+    { label: "Sub Department Name", value: "" },
+    { label: "Division Name", value: "" },
+    { label: "District Name", value: "" },
+    { label: "Upazila Name", value: "" },
+    { label: "Source Name", value: "" },
+    { label: "Created At", value: "" },
+  ];
  
   return (
     <div className="p-6 bg-gray-100">
@@ -893,152 +919,7 @@ const CreateTender = () => {
       ) : viewTenderDetails ? (
 
 
-//  <div className="p-6 bg-gray-50 ">
-// <div className="max-w-4xl mx-auto bg-white shadow-md rounded-lg overflow-hidden">
-// <div className="flex justify-between items-center mt-8">
-  
-//   <button
-//     onClick={() => setViewTenderDetails(null)}
-//     className="px-6 py-2 bg-red-500 text-white rounded-lg shadow-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-300"
-//   >
-//     Close
-//   </button>
-  
-  
-//   <button
-//     onClick={handleEditTender}
-//     className="px-6 py-2 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300"
-//   >
-//     Edit Tender
-//   </button>
-// </div>
 
-//   <div className="grid grid-cols-3 gap-4 p-6">
-   
-    
-//     <div className="col-span-2">
-//       <h1 className="text-2xl font-bold text-teal-600 mb-4">Single Tender View</h1>
-//       <table className="table-auto w-full text-left text-sm">
-//         <tbody>
-//           <tr>
-//             <td className="font-medium text-gray-600 py-2">Name</td>
-//             <td className="py-2">Imran</td>
-//           </tr>
-//           <tr>
-//             <td className="font-medium text-gray-600 py-2">Earnest Money</td>
-//             <td className="py-2"></td>
-//           </tr>
-//           <tr>
-//             <td className="font-medium text-gray-600 py-2">Document Price</td>
-//             <td className="py-2"></td>
-//           </tr>
-//           <tr>
-//             <td className="font-medium text-gray-600 py-2">Published On</td>
-//             <td className="py-2"></td>
-//           </tr>
-//           <tr>
-//             <td className="font-medium text-gray-600 py-2">Opening Date</td>
-//             <td className="py-2"></td>
-//           </tr>
-//           <tr>
-//             <td className="font-medium text-gray-600 py-2">End Date</td>
-//             <td className="py-2"></td>
-//           </tr>
-//           <tr>
-//             <td className="font-medium text-gray-600 py-2">Purchase Last Date</td>
-//             <td className="py-2">
-//               <span className="px-2 py-1 text-white bg-red-500 rounded-md">
-               
-//               </span>
-//             </td>
-//           </tr>
-//           <tr>
-//             <td className="font-medium text-gray-600 py-2">Prebid Metting Date</td>
-//             <td className="py-2"></td>
-//           </tr>
-//           <tr>
-//             <td className="font-medium text-gray-600 py-2">Submission Date</td>
-//             <td className="py-2"></td>
-//           </tr>
-//           <tr>
-//             <td className="font-medium text-gray-600 py-2">Tender Section</td>
-//             <td className="py-2"></td>
-//           </tr>
-//           <tr>
-//             <td className="font-medium text-gray-600 py-2">Type</td>
-//             <td className="py-2"></td>
-//           </tr>
-//           <tr>
-//             <td className="font-medium text-gray-600 py-2">Source Type</td>
-//             <td className="py-2"></td>
-//           </tr>
-//           <tr>
-//             <td className="font-medium text-gray-600 py-2">Status</td>
-//             <td className="py-2"></td>
-//           </tr>
-//           <tr>
-//             <td className="font-medium text-gray-600 py-2">Category Name</td>
-//             <td className="py-2"></td>
-//           </tr>
-//           <tr>
-//             <td className="font-medium text-gray-600 py-2">Sector Name</td>
-//             <td className="py-2"></td>
-//           </tr>
-//           <tr>
-//             <td className="font-medium text-gray-600 py-2">SubSector Name</td>
-//             <td className="py-2"></td>
-//           </tr>
-//           <tr>
-//             <td className="font-medium text-gray-600 py-2">Department Name</td>
-//             <td className="py-2"></td>
-//           </tr>
-//           <tr>
-//             <td className="font-medium text-gray-600 py-2">Sub Department Name</td>
-//             <td className="py-2"></td>
-//           </tr>
-//           <tr>
-//             <td className="font-medium text-gray-600 py-2">Division Name</td>
-//             <td className="py-2"></td>
-//           </tr>
-//           <tr>
-//             <td className="font-medium text-gray-600 py-2">District Name</td>
-//             <td className="py-2"></td>
-//           </tr>
-//           <tr>
-//             <td className="font-medium text-gray-600 py-2">Upazila Name</td>
-//             <td className="py-2"></td>
-//           </tr>
-//           <tr>
-//             <td className="font-medium text-gray-600 py-2">Source Name</td>
-//             <td className="py-2"></td>
-//           </tr>
-//           <tr>
-//             <td className="font-medium text-gray-600 py-2">Created At</td>
-//             <td className="py-2"></td>
-//           </tr>
-//         </tbody>
-//       </table>
-//     </div>
-
-   
-//     <div className="col-span-1 flex flex-col items-center">
-//       <div className="relative w-full h-48 mb-4">
-//         <img
-//           src="https://via.placeholder.com/300"
-//           alt="Room"
-//           className="w-full h-full object-cover rounded-md"
-//         />
-//         <span className="absolute top-2 left-2 bg-teal-500 text-white text-xs px-2 py-1 rounded-full">
-//           142
-//         </span>
-//       </div>
-//       <button className="flex items-center px-4 py-2 bg-teal-500 text-white rounded-md hover:bg-teal-600">
-//         <span className="mr-2">✏️</span> Update
-//       </button>
-//     </div>
-//   </div>
-// </div>
-// </div> 
       
 <div className="p-6 bg-gray-100 min-h-screen">
 <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
@@ -1054,11 +935,15 @@ const CreateTender = () => {
         Close
       </button>
       {/* Edit Button */}
-      <button
+      {/* <button
         onClick={handleEditTender}
         className="px-6 py-2 bg-blue-500 text-white font-medium rounded-lg shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300"
       >
         Edit Tender
+      </button> */}
+        {/* Update Button */}
+        <button className="flex items-center px-6 py-2 bg-teal-500 text-white font-medium rounded-md shadow hover:bg-teal-600">
+        <span className="mr-2">✏️</span> Update
       </button>
     </div>
   </div>
@@ -1067,7 +952,7 @@ const CreateTender = () => {
   <div className="grid grid-cols-3 gap-6 p-6">
     {/* Details Section */}
     <div className="col-span-2">
-      <table className="table-auto w-full text-left text-sm border-separate border-spacing-y-2">
+      {/* <table className="table-auto w-full text-left text-sm border-separate border-spacing-y-2">
         <tbody>
           {[
             { label: "Name", value: "Imran" },
@@ -1100,7 +985,20 @@ const CreateTender = () => {
             </tr>
           ))}
         </tbody>
+      </table> */}
+        <div className="p-4">
+      <table className="table-auto w-full text-left text-sm border-separate border-spacing-y-2">
+        <tbody>
+          {data.map((item, index) => (
+            <tr key={index}>
+              <td className="font-medium text-gray-700 py-2">{item.label}</td>
+              <td className="py-2 text-gray-600">{item.value || "---"}</td>
+            </tr>
+          ))}
+        </tbody>
       </table>
+    </div>
+      
     </div>
 
     {/* Image and Actions Section */}
@@ -1116,10 +1014,7 @@ const CreateTender = () => {
           142
         </span>
       </div>
-      {/* Update Button */}
-      <button className="flex items-center px-6 py-2 bg-teal-500 text-white font-medium rounded-md shadow hover:bg-teal-600">
-        <span className="mr-2">✏️</span> Update
-      </button>
+    
     </div>
   </div>
 </div>
