@@ -20,6 +20,10 @@ import CreateTender from './Components/Tender/CreateTender/CreateTender';
 import CreatePackage from './Components/Subscription/CreatePackage';
 import ActivePackage from './Components/Subscription/ActivePackage';
 import AllPackageList from './Components/Subscription/AllPackageList';
+import InActiveUser from './Components/Stack-Holder/InActiveUser';
+import AllContactUs from './Components/Contact Us/AllContactUs';
+import AllPublishTender from './Components/Tender/PublishedTender/AllPublishTender';
+import PendingPublishTender from './Components/Tender/PublishedTender/PendingPublishTender';
 
 
 function App() {
@@ -71,6 +75,11 @@ function App() {
                 }
               />
               
+              
+              <Route path="/pendingpublishtender" element={<ProtectedRoute><PendingPublishTender></PendingPublishTender></ProtectedRoute>} />
+              <Route path="/allpublishedtender" element={<ProtectedRoute><AllPublishTender></AllPublishTender></ProtectedRoute>} />
+              <Route path="/allcontactlist" element={<ProtectedRoute><AllContactUs></AllContactUs></ProtectedRoute>} />
+              <Route path="/inactive-user" element={<ProtectedRoute><InActiveUser></InActiveUser></ProtectedRoute>} />
               <Route path="/allpackagelist" element={<ProtectedRoute><AllPackageList></AllPackageList></ProtectedRoute>} />
               <Route path="/activepackage" element={<ProtectedRoute><ActivePackage></ActivePackage></ProtectedRoute>} />
               <Route path="/createpackage" element={<ProtectedRoute><CreatePackage></CreatePackage></ProtectedRoute>} />

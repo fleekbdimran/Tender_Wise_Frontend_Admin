@@ -4,9 +4,9 @@ import { useState, useEffect } from 'react'; // Importing useState and useEffect
 import { Pagination } from 'antd'; // Import Pagination from Ant Design
 import { SearchOutlined } from '@ant-design/icons';
 
-import ApiClient from '../../Api/ApiClient';
+import ApiClient from '../../Api/ApiClient'; // Import API client
 
-const ActiveUser = () => {
+const InActiveUser = () => {
   const [searchTerm, setSearchTerm] = useState(''); // State to store the search term
   const [currentPage, setCurrentPage] = useState(1); // State for current page
   const [pageSize, setPageSize] = useState(5); // State for page size
@@ -15,17 +15,17 @@ const ActiveUser = () => {
   const [error, setError] = useState(null); // Error state
 
   useEffect(() => {
+    // Fetch data from the API using ApiClient
     const fetchData = async () => {
       try {
         const response = await ApiClient.get('/admin/stakeholder'); // Use the API client to get the data
-        // console.log("Fetched Data:", response.data); // Debug log for fetched data
-        // Filter the fetched data to only include active users
-        const activeUsers = response.data.data.filter(user => user.status === 'active');
-        setAdminUserList(activeUsers); // Set the filtered data to state
+        // Filter the fetched data to only include inactive users (status: "inactive" or 0)
+        const inactiveUsers = response.data.data.filter(user => user.status === 'inactive' || user.status === 0);
+        setAdminUserList(inactiveUsers); // Set the filtered data to state
       } catch (err) {
-        setError(err.message);
+        setError(err.message); // Set error message if fetching fails
       } finally {
-        setLoading(false);
+        setLoading(false); // Disable loading after fetching completes
       }
     };
 
@@ -55,7 +55,7 @@ const ActiveUser = () => {
 
   return (
     <div className="p-6 bg-gray-100">
-      <h2 className="text-2xl font-bold mb-4">Active Users</h2>
+      <h2 className="text-2xl font-bold mb-4">InActive Users</h2>
 
       {loading ? (
         <div>Loading...</div>
@@ -126,4 +126,4 @@ const ActiveUser = () => {
   );
 };
 
-export default ActiveUser;
+export default InActiveUser;
