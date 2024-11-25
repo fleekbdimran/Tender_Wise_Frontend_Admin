@@ -4,7 +4,6 @@ const ApiClient = axios.create({
   // baseURL: 'http://192.168.0.230:9009/api/v1',
   // baseURL: 'http://192.168.0.229:9009/api/v1',
   baseURL: 'http://192.168.0.230:9009/api/v1',
-
 });
 
 // Request interceptor
@@ -41,3 +40,5 @@ ApiClient.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
+export default ApiClient;

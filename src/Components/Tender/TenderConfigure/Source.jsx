@@ -1,4 +1,3 @@
-
 // import { useEffect, useState } from "react";
 // import { EditOutlined, CloseOutlined, SendOutlined, SearchOutlined } from "@ant-design/icons";
 // import ApiClient from "./../../../Api/ApiClient";
@@ -82,24 +81,22 @@
 //     setCurrentStatus(newStatus);
 //   };
 
-
 //   const fetchUpazilaData = async () => {
 //     try {
 //       const response = await ApiClient.get("/admin/tender-config/source?key=");
-  
+
 //       // Transform the data to make the status human-readable
 //       const transformedData = response.data.data.map((source) => ({
 //         ...source,
 //         status: source.status === 1 ? 'Available' : 'Unavailable', // Convert status to readable format
 //       }));
-  
+
 //       setUpazilaData(transformedData); // Set the transformed data
 //       // console.log(transformedData); // Log transformed data
 //     } catch (error) {
 //       console.error("Error fetching data:", error);
 //     }
 //   };
-  
 
 //   useEffect(() => {
 //     fetchUpazilaData();
@@ -149,7 +146,6 @@
 //           <option value="Unavailable">Unavailable</option>
 //         </select>
 
-        
 //       </div>
 
 //       <DesignationTypeModal
@@ -203,8 +199,6 @@
 // }
 
 // export default Source;
-
-
 
 // import { useEffect, useState } from "react";
 // import { EditOutlined, CloseOutlined, SendOutlined, SearchOutlined } from "@ant-design/icons";
@@ -398,8 +392,6 @@
 // }
 
 // export default Source;
-
-
 
 // import { useEffect, useState } from "react";
 // import { EditOutlined, CloseOutlined, SendOutlined, SearchOutlined } from "@ant-design/icons";
@@ -648,8 +640,6 @@
 // }
 
 // export default Source;
-
-
 
 // import { useEffect, useState } from "react";
 // import { EditOutlined, CloseOutlined, SendOutlined } from "@ant-design/icons";
@@ -902,17 +892,16 @@
 
 // export default Source;
 
-
-
-import { useEffect, useState } from "react";
-import { EditOutlined, CloseOutlined, SendOutlined } from "@ant-design/icons";
+import { useEffect, useState } from 'react';
+import { EditOutlined, CloseOutlined, SendOutlined } from '@ant-design/icons';
+import ApiClient from '../../../Api/ApiClient';
 
 function SourceModal({ isOpen, onClose, title, currentItem, onSubmit }) {
   const [formData, setFormData] = useState({
-    id: "",
-    name: "",
-    sourceType: "E-GP",
-    details: "",
+    id: '',
+    name: '',
+    sourceType: 'E-GP',
+    details: '',
     status: 1, // Default status
   });
 
@@ -921,21 +910,21 @@ function SourceModal({ isOpen, onClose, title, currentItem, onSubmit }) {
       setFormData(currentItem);
     } else {
       setFormData({
-        id: "",
-        name: "",
-        sourceType: "E-GP",
-        details: "",
+        id: '',
+        name: '',
+        sourceType: 'E-GP',
+        details: '',
         status: 1,
       });
     }
   }, [currentItem]);
 
-  const handleChange = (e) => {
+  const handleChange = e => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = e => {
     e.preventDefault();
     onSubmit(formData);
     onClose();
@@ -946,13 +935,18 @@ function SourceModal({ isOpen, onClose, title, currentItem, onSubmit }) {
   return (
     <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50 w-full h-full">
       <div className="bg-white p-8 rounded-lg shadow-lg w-96 relative">
-        <button onClick={onClose} className="absolute top-2 right-2 text-gray-500 hover:text-gray-700">
+        <button
+          onClick={onClose}
+          className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+        >
           <CloseOutlined />
         </button>
         <h2 className="text-xl font-semibold mb-6">{title}</h2>
         <form onSubmit={handleFormSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700">Name</label>
+            <label className="block text-sm font-medium text-gray-700">
+              Name
+            </label>
             <input
               type="text"
               name="name"
@@ -964,7 +958,9 @@ function SourceModal({ isOpen, onClose, title, currentItem, onSubmit }) {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">Source Type</label>
+            <label className="block text-sm font-medium text-gray-700">
+              Source Type
+            </label>
             <select
               name="sourceType"
               value={formData.sourceType}
@@ -979,7 +975,9 @@ function SourceModal({ isOpen, onClose, title, currentItem, onSubmit }) {
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">Details</label>
+            <label className="block text-sm font-medium text-gray-700">
+              Details
+            </label>
             <input
               type="text"
               name="details"
@@ -990,7 +988,9 @@ function SourceModal({ isOpen, onClose, title, currentItem, onSubmit }) {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">Status</label>
+            <label className="block text-sm font-medium text-gray-700">
+              Status
+            </label>
             <select
               name="status"
               value={formData.status}
@@ -1015,26 +1015,23 @@ function SourceModal({ isOpen, onClose, title, currentItem, onSubmit }) {
 
 function Source() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalTitle, setModalTitle] = useState("Add Source");
+  const [modalTitle, setModalTitle] = useState('Add Source');
   const [currentItem, setCurrentItem] = useState(null);
   const [data, setData] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
 
   const fetchSources = async () => {
     const myHeaders = new Headers();
-    myHeaders.append(
-      "Authorization",
-      "Bearer YOUR_TOKEN_HERE"
-    );
+    myHeaders.append('Authorization', 'Bearer YOUR_TOKEN_HERE');
 
     const requestOptions = {
-      method: "GET",
+      method: 'GET',
       headers: myHeaders,
     };
 
     try {
-      const response = await fetch(
-        "http://192.168.0.230:9009/api/v1/admin/tender-config/source",
+      const response = await ApiClient.get(
+        '/admin/tender-config/source',
         requestOptions
       );
       const result = await response.json();
@@ -1042,35 +1039,32 @@ function Source() {
         setData(result.data);
       }
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error('Error fetching data:', error);
     }
   };
 
-  const createSource = async (formData) => {
+  const createSource = async formData => {
     const myHeaders = new Headers();
-    myHeaders.append(
-      "Authorization",
-      "Bearer YOUR_TOKEN_HERE"
-    );
-    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append('Authorization', 'Bearer YOUR_TOKEN_HERE');
+    myHeaders.append('Content-Type', 'application/json');
 
     const requestOptions = {
-      method: "POST",
+      method: 'POST',
       headers: myHeaders,
       body: JSON.stringify(formData),
     };
 
     try {
       const response = await fetch(
-        "http://192.168.0.230:9009/api/v1/admin/tender-config/source",
+        'http://192.168.0.230:9009/api/v1/admin/tender-config/source',
         requestOptions
       );
       const result = await response.json();
       if (result.data) {
-        setData((prev) => [...prev, result.data]);
+        setData(prev => [...prev, result.data]);
       }
     } catch (error) {
-      console.error("Error creating source:", error);
+      console.error('Error creating source:', error);
     }
   };
 
@@ -1080,17 +1074,17 @@ function Source() {
     setIsModalOpen(true);
   };
 
-  const handleFormSubmit = (formData) => {
+  const handleFormSubmit = formData => {
     if (currentItem) {
-      setData((prev) =>
-        prev.map((item) => (item.id === currentItem.id ? { ...formData } : item))
+      setData(prev =>
+        prev.map(item => (item.id === currentItem.id ? { ...formData } : item))
       );
     } else {
       createSource(formData);
     }
   };
 
-  const filteredData = data.filter((item) =>
+  const filteredData = data.filter(item =>
     item.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -1104,7 +1098,7 @@ function Source() {
 
       <div className="flex items-center justify-between mb-4">
         <button
-          onClick={() => openModal("Add Source")}
+          onClick={() => openModal('Add Source')}
           className="bg-teal-500 text-white px-7 py-3 rounded-lg"
         >
           Create
@@ -1112,7 +1106,7 @@ function Source() {
         <input
           type="text"
           value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+          onChange={e => setSearchTerm(e.target.value)}
           placeholder="Search..."
           className="px-4 py-2 border border-gray-300 rounded-md w-[400px]"
         />
@@ -1130,25 +1124,39 @@ function Source() {
         <table className="w-full border-collapse border border-gray-200">
           <thead>
             <tr>
-              <th className="px-4 py-2 bg-teal-100 text-left font-semibold border-b">ID</th>
-              <th className="px-4 py-2 bg-teal-100 text-left font-semibold border-b">Name</th>
-              <th className="px-4 py-2 bg-teal-100 text-left font-semibold border-b">Type</th>
-              <th className="px-4 py-2 bg-teal-100 text-left font-semibold border-b">Details</th>
-              <th className="px-4 py-2 bg-teal-100 text-left font-semibold border-b">Status</th>
-              <th className="px-4 py-2 bg-teal-100 text-left font-semibold border-b">Action</th>
+              <th className="px-4 py-2 bg-teal-100 text-left font-semibold border-b">
+                ID
+              </th>
+              <th className="px-4 py-2 bg-teal-100 text-left font-semibold border-b">
+                Name
+              </th>
+              <th className="px-4 py-2 bg-teal-100 text-left font-semibold border-b">
+                Type
+              </th>
+              <th className="px-4 py-2 bg-teal-100 text-left font-semibold border-b">
+                Details
+              </th>
+              <th className="px-4 py-2 bg-teal-100 text-left font-semibold border-b">
+                Status
+              </th>
+              <th className="px-4 py-2 bg-teal-100 text-left font-semibold border-b">
+                Action
+              </th>
             </tr>
           </thead>
           <tbody>
-            {filteredData.map((item) => (
+            {filteredData.map(item => (
               <tr key={item.id} className="hover:bg-gray-50">
                 <td className="px-4 py-2 border-b">{item.id}</td>
                 <td className="px-4 py-2 border-b">{item.name}</td>
                 <td className="px-4 py-2 border-b">{item.sourceType}</td>
                 <td className="px-4 py-2 border-b">{item.details}</td>
-                <td className="px-4 py-2 border-b">{item.status === 1 ? "Active" : "Inactive"}</td>
+                <td className="px-4 py-2 border-b">
+                  {item.status === 1 ? 'Active' : 'Inactive'}
+                </td>
                 <td className="px-4 py-2 border-b">
                   <button
-                    onClick={() => openModal("Edit Source", item)}
+                    onClick={() => openModal('Edit Source', item)}
                     className="text-blue-500 hover:underline flex items-center"
                   >
                     <EditOutlined className="mr-1" /> Edit
@@ -1164,7 +1172,3 @@ function Source() {
 }
 
 export default Source;
-
-
-
-

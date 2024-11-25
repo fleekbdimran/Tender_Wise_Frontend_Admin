@@ -55,22 +55,13 @@ function DesignationTypeModal({
       district_id: selectedCategory,
     };
 
-    const myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-    myHeaders.append("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiSXFiYWwgMSIsImVtYWlsIjoiaXFiYWxAZ21haWwuY29tIiwicGhvbmUiOiI4ODAxOTk2MTA1MDIwIiwic3RhdHVzIjoxLCJ1cGRhdGVkX2J5Ijo2LCJpZCI6NiwidHlwZSI6InN1cGVyLWFkbWluIiwiaWF0IjoxNzMyMTYxMzY3LCJleHAiOjE3MzIyNDc3Njd9.o9HamEOjrgOnQjI7uc9yR5MvYbrb3tBc_5H0WaJSbPw");
-
-    const raw = JSON.stringify(data);
-
-    const requestOptions = {
-      method: "POST",
-      headers: myHeaders,
-      body: raw,
-      redirect: "follow",
-    };
-
     try {
-      const response = await ApiClient.post("/admin/tender-config/upazila", requestOptions);
-      const result = await response.text();
+      const response = await ApiClient.post(
+        '/admin/tender-config/upazila',
+        data
+      );
+      // const result = await response.text();
+      console.log(response.data);
       if (response.status === 201) {
         Swal.fire({
           title: 'Success!',
