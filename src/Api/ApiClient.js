@@ -41,20 +41,3 @@ ApiClient.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-
-export default ApiClient;
-<<<<<<< HEAD
-=======
-
-
-
-
-
-
-
-
-
-
-
-
->>>>>>> 34dd07d55eb399640c891ee16887df780add85a5
