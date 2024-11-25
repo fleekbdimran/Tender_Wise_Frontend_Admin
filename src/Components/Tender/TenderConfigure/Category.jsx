@@ -133,7 +133,7 @@ function Category() {
       category.name.toLowerCase().includes(value.toLowerCase())
     );
     setFilteredCategories(filtered);
-    setCurrentPage(1);
+    setCurrentPage(10);
   };
 
   useEffect(() => {

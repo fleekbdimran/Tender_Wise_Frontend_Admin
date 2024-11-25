@@ -1,6 +1,7 @@
 
 import React, { useState } from "react";
-import ApiClient from '../../Api/ApiClient'; // Import ApiClient instance
+import Swal from "sweetalert2";
+import ApiClient from "../../Api/ApiClient"; // Import ApiClient instance
 
 const CreatePackage = () => {
   const [formData, setFormData] = useState({
@@ -8,20 +9,19 @@ const CreatePackage = () => {
     amount: "",
     duration: "",
   });
-  const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  // Handle input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError(null);
 
-    // Prepare the request payload
     const payload = {
       name: formData.name,
       amount: formData.amount,
@@ -29,25 +29,43 @@ const CreatePackage = () => {
     };
 
     try {
-      // Use ApiClient to make the POST request
+      // Sending API request
       const response = await ApiClient.post("/admin/package", payload);
 
-      // If the response is successful, reset the form and show success message
-      if (response.status === 200) {
-        alert("Package created successfully!");
-        setFormData({
-          name: "",
-          amount: "",
-          duration: "",
+      console.log("API Response:", response); // Debug the response
+
+      // Check if the API response status indicates success
+      if (response.status === 200 || response.status === 201) {
+        // SweetAlert success message
+        await Swal.fire({
+          title: "Success!",
+          text: "Package created successfully!",
+          icon: "success",
+          confirmButtonText: "OK",
         });
+
+        // Reset form fields
+        setFormData({ name: "", amount: "", duration: "" });
       } else {
-        setError(response.data.message || "Failed to create package.");
+        // Fallback error message
+        Swal.fire({
+          title: "Error!",
+          text: response.data.message || "Something went wrong!",
+          icon: "error",
+          confirmButtonText: "Try Again",
+        });
       }
     } catch (error) {
-      // Handle error if the API request fails
-      setError(error.response?.data?.message || "Failed to create package.");
+      console.error("Error in API Call:", error); // Debugging the error
+      // SweetAlert error message for exceptions
+      Swal.fire({
+        title: "Error!",
+        text: error.response?.data?.message || "Something went wrong!",
+        icon: "error",
+        confirmButtonText: "Try Again",
+      });
     } finally {
-      setLoading(false);
+      setLoading(false); // Reset loading state
     }
   };
 
@@ -55,6 +73,7 @@ const CreatePackage = () => {
     <div className="flex items-center justify-center h-screen w-full bg-gray-50">
       <div className="bg-white rounded-xl shadow-lg p-8 w-full max-w-3xl">
         <h2 className="text-3xl font-bold text-center mb-6">Create Package</h2>
+
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Name Input */}
           <div className="flex flex-col">
@@ -108,6 +127,7 @@ const CreatePackage = () => {
               type="number"
               id="duration"
               name="duration"
+              placeholder="Enter Duration"
               value={formData.duration}
               onChange={handleChange}
               className="p-4 border border-gray-300 rounded-lg shadow-sm text-lg focus:ring-blue-500 focus:border-blue-500"
@@ -125,13 +145,6 @@ const CreatePackage = () => {
               {loading ? "Submitting..." : "Submit"}
             </button>
           </div>
-
-          {/* Error Message */}
-          {error && (
-            <div className="text-red-500 text-center mt-4">
-              <p>{error}</p>
-            </div>
-          )}
         </form>
       </div>
     </div>
@@ -139,4 +152,3 @@ const CreatePackage = () => {
 };
 
 export default CreatePackage;
-

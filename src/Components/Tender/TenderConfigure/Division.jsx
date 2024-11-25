@@ -300,7 +300,7 @@ function Division() {
   const [modalTitle, setModalTitle] = useState("Add division");
   const [editingdivision, setEditingdivision] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 3;
+  const itemsPerPage = 10;
 
   const fetchCategories = async () => {
     try {
@@ -452,7 +452,7 @@ function Division() {
                 <td className="px-4 py-2 border-b">
                   <span
                     onClick={() => handledivisionNameEdit(division)}
-                    className="text-blue-500 hover:underline cursor-pointer"
+                    className="text-black hover:underline cursor-pointer"
                   >
                     {division.name}
                   </span>

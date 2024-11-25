@@ -318,7 +318,7 @@ const AllPackageList = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Submitted Data:", formData);
+    // console.log("Submitted Data:", formData);
 
     // Call the createPackage function
     const result = await createPackage(formData);
