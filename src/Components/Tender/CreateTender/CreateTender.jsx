@@ -4,28 +4,9 @@ import { AiOutlineFile, AiOutlineClose, AiOutlinePlus } from 'react-icons/ai';
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import { useEffect, useState } from 'react';
 import ApiClient from './../../../Api/ApiClient';
-// Sample Admin List
-const adminUserList = [
-  {
-    id: 91,
-    name: 'Grand',
-    email: 'Free',
-    expiredDate: '10-02-2025',
-    createdDate: '10-11-2024',
-    group: 'Not Available',
-    status: 'Publish',
-  },
-  {
-    id: 90,
-    name: 'Rose',
-    email: 'Popular',
-    expiredDate: '29-12-2024',
-    createdDate: '29-10-2024',
-    group: 'Not Available',
-    status: 'Pending',
-  },
-];
-
+import Swal from 'sweetalert2';
+// import CreateTenderTable from './CreateTenderTable';
+import { format } from 'date-fns';
 const CreateTenderForm = ({ onClose }) => {
   const [categories, setCategories] = useState([]);
   const [departments, setDepartments] = useState([]);
@@ -50,6 +31,148 @@ const CreateTenderForm = ({ onClose }) => {
   const [sources, setSources] = useState([]);
   const [selectedSourceType, setSelectedSourceType] = useState('');
   const [filteredSources, setFilteredSources] = useState([]);
+
+  const [formDataSubmit, setFormDataSubmit] = useState({
+    name: '',
+    invitation_for: '',
+    ref_no: '',
+    type: '',
+    sub_sector_id: '',
+    sub_department_id: '',
+    source_id: '',
+    upazila_id: '',
+    earnest_money: '',
+    documents_price: '',
+    publish_on: '',
+    opening_date: '',
+    end_date: '',
+    purchase_last_date: '',
+    prebid_meeting_date: '',
+    submission_date: '',
+    description: '',
+    tender_section: '',
+  });
+  const [fileInput, setFileInput] = useState(null);
+  const [logoInput, setLogoInput] = useState(null);
+
+const handleInputChange = e => {
+  const { name, value } = e.target;
+  console.log(`Field Name: ${name}, Value: ${value}`);
+  setFormDataSubmit(prevDetails => ({
+    ...prevDetails,
+    [name]: value,
+  }));
+  };
+
+  const handleFileUpload = (e, setImage) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImage(file); // Store the actual File object
+    }
+  };
+  const handleLogoUpload = (e, setImage) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImage(file); // Store the actual File object
+    }
+  };
+
+
+  const handleSubmit = async e => {
+    e.preventDefault();
+
+    const formdata = new FormData();
+    formdata.append('name', formDataSubmit.name || '');
+    formdata.append(
+      'invitation_for',
+      formDataSubmit.invitation_for || ''
+    );
+    formdata.append('ref_no', formDataSubmit.ref_no || '');
+    formdata.append('type', formDataSubmit.type || '');
+    formdata.append('sub_sector_id', formDataSubmit.sub_sector_id || '');
+    formdata.append(
+      'sub_department_id',
+      formDataSubmit.sub_department_id || ''
+    );
+    formdata.append('source_id', formDataSubmit.source_id || '');
+    formdata.append('upazila_id', formDataSubmit.upazila_id || '');
+    formdata.append('earnest_money', formDataSubmit.earnest_money || '');
+    formdata.append(
+      'documents_price',
+      formDataSubmit.documents_price || ''
+    );
+    formdata.append('publish_on', formDataSubmit.publish_on || '');
+
+    formdata.append(
+      'opening_date',
+      formDataSubmit.opening_date || ''
+    );
+    formdata.append('end_date', formDataSubmit.end_date || '');
+    formdata.append(
+      'purchase_last_date',
+      formDataSubmit.purchase_last_date || ''
+    );
+    formdata.append(
+      'prebid_meeting_date',
+      formDataSubmit.prebid_meeting_date || ''
+    );
+    formdata.append(
+      'submission_date',
+      formDataSubmit.submission_date || ''
+    );
+    formdata.append(
+      'description',
+      formDataSubmit.description || ''
+    );
+    formdata.append(
+      'tender_section',
+      formDataSubmit.tender_section || ''
+    );
+
+    if (fileInput instanceof File) {
+      formdata.append('file_upload', fileInput);
+    }
+    if (logoInput instanceof File) {
+      formdata.append('company_logo', logoInput);
+    }
+
+    console.log('Before send Data:', formdata);
+    console.log('Before send Data:', formDataSubmit);
+
+    try {
+      const response = await ApiClient.post('/admin/tender', formdata);
+      console.log(response.data);
+
+            const successMessage =
+              response?.data?.message || 'An unknown error occurred';
+            Swal.fire({
+              title: 'Success!',
+              text: successMessage,
+              customClass: {
+                popup: 'w-72 h-auto p-2',
+                title: 'text-lg',
+                content: 'text-xs',
+                confirmButton:
+                  'bg-blue-600 text-white px-4 py-1 text-sm rounded-md',
+              },
+            });
+    } catch (error) {
+      console.error(error);
+              const errorMessage =
+                error.response?.data?.message || 'An unknown error occurred';
+              Swal.fire({
+                title: 'Failed!',
+                text: errorMessage,
+                customClass: {
+                  popup: 'w-72 h-auto p-2',
+                  title: 'text-lg',
+                  content: 'text-xs',
+                  confirmButton:
+                    'bg-blue-600 text-white px-4 py-1 text-sm rounded-md',
+                },
+              });
+    }
+  };
 
   // Fetch categories
   useEffect(() => {
@@ -198,7 +321,7 @@ const CreateTenderForm = ({ onClose }) => {
   const fetchSourcesByType = async type => {
     try {
       const response = await ApiClient.get(
-        `/admin/tender-config/source?type=${type}`,
+        `/admin/tender-config/source?type=${type}`
       );
       if (response.data.success) {
         setFilteredSources(response.data.data);
@@ -217,19 +340,8 @@ const CreateTenderForm = ({ onClose }) => {
     }
   }, [selectedSourceType]);
 
-    const [selectedFile, setSelectedFile] = useState(null);
-
-    // const handleChange = e => {
-    //   const { name, value } = e.target;
-    //   setFormData({ ...formData, [name]: value });
-    // };
-
-    const handleFileChange = e => {
-      setSelectedFile(e.target.files[0]);
-    };
-
   return (
-    <div className="block mx-auto p-8 w-full">
+    <div className="block mx-auto md:p-2 p-1 w-full">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-semibold">Create Tender</h2>
         <button
@@ -240,7 +352,7 @@ const CreateTenderForm = ({ onClose }) => {
         </button>
       </div>
       <div className="bg-white p-8 rounded-lg shadow-lg w-full">
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-3 2xl:grid-cols-4 gap-6">
             {/* Name */}
             <div>
@@ -250,16 +362,38 @@ const CreateTenderForm = ({ onClose }) => {
               <input
                 type="text"
                 placeholder="Enter name"
+                name="name" // Ensure this matches the key in formDataSubmit state
+                value={formDataSubmit.name} // Must bind to state
+                onChange={handleInputChange}
                 className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                required
+              />
+            </div>
+            {/* Description */}
+            <div>
+              <label className="block text-gray-700 font-medium mb-1">
+                Description
+              </label>
+              <input
+                type="text"
+                placeholder="Enter name"
+                name="description" // Ensure this matches the key in formDataSubmit state
+                value={formDataSubmit.description} // Must bind to state
+                onChange={handleInputChange}
+                className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                required
               />
             </div>
             {/* Invitation for */}
             <div>
               <label className="block text-gray-700 font-medium mb-1">
-                Invitation for <span className="text-red-500">*</span>
+                Invitation for
               </label>
               <input
                 type="text"
+                name="invitation_for"
+                value={formDataSubmit.invitation_for}
+                onChange={handleInputChange}
                 placeholder="Enter invitation for"
                 className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
@@ -267,10 +401,13 @@ const CreateTenderForm = ({ onClose }) => {
             {/* Reference No */}
             <div>
               <label className="block text-gray-700 font-medium mb-1">
-                Reference No <span className="text-red-500">*</span>
+                Reference No
               </label>
               <input
                 type="text"
+                name="ref_no"
+                value={formDataSubmit.ref_no}
+                onChange={handleInputChange}
                 placeholder="Enter Reference No "
                 className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
@@ -281,9 +418,11 @@ const CreateTenderForm = ({ onClose }) => {
                 Tender Section <span className="text-red-500">*</span>
               </label>
               <select
-                // value={selectedSourceType}
-                // onChange={e => setSelectedSourceType(e.target.value)}
+                name="tender_section"
+                value={formDataSubmit.tender_section}
+                onChange={handleInputChange}
                 className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                required
               >
                 <option value="" disabled>
                   Select Tender Section
@@ -300,9 +439,11 @@ const CreateTenderForm = ({ onClose }) => {
                 Type <span className="text-red-500">*</span>
               </label>
               <select
-                // value={selectedSourceType}
-                // onChange={e => setSelectedSourceType(e.target.value)}
+                name="type"
+                value={formDataSubmit.type}
+                onChange={handleInputChange}
                 className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                required
               >
                 <option value="" disabled>
                   Select Type
@@ -310,6 +451,7 @@ const CreateTenderForm = ({ onClose }) => {
                 <option value="free">Free Tender</option>
                 <option value="hot">Hot Tender</option>
                 <option value="popular">Popular Tender</option>
+                <option value="corrigendum">Corrigendum Tender</option>
                 <option value="int_popular">Int Popular Tender</option>
               </select>
             </div>
@@ -317,7 +459,7 @@ const CreateTenderForm = ({ onClose }) => {
             {/* Category Dropdown */}
             <div>
               <label className="block text-gray-700 font-medium mb-1">
-                Category<span className="text-red-500">*</span>
+                Category
               </label>
               <select
                 value={selectedCategory}
@@ -338,7 +480,7 @@ const CreateTenderForm = ({ onClose }) => {
             {/* Sector Dropdown */}
             <div>
               <label className="block text-gray-700 font-medium mb-1">
-                Sector <span className="text-red-500">*</span>
+                Sector
               </label>
               <select
                 value={selectedSector}
@@ -359,9 +501,15 @@ const CreateTenderForm = ({ onClose }) => {
             {/* Subsector Dropdown */}
             <div>
               <label className="block text-gray-700 font-medium mb-1">
-                Subsector <span className="text-red-500">*</span>
+                Subsector
               </label>
-              <select className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <select
+                name="sub_sector_id"
+                value={formDataSubmit.sub_sector_id}
+                onChange={handleInputChange}
+                // onChange={handleSectorChange}
+                className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
                 <option value="" disabled>
                   Select a Subsector
                 </option>
@@ -376,7 +524,7 @@ const CreateTenderForm = ({ onClose }) => {
             {/* Department Dropdown */}
             <div>
               <label className="block text-gray-700 font-medium mb-1">
-                Department <span className="text-red-500">*</span>
+                Department
               </label>
               <select
                 value={selectedDepartment}
@@ -397,9 +545,14 @@ const CreateTenderForm = ({ onClose }) => {
             {/* Subdepartment Dropdown */}
             <div>
               <label className="block text-gray-700 font-medium mb-1">
-                Subdepartment <span className="text-red-500">*</span>
+                Subdepartment
               </label>
-              <select className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <select
+                name="sub_department_id"
+                value={formDataSubmit.sub_department_id}
+                onChange={handleInputChange}
+                className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
                 <option value="" disabled>
                   Select a Subdepartment
                 </option>
@@ -459,8 +612,10 @@ const CreateTenderForm = ({ onClose }) => {
                 Upazila <span className="text-red-500">*</span>
               </label>
               <select
-                value={selectedUpazila}
-                onChange={e => setSelectedUpazila(e.target.value)}
+                value={formDataSubmit.upazila_id}
+                onChange={handleInputChange}
+                name="upazila_id"
+                required
                 className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value="" disabled>
@@ -482,6 +637,7 @@ const CreateTenderForm = ({ onClose }) => {
               <select
                 value={selectedSourceType}
                 onChange={e => setSelectedSourceType(e.target.value)}
+                required
                 className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value="" disabled>
@@ -500,7 +656,13 @@ const CreateTenderForm = ({ onClose }) => {
               <label className="block text-gray-700 font-medium mb-1">
                 Source <span className="text-red-500">*</span>
               </label>
-              <select className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <select
+                name="source_id"
+                value={formDataSubmit.source_id}
+                onChange={handleInputChange}
+                className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                required
+              >
                 <option value="" disabled>
                   Select a Source
                 </option>
@@ -514,10 +676,13 @@ const CreateTenderForm = ({ onClose }) => {
             {/* Earnest Money*/}
             <div>
               <label className="block text-gray-700 font-medium mb-1">
-                Earnest Money <span className="text-red-500">*</span>
+                Earnest Money
               </label>
               <input
                 type="text"
+                name="earnest_money"
+                value={formDataSubmit.earnest_money}
+                onChange={handleInputChange}
                 placeholder="Enter Earnest Money"
                 className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
@@ -525,10 +690,13 @@ const CreateTenderForm = ({ onClose }) => {
             {/* Document Price*/}
             <div>
               <label className="block text-gray-700 font-medium mb-1">
-                Document Price <span className="text-red-500">*</span>
+                Document Price
               </label>
               <input
                 type="text"
+                name="documents_price"
+                value={formDataSubmit.documents_price}
+                onChange={handleInputChange}
                 placeholder="Enter Earnest Money"
                 className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
@@ -536,10 +704,14 @@ const CreateTenderForm = ({ onClose }) => {
             {/*  Publish on*/}
             <div>
               <label className="block text-gray-700 font-medium mb-1">
-                Publish on <span className="text-red-500">*</span>
+                Publish on
               </label>
               <input
                 type="date"
+                name="publish_on"
+                value={formDataSubmit.publish_on}
+                onChange={handleInputChange}
+                // onChange={handlePublishOnDateChange}
                 placeholder="Enter Earnest Money"
                 className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
@@ -551,8 +723,12 @@ const CreateTenderForm = ({ onClose }) => {
               </label>
               <input
                 type="date"
+                name="opening_date"
+                value={formDataSubmit.opening_date}
+                onChange={handleInputChange}
                 placeholder="Enter Date"
                 className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                required
               />
             </div>
             {/*  End Date*/}
@@ -562,17 +738,24 @@ const CreateTenderForm = ({ onClose }) => {
               </label>
               <input
                 type="date"
+                name="end_date"
+                value={formDataSubmit.end_date}
+                onChange={handleInputChange}
                 placeholder="Enter Date"
                 className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                required
               />
             </div>
             {/*  Pharchase Last Date*/}
             <div>
               <label className="block text-gray-700 font-medium mb-1">
-                Pharchase Last Date <span className="text-red-500">*</span>
+                Pharchase Last Date
               </label>
               <input
                 type="date"
+                name="purchase_last_date"
+                value={formDataSubmit.purchase_last_date}
+                onChange={handleInputChange}
                 placeholder="Enter Date"
                 className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
@@ -580,10 +763,13 @@ const CreateTenderForm = ({ onClose }) => {
             {/*  Prebid Meeting Date*/}
             <div>
               <label className="block text-gray-700 font-medium mb-1">
-                Prebid Meeting Date<span className="text-red-500">*</span>
+                Prebid Meeting Date
               </label>
               <input
                 type="date"
+                name="prebid_meeting_date"
+                value={formDataSubmit.prebid_meeting_date}
+                onChange={handleInputChange}
                 placeholder="Enter Date"
                 className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
@@ -595,57 +781,36 @@ const CreateTenderForm = ({ onClose }) => {
               </label>
               <input
                 type="date"
+                name="submission_date"
+                value={formDataSubmit.submission_date}
+                onChange={handleInputChange}
                 placeholder="Enter Date"
                 className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                required
               />
             </div>
 
             {/* File Upload */}
-            <div className="mt-0">
-              <label
-                htmlFor="fileInput"
-                className="block text-gray-700 font-medium mb-0"
-              >
-                <AiOutlineFile className="inline text-gray-500 mr-1" /> File
-                Upload
+            <div>
+              <label className="block text-gray-700 font-medium mb-1">
+                File Upload
               </label>
               <input
                 type="file"
-                id="fileInput"
-                className="w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                onChange={handleFileChange}
+                onChange={e => handleFileUpload(e, setFileInput)}
+                className="w-full p-2 border border-gray-300 rounded-lg"
               />
-              {selectedFile && (
-                <p className="mt-2 text-sm text-gray-600">
-                  Selected File:{' '}
-                  <span className="font-medium text-gray-800">
-                    {selectedFile.name}
-                  </span>
-                </p>
-              )}
             </div>
-            <div className="mt-0">
-              <label
-                htmlFor="fileInput"
-                className="block text-gray-700 font-medium mb-0"
-              >
-                <AiOutlineFile className="inline text-gray-500 mr-1" />{' '}
+            {/* Logo Upload */}
+            <div>
+              <label className="block text-gray-700 font-medium mb-1">
                 Organization Logo
               </label>
               <input
                 type="file"
-                id="fileInput"
-                className="w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                onChange={handleFileChange}
+                onChange={e => handleLogoUpload(e, setLogoInput)}
+                className="w-full p-2 border border-gray-300 rounded-lg"
               />
-              {selectedFile && (
-                <p className="mt-2 text-sm text-gray-600">
-                  Selected File:{' '}
-                  <span className="font-medium text-gray-800">
-                    {selectedFile.name}
-                  </span>
-                </p>
-              )}
             </div>
           </div>
 
@@ -664,6 +829,29 @@ const CreateTenderForm = ({ onClose }) => {
 };
 
 
+// Sample Admin List
+const adminUserList = [
+  {
+    id: 91,
+    name: 'Grand',
+    email: 'Free',
+    expiredDate: '10-02-2025',
+    createdDate: '10-11-2024',
+    group: 'Not Available',
+    status: 'Publish',
+  },
+  {
+    id: 90,
+    name: 'Rose',
+    email: 'Popular',
+    expiredDate: '29-12-2024',
+    createdDate: '29-10-2024',
+    group: 'Not Available',
+    status: 'Pending',
+  },
+];
+// Tender Table
+{/* <CreateTenderTable/> */}
 const CreateTender = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
