@@ -24,6 +24,8 @@ import InActiveUser from './Components/Stack-Holder/InActiveUser';
 import AllContactUs from './Components/Contact Us/AllContactUs';
 import AllPublishTender from './Components/Tender/PublishedTender/AllPublishTender';
 import PendingPublishTender from './Components/Tender/PublishedTender/PendingPublishTender';
+import ViewTenderDetails from './Components/Tender/ViewTenderDetails/ViewTenderDetails';
+import PostTender from './Components/Tender/PostTender/PostTender';
 
 
 function App() {
@@ -94,6 +96,8 @@ function App() {
               <Route path="/sector" element={<ProtectedRoute><Sector /></ProtectedRoute>} />
               <Route path="/subSector" element={<ProtectedRoute><SubSector /></ProtectedRoute>} />
               <Route path="/create-user" element={<ProtectedRoute><CreateUsers /></ProtectedRoute>} />
+              <Route path="/viewtenderdetails" element={<ProtectedRoute><ViewTenderDetails></ViewTenderDetails></ProtectedRoute>} />
+              <Route path="/posttender" element={<ProtectedRoute><PostTender></PostTender></ProtectedRoute>} />
               <Route path="/user-list" element={<ProtectedRoute><UserList /></ProtectedRoute>} />
               <Route path="/all-users" element={<ProtectedRoute><AllUsers /></ProtectedRoute>} />
               <Route path="/active-user" element={<ProtectedRoute><ActiveUser /></ProtectedRoute>} />

@@ -208,6 +208,8 @@ const items = [
     label: 'Tender',
     children: [
       { key: '4-1', label: <Link to="/createtender">Create Tender</Link> },
+      { key: '4-9', label: <Link to="/viewtenderdetails">View Tender Details</Link> },
+      { key: '4-5', label: <Link to="/posttender">Post Tender </Link> },
       {
         key: '4-2',
         label: 'Tender Configure',
