@@ -1,6 +1,4 @@
 
-
-
 import React, { useState, useEffect } from "react";
 import { EditOutlined, SearchOutlined } from "@ant-design/icons";
 import { Pagination, message } from "antd";
@@ -135,39 +133,36 @@ const UserList = () => {
   const handleModalSubmit = async (updatedDetails) => {
     const { sectorName, categoryName } = updatedDetails;
 
-    const myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-    myHeaders.append("Authorization", `Bearer ${localStorage.getItem("token")}`); // Use token from localStorage
-
-    const raw = JSON.stringify({
-      admin_type: categoryName,
-      status: sectorName === "Available" ? 1 : 0, // Convert status to 1 or 0
-    });
-
-    const requestOptions = {
-      method: "PATCH",
-      headers: myHeaders,
-      body: raw,
-      redirect: "follow",
-    };
-
     try {
-      const response = await fetch(
+      // PATCH request with Axios
+      const response = await ApiClient.patch(
         `/admin/profile/${selectedAdmin.id}`,
-        requestOptions
+        {
+          admin_type: categoryName,
+          status: sectorName === "Available" ? 1 : 0, // Convert status to 1 or 0
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`, // Use token from localStorage
+          },
+        }
       );
 
-      if (response.ok) {
-        const result = await response.json();
+      if (response.status === 200) {
         message.success("Admin details updated successfully!");
 
-        // Fetch the latest list of admins after the update
-        const updatedResponse = await ApiClient.get("/admin/profile");
-        setAdminUserList(updatedResponse.data.data); // Update with latest data
+        // Update the local state immediately after the successful update
+        setAdminUserList((prevAdminList) => {
+          return prevAdminList.map((admin) =>
+            admin.id === selectedAdmin.id
+              ? { ...admin, admin_type: categoryName, status: sectorName === "Available" ? 1 : 0 }
+              : admin
+          );
+        });
 
         setModalOpen(false); // Close the modal after successful update
       } else {
-        message.error("Failed to update admin details.");
+        message.error("update admin details.");
       }
     } catch (error) {
       console.error("Error updating admin profile:", error);

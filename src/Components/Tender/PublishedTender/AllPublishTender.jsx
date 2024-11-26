@@ -1,5 +1,5 @@
 
-import  { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import ApiClient from "../../../Api/ApiClient"; // Import the custom axios instance
 
 const AllPublishTender = () => {
@@ -11,17 +11,15 @@ const AllPublishTender = () => {
   const fetchTenders = async () => {
     try {
       const response = await ApiClient.get("/admin/tender/publish-tender?key");
-    //   console.log("API Response:", response.data); // Debugging the API response
+      // console.log("API Response:", response.data); // Debugging the API response
 
       // Access the data property which contains the tenders array
       if (response.data && Array.isArray(response.data.data)) {
         setData(response.data.data);
       } else {
-        // console.error("Unexpected response format:", response.data);
         setError("Unexpected response format.");
       }
     } catch (err) {
-    //   console.error("Error fetching tenders:", err);
       setError("Failed to fetch tenders. Please try again.");
     } finally {
       setLoading(false);
@@ -60,7 +58,7 @@ const AllPublishTender = () => {
                   <td className="border border-gray-200 px-4 py-2">{item.email || "N/A"}</td>
                   <td className="border border-gray-200 px-4 py-2">{item.phone || "N/A"}</td>
                   <td className="border border-gray-200 px-4 py-2">
-                    {item.tenderName || "N/A"}
+                    {item.tender_name || "N/A"} {/* Correctly using tender_name */}
                   </td>
                   <td className="border border-gray-200 px-4 py-2">
                     {item.status || "N/A"}
@@ -84,4 +82,3 @@ const AllPublishTender = () => {
 };
 
 export default AllPublishTender;
-
