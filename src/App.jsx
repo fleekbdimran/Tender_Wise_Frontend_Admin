@@ -24,6 +24,8 @@ import InActiveUser from './Components/Stack-Holder/InActiveUser';
 import AllContactUs from './Components/Contact Us/AllContactUs';
 import AllPublishTender from './Components/Tender/PublishedTender/AllPublishTender';
 import PendingPublishTender from './Components/Tender/PublishedTender/PendingPublishTender';
+import TenderDetails from './Components/Tender/CreateTender/TenderDetails';
+import CreateTenderForm from './Components/Tender/CreateTender/CreateTenderForm';
 
 
 function App() {
@@ -74,29 +76,191 @@ function App() {
                   </ProtectedRoute>
                 }
               />
-              
-              
-              <Route path="/pendingpublishtender" element={<ProtectedRoute><PendingPublishTender></PendingPublishTender></ProtectedRoute>} />
-              <Route path="/allpublishedtender" element={<ProtectedRoute><AllPublishTender></AllPublishTender></ProtectedRoute>} />
-              <Route path="/allcontactlist" element={<ProtectedRoute><AllContactUs></AllContactUs></ProtectedRoute>} />
-              <Route path="/inactive-user" element={<ProtectedRoute><InActiveUser></InActiveUser></ProtectedRoute>} />
-              <Route path="/allpackagelist" element={<ProtectedRoute><AllPackageList></AllPackageList></ProtectedRoute>} />
-              <Route path="/activepackage" element={<ProtectedRoute><ActivePackage></ActivePackage></ProtectedRoute>} />
-              <Route path="/createpackage" element={<ProtectedRoute><CreatePackage></CreatePackage></ProtectedRoute>} />
-              <Route path="/createtender" element={<ProtectedRoute><CreateTender></CreateTender></ProtectedRoute>} />
-              <Route path="/source" element={<ProtectedRoute><Source></Source></ProtectedRoute>} />
-              <Route path="/district" element={<ProtectedRoute><District></District></ProtectedRoute>} />
-              <Route path="/upazila" element={<ProtectedRoute><Upazila></Upazila></ProtectedRoute>} />
-              <Route path="/division" element={<ProtectedRoute><Division></Division></ProtectedRoute>} />
-              <Route path="/subdepartment" element={<ProtectedRoute><SubDepartment></SubDepartment></ProtectedRoute>} />
-              <Route path="/department" element={<ProtectedRoute><Department></Department></ProtectedRoute>} />
-              <Route path="/category" element={<ProtectedRoute><Category /></ProtectedRoute>} />
-              <Route path="/sector" element={<ProtectedRoute><Sector /></ProtectedRoute>} />
-              <Route path="/subSector" element={<ProtectedRoute><SubSector /></ProtectedRoute>} />
-              <Route path="/create-user" element={<ProtectedRoute><CreateUsers /></ProtectedRoute>} />
-              <Route path="/user-list" element={<ProtectedRoute><UserList /></ProtectedRoute>} />
-              <Route path="/all-users" element={<ProtectedRoute><AllUsers /></ProtectedRoute>} />
-              <Route path="/active-user" element={<ProtectedRoute><ActiveUser /></ProtectedRoute>} />
+
+              <Route
+                path="/pendingpublishtender"
+                element={
+                  <ProtectedRoute>
+                    <PendingPublishTender></PendingPublishTender>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/allpublishedtender"
+                element={
+                  <ProtectedRoute>
+                    <AllPublishTender></AllPublishTender>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/allcontactlist"
+                element={
+                  <ProtectedRoute>
+                    <AllContactUs></AllContactUs>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/inactive-user"
+                element={
+                  <ProtectedRoute>
+                    <InActiveUser></InActiveUser>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/allpackagelist"
+                element={
+                  <ProtectedRoute>
+                    <AllPackageList></AllPackageList>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/activepackage"
+                element={
+                  <ProtectedRoute>
+                    <ActivePackage></ActivePackage>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/createpackage"
+                element={
+                  <ProtectedRoute>
+                    <CreatePackage></CreatePackage>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/createtender"
+                element={
+                  <ProtectedRoute>
+                    <CreateTenderForm></CreateTenderForm>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/tenderList"
+                element={
+                  <ProtectedRoute>
+                    <CreateTender></CreateTender>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/tenderDetails/:id"
+                element={
+                  <ProtectedRoute>
+                    <TenderDetails></TenderDetails>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/source"
+                element={
+                  <ProtectedRoute>
+                    <Source></Source>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/district"
+                element={
+                  <ProtectedRoute>
+                    <District></District>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/upazila"
+                element={
+                  <ProtectedRoute>
+                    <Upazila></Upazila>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/division"
+                element={
+                  <ProtectedRoute>
+                    <Division></Division>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/subdepartment"
+                element={
+                  <ProtectedRoute>
+                    <SubDepartment></SubDepartment>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/department"
+                element={
+                  <ProtectedRoute>
+                    <Department></Department>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/category"
+                element={
+                  <ProtectedRoute>
+                    <Category />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/sector"
+                element={
+                  <ProtectedRoute>
+                    <Sector />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/subSector"
+                element={
+                  <ProtectedRoute>
+                    <SubSector />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/create-user"
+                element={
+                  <ProtectedRoute>
+                    <CreateUsers />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/user-list"
+                element={
+                  <ProtectedRoute>
+                    <UserList />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/all-users"
+                element={
+                  <ProtectedRoute>
+                    <AllUsers />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/active-user"
+                element={
+                  <ProtectedRoute>
+                    <ActiveUser />
+                  </ProtectedRoute>
+                }
+              />
               <Route path="*" element={<Navigate to="/dashboard" replace />} />
             </Routes>
           </div>

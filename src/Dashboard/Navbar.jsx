@@ -207,7 +207,12 @@ const items = [
     icon: <AppstoreOutlined />,
     label: 'Tender',
     children: [
+      { key: '4-1', label: <Link to="/tenderList">Tender List</Link> },
       { key: '4-1', label: <Link to="/createtender">Create Tender</Link> },
+      // {
+      //   key: '4-1',
+      //   label: <Link to="/tenderDetails/:id">Tender Details</Link>,
+      // },
       {
         key: '4-2',
         label: 'Tender Configure',
@@ -223,12 +228,21 @@ const items = [
           { key: '4-10', label: <Link to="/source">Source</Link> },
         ],
       },
-      { key: '4-11',
-         label: 'Published Tender',
-         children: [
-          { key: '4-3', label: <Link to="/allpublishedtender">All Publish Tender</Link> },
-          { key: '4-4', label: <Link to="/pendingpublishtender">Pending Publish Tender</Link> },
-         ],
+      {
+        key: '4-11',
+        label: 'Published Tender',
+        children: [
+          {
+            key: '4-3',
+            label: <Link to="/allpublishedtender">All Publish Tender</Link>,
+          },
+          {
+            key: '4-4',
+            label: (
+              <Link to="/pendingpublishtender">Pending Publish Tender</Link>
+            ),
+          },
+        ],
       },
       { key: '4-12', label: <Link to="/active-tender">Active Tender</Link> },
     ],
@@ -241,7 +255,7 @@ const items = [
       { key: '4-3', label: <Link to="/createpackage">CreatePackage</Link> },
       { key: '4-5', label: <Link to="/allpackagelist">AllPackageList</Link> },
       { key: '4-4', label: <Link to="/activepackage">ActivePackage</Link> },
-      
+
       { key: '8-4', label: 'Subscription List' },
     ],
   },
@@ -251,7 +265,6 @@ const items = [
     label: 'Contact Us',
     children: [
       { key: '4-9', label: <Link to="/allcontactlist">All Contact List</Link> },
-      
     ],
   },
   {
@@ -259,7 +272,10 @@ const items = [
     icon: <SettingOutlined />,
     label: 'Settings',
     children: [
-      { key: '9-1', label: <Link to="/company-info-update">Company Info Update</Link> },
+      {
+        key: '9-1',
+        label: <Link to="/company-info-update">Company Info Update</Link>,
+      },
     ],
   },
 ];
