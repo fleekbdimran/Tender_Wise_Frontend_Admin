@@ -24,13 +24,8 @@ import InActiveUser from './Components/Stack-Holder/InActiveUser';
 import AllContactUs from './Components/Contact Us/AllContactUs';
 import AllPublishTender from './Components/Tender/PublishedTender/AllPublishTender';
 import PendingPublishTender from './Components/Tender/PublishedTender/PendingPublishTender';
-<<<<<<< HEAD
 import ViewTenderDetails from './Components/Tender/ViewTenderDetails/ViewTenderDetails';
 import PostTender from './Components/Tender/PostTender/PostTender';
-=======
-import TenderDetails from './Components/Tender/CreateTender/TenderDetails';
-import CreateTenderForm from './Components/Tender/CreateTender/CreateTenderForm';
->>>>>>> 5de175766e2841e2e9b859d958cae7d3bc3dd390
 
 
 function App() {
