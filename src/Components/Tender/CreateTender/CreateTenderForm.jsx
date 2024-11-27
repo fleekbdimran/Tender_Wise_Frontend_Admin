@@ -1,20 +1,12 @@
-import { EditOutlined, SearchOutlined } from '@ant-design/icons';
-import { Pagination } from 'antd';
-import { AiOutlineFile, AiOutlineClose, AiOutlinePlus } from 'react-icons/ai';
-import {
-  AiOutlineEye,
-  AiOutlineEdit,
-  AiOutlineEyeInvisible,
-} from 'react-icons/ai';
+
+import {  AiOutlineClose} from 'react-icons/ai';
 import { useEffect, useState } from 'react';
 import ApiClient from './../../../Api/ApiClient';
 import Swal from 'sweetalert2';
-import { format } from 'date-fns';
+import { useNavigate } from 'react-router-dom';
 const CreateTenderForm = ({ onClose }) => {
-  const navigate = useNavigate();
   const [categories, setCategories] = useState([]);
   const [departments, setDepartments] = useState([]);
-  const [subdepartments, setSubdepartments] = useState([]);
   const [sectors, setSectors] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedDepartment, setSelectedDepartment] = useState('');
@@ -30,9 +22,7 @@ const CreateTenderForm = ({ onClose }) => {
   const [filteredUpazilas, setFilteredUpazilas] = useState([]);
   const [selectedDivision, setSelectedDivision] = useState('');
   const [selectedDistrict, setSelectedDistrict] = useState('');
-  const [selectedUpazila, setSelectedUpazila] = useState('');
   // State for source
-  const [sources, setSources] = useState([]);
   const [selectedSourceType, setSelectedSourceType] = useState('');
   const [filteredSources, setFilteredSources] = useState([]);
 
@@ -85,34 +75,34 @@ const CreateTenderForm = ({ onClose }) => {
     e.preventDefault();
 
     const formdata = new FormData();
-    formdata.append('name', formDataSubmit.name || '');
-    formdata.append('invitation_for', formDataSubmit.invitation_for || '');
-    formdata.append('ref_no', formDataSubmit.ref_no || '');
-    formdata.append('type', formDataSubmit.type || '');
-    formdata.append('sub_sector_id', formDataSubmit.sub_sector_id || '');
+    formdata.append('name', formDataSubmit.name || null);
+    formdata.append('invitation_for', formDataSubmit.invitation_for || null);
+    formdata.append('ref_no', formDataSubmit.ref_no || null);
+    formdata.append('type', formDataSubmit.type || null);
+    formdata.append('sub_sector_id', formDataSubmit.sub_sector_id || null);
     formdata.append(
       'sub_department_id',
-      formDataSubmit.sub_department_id || ''
+      formDataSubmit.sub_department_id || null
     );
-    formdata.append('source_id', formDataSubmit.source_id || '');
-    formdata.append('upazila_id', formDataSubmit.upazila_id || '');
-    formdata.append('earnest_money', formDataSubmit.earnest_money || '');
-    formdata.append('documents_price', formDataSubmit.documents_price || '');
-    formdata.append('publish_on', formDataSubmit.publish_on || '');
+    formdata.append('source_id', formDataSubmit.source_id || null);
+    formdata.append('upazila_id', formDataSubmit.upazila_id || null);
+    formdata.append('earnest_money', formDataSubmit.earnest_money || null);
+    formdata.append('documents_price', formDataSubmit.documents_price || null);
+    formdata.append('publish_on', formDataSubmit.publish_on || null);
 
-    formdata.append('opening_date', formDataSubmit.opening_date || '');
-    formdata.append('end_date', formDataSubmit.end_date || '');
+    formdata.append('opening_date', formDataSubmit.opening_date || null);
+    formdata.append('end_date', formDataSubmit.end_date || null);
     formdata.append(
       'purchase_last_date',
-      formDataSubmit.purchase_last_date || ''
+      formDataSubmit.purchase_last_date || null
     );
     formdata.append(
       'prebid_meeting_date',
-      formDataSubmit.prebid_meeting_date || ''
+      formDataSubmit.prebid_meeting_date || null
     );
-    formdata.append('submission_date', formDataSubmit.submission_date || '');
-    formdata.append('description', formDataSubmit.description || '');
-    formdata.append('tender_section', formDataSubmit.tender_section || '');
+    formdata.append('submission_date', formDataSubmit.submission_date || null);
+    formdata.append('description', formDataSubmit.description || null);
+    formdata.append('tender_section', formDataSubmit.tender_section || null);
 
     if (fileInput instanceof File) {
       formdata.append('file_upload', fileInput);
@@ -323,6 +313,8 @@ const CreateTenderForm = ({ onClose }) => {
     }
   }, [selectedSourceType]);
 
+
+
   return (
     <div className="block mx-auto md:p-2 p-1 w-full">
       <div className="flex justify-between items-center mb-6">
@@ -334,34 +326,33 @@ const CreateTenderForm = ({ onClose }) => {
           <AiOutlineClose />
         </button>
       </div>
-      <div className="bg-white p-8 rounded-lg shadow-lg w-full">
+      <div className="bg-gray-50 p-8 rounded-lg shadow-lg w-full text-xs">
         <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-3 2xl:grid-cols-4 gap-6">
-            {/* Name */}
+            {/* Reference No */}
             <div>
               <label className="block text-gray-700 font-medium mb-1">
-                Name <span className="text-red-500">*</span>
+                Reference No
+              </label>
+              <input
+                type="text"
+                name="ref_no"
+                value={formDataSubmit.ref_no}
+                onChange={handleInputChange}
+                placeholder="Enter Reference No "
+                className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+            {/* Title */}
+            <div>
+              <label className="block text-gray-700 font-medium mb-1">
+                Title <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
                 placeholder="Enter name"
                 name="name" // Ensure this matches the key in formDataSubmit state
                 value={formDataSubmit.name} // Must bind to state
-                onChange={handleInputChange}
-                className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
-              />
-            </div>
-            {/* Description */}
-            <div>
-              <label className="block text-gray-700 font-medium mb-1">
-                Description
-              </label>
-              <input
-                type="text"
-                placeholder="Enter name"
-                name="description" // Ensure this matches the key in formDataSubmit state
-                value={formDataSubmit.description} // Must bind to state
                 onChange={handleInputChange}
                 className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 required
@@ -381,20 +372,7 @@ const CreateTenderForm = ({ onClose }) => {
                 className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
-            {/* Reference No */}
-            <div>
-              <label className="block text-gray-700 font-medium mb-1">
-                Reference No
-              </label>
-              <input
-                type="text"
-                name="ref_no"
-                value={formDataSubmit.ref_no}
-                onChange={handleInputChange}
-                placeholder="Enter Reference No "
-                className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
+
             {/* Tender section Dropdown */}
             <div>
               <label className="block text-gray-700 font-medium mb-1">
@@ -795,6 +773,21 @@ const CreateTenderForm = ({ onClose }) => {
                 className="w-full p-2 border border-gray-300 rounded-lg"
               />
             </div>
+            {/* Description */}
+            <div>
+              <label className="block text-gray-700 font-medium mb-1">
+                Description
+              </label>
+              <input
+                type="text"
+                placeholder="Enter name"
+                name="description" // Ensure this matches the key in formDataSubmit state
+                value={formDataSubmit.description} // Must bind to state
+                onChange={handleInputChange}
+                className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                required
+              />
+            </div>
           </div>
 
           <div className="mt-8 flex justify-center">
@@ -810,241 +803,4 @@ const CreateTenderForm = ({ onClose }) => {
     </div>
   );
 };
-
-// Tender Table
-import { useNavigate } from 'react-router-dom';
-const CreateTender = () => {
-  const navigate = useNavigate();
-  const [searchTerm, setSearchTerm] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
-  const [showCreateForm, setShowCreateForm] = useState(false);
-  const [viewTenderDetails, setViewTenderDetails] = useState(null);
-  const [editTender, setEditTender] = useState(null);
-  const [tenderData, setTenderData] = useState([]);
-
-  // Fetch data using Axios
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await ApiClient.get('/admin/tender');
-        console.log('Response Tender:', response.data.data);
-        setTenderData(response.data.data); // Assuming the API returns an array of tender data
-      } catch (error) {
-        console.error('Error fetching tender data:', error);
-      }
-    };
-
-    fetchData();
-    // Reload after 1 seconds
-    const interval = setInterval(() => {
-          fetchData();
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, []); // Empty dependency array means this effect runs once on component mount
-
-  const handleSearch = e => {
-    setSearchTerm(e.target.value);
-  };
-
-  const filteredAdminList = tenderData.filter(admin =>
-    admin.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  const paginatedAdminList = filteredAdminList.slice(
-    (currentPage - 1) * pageSize,
-    currentPage * pageSize
-  );
-
-  const handlePageChange = page => {
-    setCurrentPage(page);
-  };
-
-  const handleViewTender = admin => {
-    setViewTenderDetails(admin);
-  };
-
-  // Function to navigate to edit page
-  const handleEdit = id => {
-    navigate(`/tenderDetails/${id}`);
-    console.log(id);
-  };
-
-  const data = [
-    { label: 'Name', value: 'Imran' },
-    { label: 'Earnest Money', value: '' },
-    { label: 'Document Price', value: '' },
-    { label: 'Published On', value: '' },
-    { label: 'Opening Date', value: '' },
-    { label: 'End Date', value: '' },
-    { label: 'Purchase Last Date', value: '' },
-    { label: 'Prebid Meeting Date', value: '' },
-    { label: 'Submission Date', value: '' },
-    { label: 'Tender Section', value: '' },
-    { label: 'Type', value: '' },
-    { label: 'Source Type', value: '' },
-    { label: 'Status', value: '' },
-    { label: 'Category Name', value: '' },
-    { label: 'Sector Name', value: '' },
-    { label: 'SubSector Name', value: '' },
-    { label: 'Department Name', value: '' },
-    { label: 'Sub Department Name', value: '' },
-    { label: 'Division Name', value: '' },
-    { label: 'District Name', value: '' },
-    { label: 'Upazila Name', value: '' },
-    { label: 'Source Name', value: '' },
-    { label: 'Created At', value: '' },
-  ];
-
-  return (
-    <div className="p-6 bg-gray-100">
-      {!showCreateForm && !viewTenderDetails && !editTender && (
-        <div className="mb-4 flex justify-between items-center">
-          <button
-            onClick={() => setShowCreateForm(true)}
-            className="bg-teal-500 text-white px-7 py-2 rounded-lg flex items-center"
-          >
-            <AiOutlinePlus className="mr-2" />
-            Create Tender
-          </button>
-          <div className="flex items-center border border-gray-300 rounded p-2 w-1/4 bg-white">
-            <SearchOutlined className="text-gray-500 mr-2" />
-            <input
-              type="text"
-              placeholder="Search by Tender Name"
-              value={searchTerm}
-              onChange={handleSearch}
-              className="w-full text-sm outline-none"
-            />
-          </div>
-        </div>
-      )}
-
-      {showCreateForm ? (
-        <CreateTenderForm onClose={() => setShowCreateForm(false)} />
-      ) : viewTenderDetails ? (
-        <div className="p-6 bg-gray-100 min-h-screen">
-          <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
-            <div className="flex justify-between items-center p-6 border-b border-gray-200">
-              <h1 className="text-2xl font-bold text-teal-600">
-                Single Tender View
-              </h1>
-              <div className="flex space-x-4">
-                <button
-                  onClick={() => setViewTenderDetails(null)}
-                  className="px-6 py-2 bg-red-500 text-white font-medium rounded-lg shadow hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-300"
-                >
-                  Close
-                </button>
-                <button className="flex items-center px-6 py-2 bg-teal-500 text-white font-medium rounded-md shadow hover:bg-teal-600">
-                  <span className="mr-2">✏️</span> Update
-                </button>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-3 gap-6 p-6">
-              <div className="col-span-2">
-                <div className="p-4">
-                  <table className="table-auto w-full text-left text-sm border-separate border-spacing-y-2">
-                    <tbody>
-                      {data.map((item, index) => (
-                        <tr key={index}>
-                          <td className="font-medium text-gray-700 py-2">
-                            {item.label}
-                          </td>
-                          <td className="py-2 text-gray-600">
-                            {item.value || '---'}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-
-              <div className="col-span-1 flex flex-col items-center">
-                <div className="relative w-full h-48 mb-4">
-                  <img
-                    src="https://via.placeholder.com/300"
-                    alt="Room"
-                    className="w-full h-full object-cover rounded-md"
-                  />
-                  <span className="absolute top-2 left-2 bg-teal-500 text-white text-xs font-semibold px-2 py-1 rounded-full shadow">
-                    142
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      ) : (
-        <>
-          <div className="overflow-x-auto md:text-xs 2xl:text-lg text-center">
-            <table className="min-w-full md:h-4/5 2xl:h-11/12 bg-white border border-gray-200 ">
-              <thead>
-                <tr className="bg-gray-100 ">
-                  <th className="p-2 border-b text-center">S/N</th>
-                  <th className="p-2 border-b text-center">Tender ID</th>
-                  <th className="p-2 border-b text-center">Tender Name</th>
-                  <th className="p-2 border-b text-center">Source Name</th>
-                  <th className="p-2 border-b text-center">Type</th>
-                  <th className="p-2 border-b text-center">Publish Date</th>
-                  <th className="p-2 border-b text-center">Submission Date</th>
-                  <th className="p-3 border-b text-center">Section</th>
-                  <th className="p-2 border-b text-center">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {paginatedAdminList.map((admin, index) => (
-                  <tr key={admin.id} className="">
-                    <td className="p-2 border-b"> {index + 1}</td>
-                    <td className="p-2 border-b">{admin.tender_id}</td>
-                    <td className="p-2 border-b">{admin.name}</td>
-                    <td className="p-2 border-b">{admin.source_name}</td>
-                    <td className="p-2 border-b">{admin.type}</td>
-                    <td className="p-2 border-b">{admin.publish_on}</td>
-                    <td className="p-2 border-b">{admin.submission_date}</td>
-                    <td className="p-2 border-b">{admin.tender_section}</td>
-                    <td className="p-2 border-b pl-6">
-                      {/* <div className="flex items-center space-x-4">
-                        <button className="flex items-center space-x-2 text-gray-600 hover:text-blue-600">
-                          <AiOutlineEye size={24} />
-                        </button>
-
-                        <button className="flex items-center space-x-2 text-gray-600 hover:text-green-600">
-                          <AiOutlineEdit size={24} />
-                        </button>
-                      </div> */}
-                      <button
-                        onClick={e => {
-                          e.stopPropagation();
-                          handleEdit(admin.id);
-                        }}
-                        className="flex items-center justify-center space-x-2 text-gray-600 hover:text-green-600"
-                      >
-                        <AiOutlineEdit size={24} />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
-          <div className="mt-6 flex justify-center">
-            <Pagination
-              current={currentPage}
-              total={filteredAdminList.length}
-              pageSize={pageSize}
-              onChange={handlePageChange}
-            />
-          </div>
-        </>
-      )}
-    </div>
-  );
-};
-
-export default CreateTender;
-
+export default CreateTenderForm;
