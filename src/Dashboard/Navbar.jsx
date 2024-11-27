@@ -314,7 +314,7 @@ const Navbar = ({ onLogout }) => {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
+    <div  style={{ display: 'flex',  flexDirection: 'column', height: '100vh' }}>
       {/* Logo at the top */}
       <div style={{ textAlign: 'center', padding: '20px' }}>
         <img 
