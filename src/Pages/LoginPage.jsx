@@ -33,36 +33,12 @@ function LoginPage({ onLogin }) {
     setShowPassword(!showPassword);
   };
 
-  // Validate phone number
-  // const validatePhone = () => {
-  //   if (!phone) {
-  //     toast.error('Please enter your phone number.');
-  //     return false;
-  //   }
-  //   if (!/^\d{13}$/.test(phone)) {
-  //     // toast.error('Please enter a valid 11-digit phone number.');
-  //     return false;
-  //   }
-  //   return true;
-  // };
 
-  // Validate password
-  // const validatePassword = () => {
-  //   if (!password) {
-  //     toast.error('Please enter your password.');
-  //     return false;
-  //   }
-  //   return true;
-  // };
 
   // Handle login
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    // const isPhoneValid = validatePhone();
-    // const isPasswordValid = validatePassword();
-
-    // if (!isPhoneValid || !isPasswordValid) return;
 
     try {
       const response = await ApiClient.post('/admin/auth/login/', { phone, password });

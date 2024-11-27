@@ -207,12 +207,7 @@ const items = [
     icon: <AppstoreOutlined />,
     label: 'Tender',
     children: [
-      { key: '4-1', label: <Link to="/tenderList">Tender List</Link> },
       { key: '4-1', label: <Link to="/createtender">Create Tender</Link> },
-      // {
-      //   key: '4-1',
-      //   label: <Link to="/tenderDetails/:id">Tender Details</Link>,
-      // },
       {
         key: '4-2',
         label: 'Tender Configure',
@@ -247,6 +242,36 @@ const items = [
       { key: '4-12', label: <Link to="/active-tender">Active Tender</Link> },
     ],
   },
+  // {
+  //   key: '5',
+  //   icon: <AppstoreOutlined />,
+  //   label: 'Courses',
+  //   children: [
+  //     { key: '5-1', label: 'Create Course' },
+  //     { key: '5-2', label: 'All Courses' },
+  //     { key: '5-3', label: 'Published Courses' },
+  //     { key: '5-4', label: 'Active Courses' },
+  //   ],
+  // },
+  // {
+  //   key: '6',
+  //   icon: <AppstoreOutlined />,
+  //   label: 'Teachers',
+  //   children: [
+  //     { key: '6-1', label: 'Create Teacher' },
+  //     { key: '6-2', label: 'All Teachers' },
+  //     { key: '6-3', label: 'Active Teacher' },
+  //   ],
+  // },
+  // {
+  //   key: '7',
+  //   icon: <AppstoreOutlined />,
+  //   label: 'Candidates',
+  //   children: [
+  //     { key: '7-1', label: 'All Candidates' },
+  //     { key: '7-2', label: 'Active Candidates' },
+  //   ],
+  // },
   {
     key: '8',
     icon: <AppstoreOutlined />,
@@ -310,13 +335,13 @@ const Navbar = ({ onLogout }) => {
     }
   };
 
-  const handleLogout = () => {
+  const handleLogout = ()=>{
     onLogout();
     localStorage.removeItem('token'); // Clear the token
-  };
+  }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
+    <div  style={{ display: 'flex',  flexDirection: 'column', height: '100vh' }}>
       {/* Logo at the top */}
       <div style={{ textAlign: 'center', padding: '20px' }}>
         <img 
@@ -351,3 +376,6 @@ Navbar.propTypes = {
 };
 
 export default Navbar;
+
+
+

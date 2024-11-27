@@ -1,22 +1,14 @@
 
-import React, { useState, useEffect } from "react";
+import  { useState, useEffect } from "react";
 import { EditOutlined, SearchOutlined } from "@ant-design/icons";
-import { Pagination, message } from "antd";
+import { Pagination } from "antd";
 import ApiClient from "../../Api/ApiClient";
+import Swal from "sweetalert2";
 
 // EditPassModal Component
 const EditPassModal = ({ isOpen, onClose, onSubmit, admin }) => {
   const [sectorName, setSectorName] = useState(admin?.status === 1 ? "Available" : "Unavailable");
   const [categoryName, setCategoryName] = useState(admin?.admin_type || "");
-
-  const handleSubmit = () => {
-    if (!sectorName || !categoryName) {
-      alert("Please fill out all required fields.");
-      return;
-    }
-    onSubmit({ sectorName, categoryName });
-    onClose(); // Close the modal after submission
-  };
 
   useEffect(() => {
     if (admin) {
@@ -25,7 +17,20 @@ const EditPassModal = ({ isOpen, onClose, onSubmit, admin }) => {
     }
   }, [admin]);
 
-  if (!isOpen) return null; // Do not render if modal is not open
+  const handleSubmit = () => {
+    if (!sectorName || !categoryName) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Please fill out all required fields!",
+      });
+      return;
+    }
+    onSubmit({ sectorName, categoryName });
+    onClose();
+  };
+
+  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center z-50">
@@ -37,12 +42,8 @@ const EditPassModal = ({ isOpen, onClose, onSubmit, admin }) => {
         >
           &times;
         </button>
-
         <div className="mb-4">
-          <label
-            htmlFor="categoryName"
-            className="block text-sm font-medium text-gray-700 mb-1"
-          >
+          <label htmlFor="categoryName" className="block text-sm font-medium text-gray-700 mb-1">
             Admin Type <span className="text-red-500">*</span>
           </label>
           <select
@@ -57,10 +58,7 @@ const EditPassModal = ({ isOpen, onClose, onSubmit, admin }) => {
           </select>
         </div>
         <div className="mb-4">
-          <label
-            htmlFor="status"
-            className="block text-sm font-medium text-gray-700 mb-1"
-          >
+          <label htmlFor="status" className="block text-sm font-medium text-gray-700 mb-1">
             Status <span className="text-red-500">*</span>
           </label>
           <select
@@ -89,8 +87,8 @@ const UserList = () => {
   const [adminUserList, setAdminUserList] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize] = useState(5);
-  const [selectedAdmin, setSelectedAdmin] = useState(null); // Track selected admin for modal
+  const [pageSize] = useState(10);
+  const [selectedAdmin, setSelectedAdmin] = useState(null);
   const [isModalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
@@ -102,10 +100,21 @@ const UserList = () => {
         }
       } catch (error) {
         console.error("Error fetching admin profiles:", error);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Failed to fetch user profiles.",
+        });
       }
     };
 
     fetchAdminProfiles();
+    // Reload after 1 seconds
+    const interval = setInterval(() => {
+      fetchAdminProfiles();
+    }, 1000);
+
+    return () => clearInterval(interval);
   }, []);
 
   const handleSearch = (e) => {
@@ -134,39 +143,34 @@ const UserList = () => {
     const { sectorName, categoryName } = updatedDetails;
 
     try {
-      // PATCH request with Axios
-      const response = await ApiClient.patch(
-        `/admin/profile/${selectedAdmin.id}`,
-        {
-          admin_type: categoryName,
-          status: sectorName === "Available" ? 1 : 0, // Convert status to 1 or 0
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`, // Use token from localStorage
-          },
-        }
-      );
+      const response = await ApiClient.patch(`/admin/profile/${selectedAdmin.id}`, {
+        admin_type: categoryName,
+        status: sectorName === "Available" ? 1 : 0,
+      });
 
       if (response.status === 200) {
-        message.success("Admin details updated successfully!");
-
-        // Update the local state immediately after the successful update
-        setAdminUserList((prevAdminList) => {
-          return prevAdminList.map((admin) =>
+        setAdminUserList((prevAdminList) =>
+          prevAdminList.map((admin) =>
             admin.id === selectedAdmin.id
               ? { ...admin, admin_type: categoryName, status: sectorName === "Available" ? 1 : 0 }
               : admin
-          );
+          )
+        );
+
+        Swal.fire({
+          icon: "success",
+          title: "Success",
+          text: "Admin details updated successfully!",
         });
 
-        setModalOpen(false); // Close the modal after successful update
-      } else {
-        message.error("update admin details.");
+        setModalOpen(false);
       }
     } catch (error) {
-      console.error("Error updating admin profile:", error);
-      message.error("Error occurred while updating details.");
+      Swal.fire({
+        icon: "error",
+        title: "Update Failed",
+        text: "An error occurred while updating the details.",
+      });
     }
   };
 
@@ -197,12 +201,11 @@ const UserList = () => {
             </tr>
           </thead>
           <tbody className="text-gray-700 text-sm font-light">
-            {paginatedAdminList.map((admin) => (
-              <tr
-                key={admin.id}
-                className="border-b border-gray-200 hover:bg-gray-100"
-              >
-                <td className="py-3 px-6 text-left font-bold">{admin.id}</td>
+            {paginatedAdminList.map((admin, index) => (
+              <tr key={admin.id} className="border-b border-gray-200 hover:bg-gray-100">
+                <td className="py-3 px-6 text-left font-bold">
+                  {(currentPage - 1) * pageSize + index + 1}
+                </td>
                 <td className="py-3 px-6 text-left">{admin.name}</td>
                 <td className="py-3 px-6 text-left">{admin.email}</td>
                 <td className="py-3 px-6 text-left">{admin.phone || "N/A"}</td>
@@ -240,8 +243,6 @@ const UserList = () => {
           showSizeChanger={false}
         />
       </div>
-
-      {/* Render the EditPassModal */}
       <EditPassModal
         isOpen={isModalOpen}
         onClose={() => setModalOpen(false)}
