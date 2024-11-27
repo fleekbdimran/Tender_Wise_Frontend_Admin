@@ -1,4 +1,3 @@
-
 import { EditOutlined, SearchOutlined } from '@ant-design/icons';
 import { Pagination } from 'antd';
 import { AiOutlineFile, AiOutlineClose, AiOutlinePlus } from 'react-icons/ai';
@@ -258,5 +257,4 @@ const CreateTenderTable = () => {
     </div>
   );
 };
-
 export default CreateTenderTable;

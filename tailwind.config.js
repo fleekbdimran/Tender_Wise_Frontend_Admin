@@ -4,6 +4,7 @@ export default {
   theme: {
     extend: {
       colors: {
+        DefaultColor: '#336AEA',
         tenderDetails: '#DBE8FF',
       },
       fontFamily: {

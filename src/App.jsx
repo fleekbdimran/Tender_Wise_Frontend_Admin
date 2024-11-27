@@ -26,6 +26,7 @@ import AllPublishTender from './Components/Tender/PublishedTender/AllPublishTend
 import PendingPublishTender from './Components/Tender/PublishedTender/PendingPublishTender';
 import TenderDetails from './Components/Tender/CreateTender/TenderDetails';
 import CreateTenderForm from './Components/Tender/CreateTender/CreateTenderForm';
+import BackupTenderDetails from './Components/Tender/CreateTender/BackupTenderDetails';
 
 
 function App() {
@@ -153,7 +154,8 @@ function App() {
                 path="/tenderDetails/:id"
                 element={
                   <ProtectedRoute>
-                    <TenderDetails></TenderDetails>
+                    {/* <TenderDetails></TenderDetails> */}
+                    <BackupTenderDetails></BackupTenderDetails>
                   </ProtectedRoute>
                 }
               />
