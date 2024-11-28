@@ -1,10 +1,12 @@
 import { AiOutlineClose } from 'react-icons/ai';
 import { useEffect, useState } from 'react';
-import ApiClient from './../../../Api/ApiClient';
+import ApiClient from '../../../Api/ApiClient';
 import Swal from 'sweetalert2';
-import { useNavigate } from 'react-router-dom';
-const CreateTenderForm = ({ onClose }) => {
+import { useNavigate, useParams } from 'react-router-dom';
+import tenderDetailsFormImage from '../../../assets/images/tenderDetailsFormImage.png';
+const SingleTenderDetails = ({ onClose }) => {
   const navigate = useNavigate();
+  const { id } = useParams();
   const [categories, setCategories] = useState([]);
   const [departments, setDepartments] = useState([]);
   const [sectors, setSectors] = useState([]);
@@ -25,7 +27,9 @@ const CreateTenderForm = ({ onClose }) => {
   // State for source
   const [selectedSourceType, setSelectedSourceType] = useState('');
   const [filteredSources, setFilteredSources] = useState([]);
-
+  const [logo, setLogo] = useState(null);
+  const [orgName, setOrgname] = useState('');
+  const [tenderName, setTenderName] = useState('');
   const [formDataSubmit, setFormDataSubmit] = useState({
     name: '',
     invitation_for: '',
@@ -48,6 +52,33 @@ const CreateTenderForm = ({ onClose }) => {
   });
   const [fileInput, setFileInput] = useState(null);
   const [logoInput, setLogoInput] = useState(null);
+
+  // Fetch Tender Details for Editing
+  useEffect(() => {
+    const fetchTenderDetails = async () => {
+      try {
+        const response = await ApiClient.get(`/admin/tender/${id}`);
+        const data = response.data.data;
+        setSelectedCategory(data.category_id);
+        setSelectedSector(data.sector_id);
+        setSelectedDepartment(data.department_id);
+        setSelectedDivision(data.division_id);
+        setSelectedDistrict(data.district_id);
+        // setSelectedSourceType(data.source_id);
+        setOrgname(data.org_company_name);
+        setTenderName(data.name);
+        setLogo(data.company_logo);
+        setFormDataSubmit({
+          ...formDataSubmit,
+          ...data, // Populate formData with fetched data
+        });
+        console.log('Fetched Tender Details:', data);
+      } catch (error) {
+        console.error('Error fetching tender details:', error);
+      }
+    };
+    fetchTenderDetails();
+  }, [id]);
 
   const handleInputChange = e => {
     const { name, value } = e.target;
@@ -115,7 +146,8 @@ const CreateTenderForm = ({ onClose }) => {
     console.log('Before send Data:', formDataSubmit);
 
     try {
-      const response = await ApiClient.post('/admin/tender', formdata);
+      // const response = await ApiClient.post('/admin/tender', formdata);
+      const response = await ApiClient.patch(`/admin/tender/${id}/`, formdata);
       console.log(response.data);
 
       const successMessage =
@@ -313,22 +345,35 @@ const CreateTenderForm = ({ onClose }) => {
     }
   }, [selectedSourceType]);
 
-
   return (
     <div className="block mx-auto md:p-2 p-1 w-full">
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-semibold">Create Tender</h2>
-        <button
-          // onClick={onClose}
-          onClick={() => navigate('/tenderList')}
-          className="text-gray-500 text-xl font-bold hover:text-red-500"
-        >
-          <AiOutlineClose />
-        </button>
+      <div className="flex items-center justify-center mb-6 2xl:mb-8 -mt-4">
+        <img
+          src={tenderDetailsFormImage}
+          alt="Tender Details Form"
+          className="h-40 2xl:h-44"
+        />
       </div>
-      <div className="bg-gray-50 p-8 rounded-lg shadow-lg w-full text-xs">
+      <div className="bg-tenderDetails shadow-md rounded-md p-6 border border-blue-300">
+        <div className="flex justify-between items-center mb-6">
+          <div className="flex items-center space-x-4">
+            <img
+              src={
+                logo
+                  ? `http://192.168.0.169:9009/admin-files/${logo}`
+                  : 'https://via.placeholder.com/50'
+              }
+              alt="Organization Logo"
+              className="w-16 h-16 rounded-full"
+            />
+            <div>
+              <h2 className="text-lg font-bold">{tenderName}</h2>
+              <p className="text-gray-500">{orgName}</p>
+            </div>
+          </div>
+        </div>
         <form onSubmit={handleSubmit}>
-          <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-3 2xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-2 2xl:grid-cols-4 gap-6">
             {/* Reference No */}
             <div>
               <label className="block text-gray-700 font-medium mb-1">
@@ -337,7 +382,7 @@ const CreateTenderForm = ({ onClose }) => {
               <input
                 type="text"
                 name="ref_no"
-                value={formDataSubmit.ref_no}
+                value={formDataSubmit.reference_number}
                 onChange={handleInputChange}
                 placeholder="Enter Reference No "
                 className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -361,12 +406,12 @@ const CreateTenderForm = ({ onClose }) => {
             {/* Invitation for */}
             <div>
               <label className="block text-gray-700 font-medium mb-1">
-                Invitation for
+                Org/Company Name
               </label>
               <input
                 type="text"
                 name="invitation_for"
-                value={formDataSubmit.invitation_for}
+                value={formDataSubmit.org_company_name}
                 onChange={handleInputChange}
                 placeholder="Enter invitation for"
                 className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -424,6 +469,7 @@ const CreateTenderForm = ({ onClose }) => {
               </label>
               <select
                 value={selectedCategory}
+                // value={formDataSubmit.category_name}
                 onChange={e => setSelectedCategory(e.target.value)}
                 className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
@@ -445,6 +491,7 @@ const CreateTenderForm = ({ onClose }) => {
               </label>
               <select
                 value={selectedSector}
+                // value={formDataSubmit.sector_name}
                 onChange={e => setSelectedSector(e.target.value)}
                 className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
@@ -467,6 +514,7 @@ const CreateTenderForm = ({ onClose }) => {
               <select
                 name="sub_sector_id"
                 value={formDataSubmit.sub_sector_id}
+                // value={selectedSector}
                 onChange={handleInputChange}
                 // onChange={handleSectorChange}
                 className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -596,8 +644,11 @@ const CreateTenderForm = ({ onClose }) => {
                 Source Type <span className="text-red-500">*</span>
               </label>
               <select
-                value={selectedSourceType}
-                onChange={e => setSelectedSourceType(e.target.value)}
+                // value={selectedSourceType}
+                name="source_type"
+                value={formDataSubmit.source_type}
+                // onChange={e => setSelectedSourceType(e.target.value)}
+                onChange={handleInputChange}
                 required
                 className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
@@ -617,9 +668,17 @@ const CreateTenderForm = ({ onClose }) => {
               <label className="block text-gray-700 font-medium mb-1">
                 Source <span className="text-red-500">*</span>
               </label>
-              <select
+              <input
+                type="text"
+                name="source_name"
+                value={formDataSubmit.source_name}
+                onChange={handleInputChange}
+                placeholder="Enter Earnest Money"
+                className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              {/* <select
                 name="source_id"
-                value={formDataSubmit.source_id}
+                value={formDataSubmit.source_name}
                 onChange={handleInputChange}
                 className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 required
@@ -632,7 +691,7 @@ const CreateTenderForm = ({ onClose }) => {
                     {source.name}
                   </option>
                 ))}
-              </select>
+              </select> */}
             </div>
 
             {/* Earnest Money*/}
@@ -669,7 +728,7 @@ const CreateTenderForm = ({ onClose }) => {
                 Publish on
               </label>
               <input
-                type="date"
+                type="text"
                 name="publish_on"
                 value={formDataSubmit.publish_on}
                 onChange={handleInputChange}
@@ -760,7 +819,7 @@ const CreateTenderForm = ({ onClose }) => {
               <input
                 type="file"
                 onChange={e => handleFileUpload(e, setFileInput)}
-                className="w-full p-2 border border-gray-300 rounded-lg"
+                className="w-full p-2 border border-gray-300 rounded-lg bg-white"
               />
             </div>
             {/* Logo Upload */}
@@ -771,7 +830,7 @@ const CreateTenderForm = ({ onClose }) => {
               <input
                 type="file"
                 onChange={e => handleLogoUpload(e, setLogoInput)}
-                className="w-full p-2 border border-gray-300 rounded-lg"
+                className="w-full p-2 border border-gray-300 rounded-lg bg-white"
               />
             </div>
             {/* Description */}
@@ -779,24 +838,32 @@ const CreateTenderForm = ({ onClose }) => {
               <label className="block text-gray-700 font-medium mb-1">
                 Description
               </label>
-              <input
+              <textarea
                 type="text"
-                placeholder="Enter name"
+                placeholder="Enter Descriptions"
                 name="description" // Ensure this matches the key in formDataSubmit state
                 value={formDataSubmit.description} // Must bind to state
                 onChange={handleInputChange}
-                className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full p-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 required
+                rows="1"
               />
             </div>
           </div>
 
-          <div className="mt-8 flex justify-center">
+          <div className="mt-6 flex justify-end gap-4">
+            <button
+              type="button"
+              onClick={() => navigate('/tenderList')}
+              className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+            >
+              Back
+            </button>
             <button
               type="submit"
-              className="w-full sm:w-[200px] px-5 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
             >
-              Submit
+              Update
             </button>
           </div>
         </form>
@@ -804,4 +871,4 @@ const CreateTenderForm = ({ onClose }) => {
     </div>
   );
 };
-export default CreateTenderForm;
+export default SingleTenderDetails;

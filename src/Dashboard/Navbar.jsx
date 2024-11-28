@@ -207,7 +207,8 @@ const items = [
     icon: <AppstoreOutlined />,
     label: 'Tender',
     children: [
-      { key: '4-1', label: <Link to="/createtender">Create Tender</Link> },
+      { key: '4-1', label: <Link to="/tenderList">Tender List</Link> },
+      { key: '4-1', label: <Link to="/createtenderForm">Create Tender</Link> },
       {
         key: '4-2',
         label: 'Tender Configure',

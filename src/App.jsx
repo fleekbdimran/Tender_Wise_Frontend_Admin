@@ -1,5 +1,10 @@
 import { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from 'react-router-dom';
 import './App.css';
 import ActiveUser from './Components/Stack-Holder/ActiveUser';
 import AllUsers from './Components/Stack-Holder/AllUsers';
@@ -27,7 +32,6 @@ import PendingPublishTender from './Components/Tender/PublishedTender/PendingPub
 import TenderDetails from './Components/Tender/CreateTender/TenderDetails';
 import CreateTenderForm from './Components/Tender/CreateTender/CreateTenderForm';
 import BackupTenderDetails from './Components/Tender/CreateTender/BackupTenderDetails';
-
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
@@ -77,31 +81,6 @@ function App() {
                   </ProtectedRoute>
                 }
               />
-              
-              
-              <Route path="/pendingpublishtender" element={<ProtectedRoute><PendingPublishTender></PendingPublishTender></ProtectedRoute>} />
-              <Route path="/allpublishedtender" element={<ProtectedRoute><AllPublishTender></AllPublishTender></ProtectedRoute>} />
-              <Route path="/allcontactlist" element={<ProtectedRoute><AllContactUs></AllContactUs></ProtectedRoute>} />
-              <Route path="/inactive-user" element={<ProtectedRoute><InActiveUser></InActiveUser></ProtectedRoute>} />
-              <Route path="/allpackagelist" element={<ProtectedRoute><AllPackageList></AllPackageList></ProtectedRoute>} />
-              <Route path="/activepackage" element={<ProtectedRoute><ActivePackage></ActivePackage></ProtectedRoute>} />
-              <Route path="/createpackage" element={<ProtectedRoute><CreatePackage></CreatePackage></ProtectedRoute>} />
-              <Route path="/createtender" element={<ProtectedRoute><CreateTender></CreateTender></ProtectedRoute>} />
-              <Route path="/source" element={<ProtectedRoute><Source></Source></ProtectedRoute>} />
-              <Route path="/district" element={<ProtectedRoute><District></District></ProtectedRoute>} />
-              <Route path="/upazila" element={<ProtectedRoute><Upazila></Upazila></ProtectedRoute>} />
-              <Route path="/division" element={<ProtectedRoute><Division></Division></ProtectedRoute>} />
-              <Route path="/subdepartment" element={<ProtectedRoute><SubDepartment></SubDepartment></ProtectedRoute>} />
-              <Route path="/department" element={<ProtectedRoute><Department></Department></ProtectedRoute>} />
-              <Route path="/category" element={<ProtectedRoute><Category /></ProtectedRoute>} />
-              <Route path="/sector" element={<ProtectedRoute><Sector /></ProtectedRoute>} />
-              <Route path="/subSector" element={<ProtectedRoute><SubSector /></ProtectedRoute>} />
-              <Route path="/create-user" element={<ProtectedRoute><CreateUsers /></ProtectedRoute>} />
-              <Route path="/viewtenderdetails" element={<ProtectedRoute><ViewTenderDetails></ViewTenderDetails></ProtectedRoute>} />
-              <Route path="/posttender" element={<ProtectedRoute><PostTender></PostTender></ProtectedRoute>} />
-              <Route path="/user-list" element={<ProtectedRoute><UserList /></ProtectedRoute>} />
-              <Route path="/all-users" element={<ProtectedRoute><AllUsers /></ProtectedRoute>} />
-              <Route path="/active-user" element={<ProtectedRoute><ActiveUser /></ProtectedRoute>} />
 
               <Route
                 path="/pendingpublishtender"
@@ -163,6 +142,191 @@ function App() {
                 path="/createtender"
                 element={
                   <ProtectedRoute>
+                    <CreateTender></CreateTender>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/source"
+                element={
+                  <ProtectedRoute>
+                    <Source></Source>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/district"
+                element={
+                  <ProtectedRoute>
+                    <District></District>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/upazila"
+                element={
+                  <ProtectedRoute>
+                    <Upazila></Upazila>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/division"
+                element={
+                  <ProtectedRoute>
+                    <Division></Division>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/subdepartment"
+                element={
+                  <ProtectedRoute>
+                    <SubDepartment></SubDepartment>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/department"
+                element={
+                  <ProtectedRoute>
+                    <Department></Department>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/category"
+                element={
+                  <ProtectedRoute>
+                    <Category />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/sector"
+                element={
+                  <ProtectedRoute>
+                    <Sector />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/subSector"
+                element={
+                  <ProtectedRoute>
+                    <SubSector />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/create-user"
+                element={
+                  <ProtectedRoute>
+                    <CreateUsers />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/viewtenderdetails"
+                element={
+                  <ProtectedRoute>
+                    <ViewTenderDetails></ViewTenderDetails>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/posttender"
+                element={
+                  <ProtectedRoute>
+                    <PostTender></PostTender>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/user-list"
+                element={
+                  <ProtectedRoute>
+                    <UserList />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/all-users"
+                element={
+                  <ProtectedRoute>
+                    <AllUsers />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/active-user"
+                element={
+                  <ProtectedRoute>
+                    <ActiveUser />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/pendingpublishtender"
+                element={
+                  <ProtectedRoute>
+                    <PendingPublishTender></PendingPublishTender>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/allpublishedtender"
+                element={
+                  <ProtectedRoute>
+                    <AllPublishTender></AllPublishTender>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/allcontactlist"
+                element={
+                  <ProtectedRoute>
+                    <AllContactUs></AllContactUs>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/inactive-user"
+                element={
+                  <ProtectedRoute>
+                    <InActiveUser></InActiveUser>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/allpackagelist"
+                element={
+                  <ProtectedRoute>
+                    <AllPackageList></AllPackageList>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/activepackage"
+                element={
+                  <ProtectedRoute>
+                    <ActivePackage></ActivePackage>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/createpackage"
+                element={
+                  <ProtectedRoute>
+                    <CreatePackage></CreatePackage>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/createtenderForm"
+                element={
+                  <ProtectedRoute>
                     <CreateTenderForm></CreateTenderForm>
                   </ProtectedRoute>
                 }
@@ -180,7 +344,8 @@ function App() {
                 element={
                   <ProtectedRoute>
                     {/* <TenderDetails></TenderDetails> */}
-                    <BackupTenderDetails></BackupTenderDetails>
+                    {/* <BackupTenderDetails></BackupTenderDetails> */}
+                    <SingleTenderDetails></SingleTenderDetails>
                   </ProtectedRoute>
                 }
               />
@@ -299,7 +464,6 @@ function App() {
 
 export default App;
 
-
 // import { useState, useEffect } from 'react';
 // import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 // import './App.css';
@@ -328,7 +492,9 @@ export default App;
 // import PendingPublishTender from './Components/Tender/PublishedTender/PendingPublishTender';
 // import TenderDetails from './Components/Tender/CreateTender/TenderDetails';
 // import CreateTenderForm from './Components/Tender/CreateTender/CreateTenderForm';
-
+import ViewTenderDetails from './Components/Tender/ViewTenderDetails/ViewTenderDetails';
+import PostTender from './Components/Tender/PostTender/PostTender';
+import SingleTenderDetails from './Components/Tender/CreateTender/SingleTenderDetails';
 
 // function App() {
 //   const [isLoggedIn, setIsLoggedIn] = useState(() => {
