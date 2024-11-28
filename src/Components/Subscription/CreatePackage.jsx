@@ -104,7 +104,7 @@ const CreatePackage = () => {
               Amount
             </label>
             <input
-              type="number"
+              type="text"
               id="amount"
               name="amount"
               placeholder="Enter Amount"
@@ -124,7 +124,7 @@ const CreatePackage = () => {
               Duration (Months)
             </label>
             <input
-              type="number"
+              type="text"
               id="duration"
               name="duration"
               placeholder="Enter Duration"

@@ -1,29 +1,16 @@
 
-// import { useState, useEffect } from "react";
 
+
+
+
+// import { useState, useEffect } from "react";
 // import ApiClient from "../../Api/ApiClient";
 
 // // API Utility for Fetching Data
 // const fetchPackages = async () => {
-//   const myHeaders = new Headers();
-//   myHeaders.append(
-//     "Authorization",
-//     "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiSXFiYWwgMSIsImVtYWlsIjoiaXFiYWxAZ21haWwuY29tIiwicGhvbmUiOiI4ODAxOTk2MTA1MDIwIiwic3RhdHVzIjoxLCJ1cGRhdGVkX2J5Ijo2LCJpZCI6NiwidHlwZSI6InN1cGVyLWFkbWluIiwiaWF0IjoxNzMyMzM1NTE3LCJleHAiOjE3MzI0MjE5MTd9.IhvDJhsUmHIsUePMX8hNqmhOGUqb9ZvaaLis1awMY1Y"
-//   );
-
-//   const requestOptions = {
-//     method: "GET",
-//     headers: myHeaders,
-//     redirect: "follow",
-//   };
-
 //   try {
-//     const response = await ApiClient(
-//       "/api/v1/admin/package",
-//       requestOptions
-//     );
-//     const result = await response.json();
-//     return result.data || [];
+//     const response = await ApiClient.get("/admin/package");
+//     return response.data.data || [];
 //   } catch (error) {
 //     console.error("Error fetching packages:", error);
 //     return [];
@@ -32,33 +19,15 @@
 
 // // API Utility for Creating a New Package
 // const createPackage = async (formData) => {
-//   const myHeaders = new Headers();
-//   myHeaders.append("Content-Type", "application/json");
-//   myHeaders.append(
-//     "Authorization",
-//     "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiSXFiYWwgMSIsImVtYWlsIjoiaXFiYWxAZ21haWwuY29tIiwicGhvbmUiOiI4ODAxOTk2MTA1MDIwIiwic3RhdHVzIjoxLCJ1cGRhdGVkX2J5Ijo2LCJpZCI6NiwidHlwZSI6InN1cGVyLWFkbWluIiwiaWF0IjoxNzMyMzM1NTE3LCJleHAiOjE3MzI0MjE5MTd9.IhvDJhsUmHIsUePMX8hNqmhOGUqb9ZvaaLis1awMY1Y"
-//   );
-
-//   const raw = JSON.stringify({
+//   const data = {
 //     name: formData.name,
 //     amount: formData.amount,
 //     duration: formData.duration,
-//   });
-
-//   const requestOptions = {
-//     method: "POST",
-//     headers: myHeaders,
-//     body: raw,
-//     redirect: "follow",
 //   };
 
 //   try {
-//     const response = await ApiClient(
-//       "http://192.168.0.169:9009/api/v1/admin/package",
-//       requestOptions
-//     );
-//     const result = await response.json();
-//     return result;
+//     const response = await ApiClient.post("/admin/package", data);
+//     return response.data;
 //   } catch (error) {
 //     console.error("Error creating package:", error);
 //     return null;
@@ -95,7 +64,7 @@
 
 //   const handleSubmit = async (e) => {
 //     e.preventDefault();
-//     console.log("Submitted Data:", formData);
+//     // console.log("Submitted Data:", formData);
 
 //     // Call the createPackage function
 //     const result = await createPackage(formData);
@@ -107,6 +76,46 @@
 
 //     setShowCreateForm(false); // Close the form after submission
 //   };
+
+ 
+
+//   const handleUpdate = async () => {
+//   const [loading, setLoading] = useState(false);
+//   const [response, setResponse] = useState(null);
+//   const [error, setError] = useState(null);
+//     setLoading(true);
+//     setError(null);
+  
+//     // Ensure that the package ID is valid before making the request
+//     const packageId = 2; // Adjust this as necessary (use dynamic ID if needed)
+  
+//     if (!packageId) {
+//       setError("Package ID is missing.");
+//       setLoading(false);
+//       return;
+//     }
+  
+//     try {
+//       // Make the PATCH request to update the package
+//       const data = await ApiClient.patch(`/admin/package/${packageId}`, {
+//         name: 'Electrical 1',
+//         amount: 1090,
+//         duration: 1,
+//         status: 1,
+//       });
+  
+//       setResponse(data);
+//       console.log('API Response:', data);
+//     } catch (err) {
+//       // Check if the error response contains a message from the backend
+//       const errorMessage = err.response?.data?.message || err.message || "An error occurred";
+//       setError(errorMessage);
+//       console.error('API Error:', errorMessage);
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+  
 
 //   return (
 //     <div className="p-6">
@@ -139,7 +148,7 @@
 //                   Amount
 //                 </label>
 //                 <input
-//                   type="number"
+//                   type="text"
 //                   id="amount"
 //                   name="amount"
 //                   placeholder="Enter Amount"
@@ -156,7 +165,7 @@
 //                   Duration (Month)
 //                 </label>
 //                 <input
-//                   type="number"
+//                   type="text"
 //                   id="duration"
 //                   name="duration"
 //                   placeholder="Enter Duration in Month"
@@ -177,14 +186,14 @@
 //                 </button>
 //               </div>
 //             </form>
-//             <div className="flex justify-center mt-4">
-//               <button
-//                 onClick={() => setShowCreateForm(false)}
-//                 className="px-3 py-1 bg-gray-200 rounded-md text-gray-700 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500"
-//               >
-//                 Cancel
-//               </button>
-//             </div>
+            // {/* <div className="flex justify-center mt-4">
+            //   <button
+            //     onClick={() => setShowCreateForm(false)}
+            //     className="px-3 py-1 bg-gray-200 rounded-md text-gray-700 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500"
+            //   >
+            //     Cancel
+            //   </button>
+            // </div> */}
 //           </div>
 //         </div>
 //       ) : (
@@ -213,21 +222,26 @@
 //                   <th className="px-4 py-2 text-left text-sm font-medium text-gray-600">Amount</th>
 //                   <th className="px-4 py-2 text-left text-sm font-medium text-gray-600">Duration</th>
 //                   <th className="px-4 py-2 text-left text-sm font-medium text-gray-600">Status</th>
+//                   <th className="px-4 py-2 text-left text-sm font-medium text-gray-600">Update</th>
+                  
 //                 </tr>
 //               </thead>
 //               <tbody>
-//                 {filteredPackages.map((pkg) => (
+//                 {filteredPackages.map((pkg,index) => (
 //                   <tr key={pkg.id} className="border-t">
-//                     <td className="px-4 py-2 text-sm text-gray-800">{pkg.id}</td>
+//                     <td className="px-4 py-2 text-sm text-gray-800">{index + 1}</td>
 //                     <td className="px-4 py-2 text-sm text-gray-800">{pkg.name}</td>
 //                     <td className="px-4 py-2 text-sm text-gray-800">{pkg.amount}</td>
 //                     <td className="px-4 py-2 text-sm text-gray-800">{pkg.duration}</td>
 //                     <td className="px-4 py-2 text-sm text-gray-800">
-//   <span className={pkg.status === 1 ? "text-blue-500" : "text-red-500"}>
-//     {pkg.status === 1 ? "Available" : "Unavailable"}
-//   </span>
-// </td>
-//                     {/* <td className="px-4 py-2 text-sm text-gray-800">{pkg.status === 1 ? "Available" : "Unavailable"}</td> */}
+//                       <span className={pkg.status === 1 ? "text-blue-500" : "text-red-500"}>
+//                         {pkg.status === 1 ? "Available" : "Unavailable"}
+//                       </span>
+//                     </td>
+//                     <td className=" px-4 py-2 text-blue-600 hover:underline cursor-pointer" onClick={handleUpdate}>
+//                     Edit
+                    
+//                 </td>
 //                   </tr>
 //                 ))}
 //               </tbody>
@@ -253,6 +267,7 @@
 // };
 
 // export default AllPackageList;
+
 
 
 
@@ -288,6 +303,24 @@ const createPackage = async (formData) => {
   }
 };
 
+// API Utility for Updating a Package
+const updatePackage = async (id, formData) => {
+  const data = {
+    name: formData.name,
+    amount: formData.amount,
+    duration: formData.duration,
+    status: formData.status, // Assuming you want to update status too
+  };
+
+  try {
+    const response = await ApiClient.patch(`/admin/package/${id}`, data);
+    return response.data;
+  } catch (error) {
+    console.error("Error updating package:", error);
+    return null;
+  }
+};
+
 const AllPackageList = () => {
   const [packages, setPackages] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -296,7 +329,9 @@ const AllPackageList = () => {
     name: "",
     amount: "",
     duration: "",
+    status: 1, // Default status
   });
+  const [editingPackageId, setEditingPackageId] = useState(null);
 
   useEffect(() => {
     // Fetch packages from API on component mount
@@ -318,26 +353,44 @@ const AllPackageList = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // console.log("Submitted Data:", formData);
-
-    // Call the createPackage function
-    const result = await createPackage(formData);
-    if (result) {
-      // If package creation is successful, reload the packages list
-      const updatedPackages = await fetchPackages();
-      setPackages(updatedPackages);
+    if (editingPackageId) {
+      // If editing, update the package
+      const updatedPackage = await updatePackage(editingPackageId, formData);
+      if (updatedPackage) {
+        const updatedPackages = await fetchPackages();
+        setPackages(updatedPackages);
+      }
+    } else {
+      // If creating new, create the package
+      const result = await createPackage(formData);
+      if (result) {
+        const updatedPackages = await fetchPackages();
+        setPackages(updatedPackages);
+      }
     }
-
     setShowCreateForm(false); // Close the form after submission
+    setEditingPackageId(null); // Reset editing state
+  };
+
+  const handleEdit = (pkg) => {
+    setEditingPackageId(pkg.id); // Set the package ID to indicate you're editing
+    setFormData({
+      name: pkg.name,
+      amount: pkg.amount,
+      duration: pkg.duration,
+      status: pkg.status,
+    });
+    setShowCreateForm(true); // Show the form when editing
   };
 
   return (
     <div className="p-6">
-      {/* Conditional rendering of create form or list */}
       {showCreateForm ? (
         <div className="flex items-center justify-center h-screen w-full bg-gray-50">
           <div className="bg-white rounded-xl shadow-lg p-8 w-full max-w-3xl">
-            <h2 className="text-3xl font-bold text-center mb-6">Create Package</h2>
+            <h2 className="text-3xl font-bold text-center mb-6">
+              {editingPackageId ? "Update Package" : "Create Package"}
+            </h2>
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Name Input */}
               <div className="flex flex-col">
@@ -362,7 +415,7 @@ const AllPackageList = () => {
                   Amount
                 </label>
                 <input
-                  type="number"
+                  type="text"
                   id="amount"
                   name="amount"
                   placeholder="Enter Amount"
@@ -379,7 +432,7 @@ const AllPackageList = () => {
                   Duration (Month)
                 </label>
                 <input
-                  type="number"
+                  type="text"
                   id="duration"
                   name="duration"
                   placeholder="Enter Duration in Month"
@@ -391,23 +444,23 @@ const AllPackageList = () => {
               </div>
 
               {/* Submit Button */}
-              <div className="flex justify-center">
+              <div className="flex justify-end gap-3">
                 <button
                   type="submit"
                   className="w-auto py-2 px-6 bg-blue-600 text-white rounded-lg text-lg font-semibold hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
-                  Submit
+                  {editingPackageId ? "Update" : "Submit"}
                 </button>
-              </div>
-            </form>
-            <div className="flex justify-center mt-4">
+                 <div className="flex justify-center  ">
               <button
                 onClick={() => setShowCreateForm(false)}
-                className="px-3 py-1 bg-gray-200 rounded-md text-gray-700 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                className="w-auto py-2 px-6 bg-red-700 text-white rounded-lg text-lg font-semibold hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 Cancel
               </button>
             </div>
+              </div>
+            </form>
           </div>
         </div>
       ) : (
@@ -436,12 +489,13 @@ const AllPackageList = () => {
                   <th className="px-4 py-2 text-left text-sm font-medium text-gray-600">Amount</th>
                   <th className="px-4 py-2 text-left text-sm font-medium text-gray-600">Duration</th>
                   <th className="px-4 py-2 text-left text-sm font-medium text-gray-600">Status</th>
+                  <th className="px-4 py-2 text-left text-sm font-medium text-gray-600">Update</th>
                 </tr>
               </thead>
               <tbody>
-                {filteredPackages.map((pkg) => (
+                {filteredPackages.map((pkg, index) => (
                   <tr key={pkg.id} className="border-t">
-                    <td className="px-4 py-2 text-sm text-gray-800">{pkg.id}</td>
+                    <td className="px-4 py-2 text-sm text-gray-800">{index + 1}</td>
                     <td className="px-4 py-2 text-sm text-gray-800">{pkg.name}</td>
                     <td className="px-4 py-2 text-sm text-gray-800">{pkg.amount}</td>
                     <td className="px-4 py-2 text-sm text-gray-800">{pkg.duration}</td>
@@ -450,23 +504,13 @@ const AllPackageList = () => {
                         {pkg.status === 1 ? "Available" : "Unavailable"}
                       </span>
                     </td>
+                    <td className="px-4 py-2 text-blue-600 hover:underline cursor-pointer" onClick={() => handleEdit(pkg)}>
+                      Edit
+                    </td>
                   </tr>
                 ))}
               </tbody>
             </table>
-          </div>
-          <div className="flex justify-center mt-4">
-            <button
-              className="px-3 py-1 bg-gray-200 rounded-md text-gray-700 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500"
-            >
-              &lt;
-            </button>
-            <span className="mx-2 px-4 py-1 bg-blue-600 text-white rounded-md">1</span>
-            <button
-              className="px-3 py-1 bg-gray-200 rounded-md text-gray-700 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500"
-            >
-              &gt;
-            </button>
           </div>
         </>
       )}
@@ -475,8 +519,5 @@ const AllPackageList = () => {
 };
 
 export default AllPackageList;
-
-
-
 
 

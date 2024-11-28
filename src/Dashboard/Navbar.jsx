@@ -246,11 +246,11 @@ const items = [
     icon: <AppstoreOutlined />,
     label: 'Tender',
     children: [
-      { key: '4-1', label: <Link to="/createtender">Create Tender</Link> },
-      // { key: '4-9', label: <Link to="/viewtenderdetails">View Tender Details</Link> },
-      // { key: '4-5', label: <Link to="/posttender">Post Tender </Link> },
-
-      { key: '4-12', label: <Link to="/active-tender">Active Tender</Link> },
+      { key: '4-2', label: <Link to="/createtenderForm">Create Tender</Link> },
+      { key: '4-1', label: <Link to="/tenderList">Tender List</Link> },
+      { key: '4-4', label: <Link to="/publishedtender">Published Tender</Link> },
+      { key: '4-3', label: <Link to="/activetender">Active Tender</Link> },
+      
       {
         key: '4-2',
         label: 'Tender Configure',
@@ -275,6 +275,7 @@ const items = [
     children: [
       { key: '4-3', label: <Link to="/allpublishedtender">All Tender Request</Link> },
       { key: '4-4', label: <Link to="/pendingpublishtender">All Pending Tender</Link> },
+      // { key: '4-5', label: <Link to="/viewpage">View Page</Link> },
     ],
   },
   {
@@ -282,9 +283,9 @@ const items = [
     icon: <AppstoreOutlined />,
     label: 'Subscriptions',
     children: [
-      { key: '4-3', label: <Link to="/createpackage">CreatePackage</Link> },
-      { key: '4-5', label: <Link to="/allpackagelist">AllPackageList</Link> },
-      { key: '4-4', label: <Link to="/activepackage">ActivePackage</Link> },
+      { key: '4-3', label: <Link to="/createpackage">Create Package</Link> },
+      { key: '4-5', label: <Link to="/allpackagelist">All Package List</Link> },
+      { key: '4-4', label: <Link to="/activepackage">Active Package</Link> },
       { key: '8-4', label: 'Subscription List' },
     ],
   },

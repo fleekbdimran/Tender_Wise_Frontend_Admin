@@ -33,7 +33,7 @@ const PendingPublishTender = () => {
 
   return (
     <div className="p-6">
-      <h2 className="text-2xl font-bold mb-4">Pending Publish Tender</h2>
+      <h2 className="text-2xl font-bold mb-4">All Pending Tender</h2>
 
       {loading && <p className="text-gray-600">Loading tenders...</p>}
       {error && <p className="text-red-600">{error}</p>}
@@ -45,7 +45,8 @@ const PendingPublishTender = () => {
               <tr className="bg-gray-100">
                 <th className="border border-gray-200 px-4 py-2">ID</th>
                 <th className="border border-gray-200 px-4 py-2">Name</th>
-                <th className="border border-gray-200 px-4 py-2">Email</th>
+              
+                <th className="border border-gray-200 px-4 py-2">Organization Name</th>
                 <th className="border border-gray-200 px-4 py-2">Phone</th>
                 <th className="border border-gray-200 px-4 py-2">Tender Name</th>
                 <th className="border border-gray-200 px-4 py-2">Status</th>
@@ -53,11 +54,13 @@ const PendingPublishTender = () => {
               </tr>
             </thead>
             <tbody>
-              {data.map((item) => (
+              {data.map((item, index) => (
                 <tr key={item.id || Math.random()} className="hover:bg-gray-50">
-                  <td className="border border-gray-200 px-4 py-2">{item.id}</td>
+                  <td className="border border-gray-200 px-4 py-2">{index + 1}</td>
                   <td className="border border-gray-200 px-4 py-2">{item.name || 'N/A'}</td>
-                  <td className="border border-gray-200 px-4 py-2">{item.email || 'N/A'}</td>
+                  <td className="border border-gray-200 px-4 py-2">
+                    {item.organization_name || "N/A"} {/* Correctly using tender_name */}
+                  </td>
                   <td className="border border-gray-200 px-4 py-2">{item.phone || 'N/A'}</td>
                   <td className="border border-gray-200 px-4 py-2">{item.tender_name || 'N/A'}</td>
                   <td className="border border-gray-200 px-4 py-2">{item.status || 'N/A'}</td>

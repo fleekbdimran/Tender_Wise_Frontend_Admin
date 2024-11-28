@@ -245,9 +245,9 @@ const ActivePackage = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredPackages.map((pkg) => (
+            {filteredPackages.map((pkg,index) => (
               <tr key={pkg.id} className="border-t">
-                <td className="px-4 py-2 text-sm text-gray-800">{pkg.id}</td>
+                <td className="px-4 py-2 text-sm text-gray-800">{index +1}</td>
                 <td className="px-4 py-2 text-sm text-gray-800">{pkg.name}</td>
                 <td className="px-4 py-2 text-sm text-gray-800">{pkg.amount}</td>
                 <td className="px-4 py-2 text-sm text-gray-800">{pkg.duration}</td>
