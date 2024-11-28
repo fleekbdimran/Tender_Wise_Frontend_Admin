@@ -906,7 +906,7 @@ const CreateTender = () => {
             className="bg-teal-500 text-white px-7 py-2 rounded-lg flex items-center"
           >
             <AiOutlinePlus className="mr-2" />
-            Create Tender
+            Create New Tender
           </button>
           <div className="flex items-center border border-gray-300 rounded p-2 w-1/4 bg-white">
             <SearchOutlined className="text-gray-500 mr-2" />

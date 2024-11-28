@@ -1,5 +1,4 @@
-
-import {  AiOutlineClose} from 'react-icons/ai';
+import { AiOutlineClose } from 'react-icons/ai';
 import { useEffect, useState } from 'react';
 import ApiClient from './../../../Api/ApiClient';
 import Swal from 'sweetalert2';
@@ -312,8 +311,6 @@ const CreateTenderForm = ({ onClose }) => {
       setFilteredSources([]);
     }
   }, [selectedSourceType]);
-
-
 
   return (
     <div className="block mx-auto md:p-2 p-1 w-full">
@@ -634,6 +631,7 @@ const CreateTenderForm = ({ onClose }) => {
                 ))}
               </select>
             </div>
+
             {/* Earnest Money*/}
             <div>
               <label className="block text-gray-700 font-medium mb-1">

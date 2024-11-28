@@ -52,7 +52,22 @@
 //           { key: '4-10', label: <Link to="/source">Source</Link> },
 //         ],
 //       },
-//       { key: '4-11', label: <Link to="/published-tender">Published Tender</Link> },
+//       {
+//         key: '4-11',
+//         label: 'Published Tender',
+//         children: [
+//           {
+//             key: '4-3',
+//             label: <Link to="/allpublishedtender">All Publish Tender</Link>,
+//           },
+//           {
+//             key: '4-4',
+//             label: (
+//               <Link to="/pendingpublishtender">Pending Publish Tender</Link>
+//             ),
+//           },
+//         ],
+//       },
 //       { key: '4-12', label: <Link to="/active-tender">Active Tender</Link> },
 //     ],
 //   },
@@ -92,10 +107,18 @@
 //     label: 'Subscriptions',
 //     children: [
 //       { key: '4-3', label: <Link to="/createpackage">CreatePackage</Link> },
-//       { key: '4-3', label: <Link to="/activepackage">ActivePackage</Link> },
-//       // { key: '8-2', label: 'All Packages' },
-//       // { key: '8-3', label: 'Active Packages' },
+//       { key: '4-5', label: <Link to="/allpackagelist">AllPackageList</Link> },
+//       { key: '4-4', label: <Link to="/activepackage">ActivePackage</Link> },
+
 //       { key: '8-4', label: 'Subscription List' },
+//     ],
+//   },
+//   {
+//     key: '10',
+//     icon: <AppstoreOutlined />,
+//     label: 'Contact Us',
+//     children: [
+//       { key: '4-9', label: <Link to="/allcontactlist">All Contact List</Link> },
 //     ],
 //   },
 //   {
@@ -103,7 +126,10 @@
 //     icon: <SettingOutlined />,
 //     label: 'Settings',
 //     children: [
-//       { key: '9-1', label: <Link to="/company-info-update">Company Info Update</Link> },
+//       {
+//         key: '9-1',
+//         label: <Link to="/company-info-update">Company Info Update</Link>,
+//       },
 //     ],
 //   },
 // ];
@@ -144,7 +170,17 @@
 //   }
 
 //   return (
-//     <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
+//     <div  style={{ display: 'flex',  flexDirection: 'column', height: '100vh' }}>
+//       {/* Logo at the top */}
+//       <div style={{ textAlign: 'center', padding: '20px' }}>
+//         <img 
+//           src="/src/image/Logo.jpg" 
+//           alt="Logo" 
+//           style={{ width: '220px', height: 'auto' }} 
+//         />
+//       </div>
+
+//       {/* Menu Component */}
 //       <Menu
 //         mode="inline"
 //         defaultSelectedKeys={['1']}
@@ -153,6 +189,8 @@
 //         style={{ width: 256, flex: '1' }}
 //         items={items}
 //       />
+
+//       {/* Logout Button */}
 //       <div style={{ padding: '10px', textAlign: 'center', borderTop: '1px solid #f0f0f0' }}>
 //         <button onClick={handleLogout} style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
 //           <LogoutOutlined /> Logout
@@ -167,6 +205,7 @@
 // };
 
 // export default Navbar;
+
 
 
 
@@ -208,6 +247,8 @@ const items = [
     label: 'Tender',
     children: [
       { key: '4-1', label: <Link to="/createtender">Create Tender</Link> },
+      // { key: '4-9', label: <Link to="/viewtenderdetails">View Tender Details</Link> },
+      // { key: '4-5', label: <Link to="/posttender">Post Tender </Link> },
       {
         key: '4-2',
         label: 'Tender Configure',
@@ -223,55 +264,16 @@ const items = [
           { key: '4-10', label: <Link to="/source">Source</Link> },
         ],
       },
-      {
-        key: '4-11',
+      { key: '4-11',
         label: 'Published Tender',
         children: [
-          {
-            key: '4-3',
-            label: <Link to="/allpublishedtender">All Publish Tender</Link>,
-          },
-          {
-            key: '4-4',
-            label: (
-              <Link to="/pendingpublishtender">Pending Publish Tender</Link>
-            ),
-          },
+          { key: '4-3', label: <Link to="/allpublishedtender">All Publish Tender</Link> },
+          { key: '4-4', label: <Link to="/pendingpublishtender">Pending Publish Tender</Link> },
         ],
       },
       { key: '4-12', label: <Link to="/active-tender">Active Tender</Link> },
     ],
   },
-  // {
-  //   key: '5',
-  //   icon: <AppstoreOutlined />,
-  //   label: 'Courses',
-  //   children: [
-  //     { key: '5-1', label: 'Create Course' },
-  //     { key: '5-2', label: 'All Courses' },
-  //     { key: '5-3', label: 'Published Courses' },
-  //     { key: '5-4', label: 'Active Courses' },
-  //   ],
-  // },
-  // {
-  //   key: '6',
-  //   icon: <AppstoreOutlined />,
-  //   label: 'Teachers',
-  //   children: [
-  //     { key: '6-1', label: 'Create Teacher' },
-  //     { key: '6-2', label: 'All Teachers' },
-  //     { key: '6-3', label: 'Active Teacher' },
-  //   ],
-  // },
-  // {
-  //   key: '7',
-  //   icon: <AppstoreOutlined />,
-  //   label: 'Candidates',
-  //   children: [
-  //     { key: '7-1', label: 'All Candidates' },
-  //     { key: '7-2', label: 'Active Candidates' },
-  //   ],
-  // },
   {
     key: '8',
     icon: <AppstoreOutlined />,
@@ -280,7 +282,6 @@ const items = [
       { key: '4-3', label: <Link to="/createpackage">CreatePackage</Link> },
       { key: '4-5', label: <Link to="/allpackagelist">AllPackageList</Link> },
       { key: '4-4', label: <Link to="/activepackage">ActivePackage</Link> },
-
       { key: '8-4', label: 'Subscription List' },
     ],
   },
@@ -297,10 +298,7 @@ const items = [
     icon: <SettingOutlined />,
     label: 'Settings',
     children: [
-      {
-        key: '9-1',
-        label: <Link to="/company-info-update">Company Info Update</Link>,
-      },
+      { key: '9-1', label: <Link to="/company-info-update">Company Info Update</Link> },
     ],
   },
 ];
@@ -335,37 +333,44 @@ const Navbar = ({ onLogout }) => {
     }
   };
 
-  const handleLogout = ()=>{
+  const handleLogout = () => {
     onLogout();
     localStorage.removeItem('token'); // Clear the token
-  }
+  };
 
   return (
-    <div  style={{ display: 'flex',  flexDirection: 'column', height: '100vh' }}>
-      {/* Logo at the top */}
-      <div style={{ textAlign: 'center', padding: '20px' }}>
-        <img 
-          src="/src/image/Logo.jpg" 
-          alt="Logo" 
-          style={{ width: '220px', height: 'auto' }} 
+    <div style={{ display: 'flex', height: '100vh' }}>
+      {/* Fixed Sidebar with Navbar */}
+      <div style={{ width: '256px', position: 'fixed', top: '0', left: '0', bottom: '0', backgroundColor: '#fff', boxShadow: '2px 0px 10px rgba(0,0,0,0.1)', overflowY: 'auto' }}>
+        <div style={{ textAlign: 'center', padding: '20px' }}>
+          <img 
+            src="/src/image/Logo.jpg" 
+            alt="Logo" 
+            style={{ width: '220px', height: 'auto' }} 
+          />
+        </div>
+
+        {/* Menu Component */}
+        <Menu
+          mode="inline"
+          defaultSelectedKeys={['1']}
+          openKeys={stateOpenKeys}
+          onOpenChange={onOpenChange}
+          style={{ width: '256px' }}
+          items={items}
         />
+
+        {/* Logout Button */}
+        <div style={{ padding: '10px', textAlign: 'center', borderTop: '1px solid #f0f0f0' }}>
+          <button onClick={handleLogout} style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+            <LogoutOutlined /> Logout
+          </button>
+        </div>
       </div>
 
-      {/* Menu Component */}
-      <Menu
-        mode="inline"
-        defaultSelectedKeys={['1']}
-        openKeys={stateOpenKeys}
-        onOpenChange={onOpenChange}
-        style={{ width: 256, flex: '1' }}
-        items={items}
-      />
-
-      {/* Logout Button */}
-      <div style={{ padding: '10px', textAlign: 'center', borderTop: '1px solid #f0f0f0' }}>
-        <button onClick={handleLogout} style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-          <LogoutOutlined /> Logout
-        </button>
+      {/* Main Content Area */}
+      <div style={{ marginLeft: '256px', flex: '1', padding: '20px' }}>
+        {/* Main content here */}
       </div>
     </div>
   );
@@ -376,6 +381,3 @@ Navbar.propTypes = {
 };
 
 export default Navbar;
-
-
-
