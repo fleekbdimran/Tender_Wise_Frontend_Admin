@@ -382,7 +382,7 @@ const SingleTenderDetails = ({ onClose }) => {
               <input
                 type="text"
                 name="ref_no"
-                value={formDataSubmit.reference_number}
+                value={formDataSubmit.ref_no}
                 onChange={handleInputChange}
                 placeholder="Enter Reference No "
                 className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -411,7 +411,7 @@ const SingleTenderDetails = ({ onClose }) => {
               <input
                 type="text"
                 name="invitation_for"
-                value={formDataSubmit.org_company_name}
+                value={formDataSubmit.invitation_for}
                 onChange={handleInputChange}
                 placeholder="Enter invitation for"
                 className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"

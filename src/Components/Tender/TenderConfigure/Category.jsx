@@ -1,6 +1,7 @@
 
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { EditOutlined, CloseOutlined, SendOutlined, SearchOutlined } from "@ant-design/icons";
+import Swal from "sweetalert2";
 import ApiClient from "../../../Api/ApiClient";
 
 function DesignationTypeModal({ isOpen, onClose, title, onSubmit, category }) {
@@ -83,7 +84,7 @@ function Category() {
 
   const handleAddCategory = async (name) => {
     try {
-      await ApiClient.post(
+      const response = await ApiClient.post(
         "/admin/tender-config/category",
         { name },
         {
@@ -93,16 +94,56 @@ function Category() {
           },
         }
       );
-      setIsModalOpen(false);
-      fetchCategories();
+
+      if (response.status === 200 || response.status === 201) {
+        await Swal.fire({
+          title: "Success!",
+          text: "Category created successfully!",
+          icon: "success",
+          confirmButtonText: "OK",
+          customClass: {
+            popup: 'w-72 h-auto p-3',
+            title: 'text-lg',
+            content: 'text-xs',
+            confirmButton: 'bg-teal-500 text-white px-4 py-1 text-sm rounded-md',
+          },
+        });
+        fetchCategories(); // Refresh the category list
+      } else {
+        Swal.fire({
+          title: "Error!",
+          text: response.data.message || "Something went wrong!",
+          icon: "error",
+          confirmButtonText: "Try Again",
+          customClass: {
+            popup: 'w-72 h-auto p-3',
+            title: 'text-lg',
+            content: 'text-xs',
+            confirmButton: 'bg-teal-500 text-white px-4 py-1 text-sm rounded-md',
+          },
+        });
+      }
     } catch (error) {
       console.error("Error adding category:", error);
+      Swal.fire({
+        title: "Error!",
+        text: error.response?.data?.message || "Something went wrong!",
+        icon: "error",
+        confirmButtonText: "Try Again",
+        customClass: {
+          popup: 'w-72 h-auto p-3',
+          title: 'text-lg',
+          content: 'text-xs',
+          confirmButton: 'bg-teal-500 text-white px-4 py-1 text-sm rounded-md',
+        },
+      });
     }
+    setIsModalOpen(false); // Close modal after submit
   };
 
   const handleEditCategory = async (name, id) => {
     try {
-      await ApiClient.patch(
+      const response = await ApiClient.patch(
         `/admin/tender-config/category/${id}`,
         { name },
         {
@@ -112,11 +153,39 @@ function Category() {
           },
         }
       );
-      setIsModalOpen(false);
-      fetchCategories();
+
+      if (response.status === 200 || response.status === 201) {
+        await Swal.fire({
+          title: "Success!",
+          text: "Category updated successfully!",
+          icon: "success",
+          confirmButtonText: "OK",
+        });
+        fetchCategories(); // Refresh the category list
+      } else {
+        Swal.fire({
+          title: "Error!",
+          text: response.data.message || "Something went wrong!",
+          icon: "error",
+          confirmButtonText: "Try Again",
+        });
+      }
     } catch (error) {
       console.error("Error editing category:", error);
+      Swal.fire({
+        title: "Error!",
+        text: error.response?.data?.message || "Something went wrong!",
+        icon: "error",
+        confirmButtonText: "Try Again",
+        customClass: {
+          popup: 'w-72 h-auto p-3',
+          title: 'text-lg',
+          content: 'text-xs',
+          confirmButton: 'bg-teal-500 text-white px-4 py-1 text-sm rounded-md',
+        },
+      });
     }
+    setIsModalOpen(false); // Close modal after submit
   };
 
   const handleCategoryNameEdit = (category) => {
@@ -133,7 +202,7 @@ function Category() {
       category.name.toLowerCase().includes(value.toLowerCase())
     );
     setFilteredCategories(filtered);
-    setCurrentPage(10);
+    setCurrentPage(1); // Reset to first page when searching
   };
 
   useEffect(() => {

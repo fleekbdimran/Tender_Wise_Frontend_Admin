@@ -49,7 +49,7 @@ const PendingPublishTender = () => {
                 <th className="border border-gray-200 px-4 py-2">Organization Name</th>
                 <th className="border border-gray-200 px-4 py-2">Phone</th>
                 <th className="border border-gray-200 px-4 py-2">Tender Name</th>
-                <th className="border border-gray-200 px-4 py-2">Status</th>
+                
                 <th className="border border-gray-200 px-4 py-2">Actions</th>
               </tr>
             </thead>
@@ -63,7 +63,7 @@ const PendingPublishTender = () => {
                   </td>
                   <td className="border border-gray-200 px-4 py-2">{item.phone || 'N/A'}</td>
                   <td className="border border-gray-200 px-4 py-2">{item.tender_name || 'N/A'}</td>
-                  <td className="border border-gray-200 px-4 py-2">{item.status || 'N/A'}</td>
+                  
                   <td className="border border-gray-200 px-4 py-2 text-center">
                     <button className="text-gray-600 hover:text-gray-800">
                       👁

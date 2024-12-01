@@ -85,28 +85,31 @@ const AllUsers = () => {
                   <th className="py-3 px-6 text-left">Phone</th>
                   <th className="py-3 px-6 text-left">Address</th>
                   <th className="py-3 px-6 text-left">Status</th>
-                  <th className="py-3 px-6 text-left">Actions</th>
+                  {/* <th className="py-3 px-6 text-left">Actions</th> */}
                 </tr>
               </thead>
               <tbody className="text-gray-700 text-sm font-light">
-                {paginatedAdminList.map((admin) => (
+                {paginatedAdminList.map((admin,index) => (
                   <tr
                     key={admin.id}
                     className="border-b border-gray-200 hover:bg-gray-100"
                   >
                     <td className="py-3 px-6 text-left whitespace-nowrap">
-                      {admin.id}
+                      {index +1}
                     </td>
                     <td className="py-3 px-6 text-left">{admin.full_name || "N/A"}</td>
                     <td className="py-3 px-6 text-left">{admin.email || "N/A"}</td>
                     <td className="py-3 px-6 text-left">{admin.phone || "N/A"}</td>
                     <td className="py-3 px-6 text-left">{admin.address || "N/A"}</td>
                     <td className="py-3 px-6 text-left">{admin.status || "N/A"}</td>
-                    <td className="py-3 px-6 text-left">
+
+                    {/* icon */}
+                    {/* <td className="py-3 px-6 text-left">
                       <button className="text-blue-500 hover:underline">
-                        <EditOutlined /> {/* Ant Design edit icon */}
+                        <EditOutlined />
                       </button>
-                    </td>
+                    </td> */}
+                   
                   </tr>
                 ))}
               </tbody>

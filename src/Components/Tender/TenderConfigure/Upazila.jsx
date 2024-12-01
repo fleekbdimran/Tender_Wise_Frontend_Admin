@@ -232,6 +232,7 @@ function Upazila() {
         <table className="w-full border-collapse border border-gray-200">
           <thead>
             <tr>
+              <th className="px-4 py-2 bg-teal-100 text-left font-semibold border-b">ID</th>
               <th className="px-4 py-2 bg-teal-100 text-left font-semibold border-b">Name</th>
               <th className="px-4 py-2 bg-teal-100 text-left font-semibold border-b">Status</th>
               <th className="px-4 py-2 bg-teal-100 text-left font-semibold border-b">Action</th>
@@ -240,6 +241,7 @@ function Upazila() {
           <tbody>
             {filteredUpazilas.map((Upazila, index) => (
               <tr key={index} className="hover:bg-gray-50">
+                <td className="px-4 py-2 border-b">{index + 1}</td>
                 <td className="px-4 py-2 border-b">{Upazila.name}</td>
                 <td className="px-4 py-2 border-b">
                   <span

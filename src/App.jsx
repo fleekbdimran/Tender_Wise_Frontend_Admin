@@ -106,6 +106,9 @@ function App() {
                   </ProtectedRoute>
                 }
               />
+               {/* <Route path="/contact-us" element={<AllContactUs />} /> */}
+               <Route path="/contact-us/:id" element={<ContactUsDetails />} />
+
               <Route
                 path="/inactive-user"
                 element={
@@ -538,6 +541,7 @@ import SingleTenderDetails from './Components/Tender/CreateTender/SingleTenderDe
 import ActiveTender from './Components/Tender/ActiveTender/ActiveTender';
 import PublishedTender from './Components/Tender/PublishedTender1/PublishedTender';
 import ViewPage from './Components/Tender/PublishedTender/ViewPage';
+import ContactUsDetails from './Components/Contact Us/ContactUsDetails';
 
 // function App() {
 //   const [isLoggedIn, setIsLoggedIn] = useState(() => {
