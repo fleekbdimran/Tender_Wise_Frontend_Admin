@@ -40,6 +40,12 @@ const CreateUsers = () => {
         text: successMessage,
         icon: 'success',
         confirmButtonText: 'OK',
+        customClass: {
+          popup: 'w-72 h-auto p-3',
+          title: 'text-lg',
+          content: 'text-xs',
+          confirmButton: 'bg-teal-500 text-white px-4 py-1 text-sm rounded-md',
+        },
       });
 
       setUsersName('');
@@ -55,6 +61,12 @@ const CreateUsers = () => {
         text: errorMessage,
         icon: 'error',
         confirmButtonText: 'OK',
+        customClass: {
+          popup: 'w-72 h-auto p-3',
+          title: 'text-lg',
+          content: 'text-xs',
+          confirmButton: 'bg-teal-500 text-white px-4 py-1 text-sm rounded-md',
+        },
       });
     }
   };

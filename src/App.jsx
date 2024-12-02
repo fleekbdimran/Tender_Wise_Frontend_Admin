@@ -61,22 +61,21 @@ function App() {
         <div className="flex min-h-screen items-center justify-center bg-gray-100">
           <Routes>
             <Route path="/" element={<LoginPage onLogin={handleLogin} />} />
+            {/* <Route path="/forgot-password" element={} /> */}
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </div>
       ) : (
-        <div className="app-container flex min-h-screen">
+        <div className=" flex min-h-screen">
           <Navbar onLogout={handleLogout} />
           <div className="content-container flex-grow p-4 overflow-hidden">
             <Routes>
               <Route
-                path="/dashboard"
+                path="/profile"
                 element={
                   <ProtectedRoute>
                     <div className="flex justify-center items-center h-full">
-                      <h1 className="text-4xl font-bold text-center text-gray-800">
-                        Welcome to the Dashboard
-                      </h1>
+                    <Profile></Profile>
                     </div>
                   </ProtectedRoute>
                 }
@@ -283,6 +282,22 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <AllPublishTender></AllPublishTender>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/pendingtender"
+                element={
+                  <ProtectedRoute>
+                    <PendingTender></PendingTender>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/PublishTenderRequest"
+                element={
+                  <ProtectedRoute>
+                    <PublishTenderRequest></PublishTenderRequest>
                   </ProtectedRoute>
                 }
               />
@@ -494,12 +509,17 @@ function App() {
                   </ProtectedRoute>
                 }
               />
+             
+
 
                
               <Route path="*" element={<Navigate to="/dashboard" replace />} />
             </Routes>
           </div>
         </div>
+
+     
+
       )}
     </Router>
   );
@@ -542,6 +562,9 @@ import ActiveTender from './Components/Tender/ActiveTender/ActiveTender';
 import PublishedTender from './Components/Tender/PublishedTender1/PublishedTender';
 import ViewPage from './Components/Tender/PublishedTender/ViewPage';
 import ContactUsDetails from './Components/Contact Us/ContactUsDetails';
+import PendingTender from './Components/Tender/PendingTender/PendingTender';
+import PublishTenderRequest from './Components/Tender/PublishedTender/PublishTenderRequest';
+import Profile from './Components/Profile/Profile';
 
 // function App() {
 //   const [isLoggedIn, setIsLoggedIn] = useState(() => {

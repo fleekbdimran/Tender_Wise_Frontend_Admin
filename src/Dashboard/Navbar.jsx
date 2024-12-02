@@ -409,7 +409,7 @@ const items = [
   {
     key: "1",
     icon: <MailOutlined />,
-    label: <Link to="/dashboard">Dashboard</Link>,
+    label: <Link to="/profile">Dashboard</Link>,
   },
   {
     key: "2",
@@ -435,10 +435,12 @@ const items = [
     icon: <AppstoreOutlined />,
     label: "Tender",
     children: [
-      { key: "4-1", label: <Link to="/tenderList">Tender List</Link> },
       { key: "4-2", label: <Link to="/createtenderForm">Create Tender</Link> },
+      { key: "4-1", label: <Link to="/tenderList">Tender List</Link> },
+      
       { key: "4-3", label: <Link to="/activetender">Active Tender</Link> },
       { key: "4-4", label: <Link to="/publishedtender">Published Tender</Link> },
+      { key: "4-5-1", label: <Link to="/pendingtender">Pending Tender</Link> },
       {
         key: "4-5",
         label: "Tender Configure",
@@ -461,7 +463,8 @@ const items = [
     label: "Tender Request",
     children: [
       { key: "15-1", label: <Link to="/allpublishedtender">All Tender Request</Link> },
-      { key: "15-2", label: <Link to="/pendingpublishtender">Pending Tenders</Link> },
+      { key: "15-2", label: <Link to="/pendingpublishtender">Pending Tender Request</Link> },
+      { key: "15-3", label: <Link to="/publishtenderrequest">Published Tender Request</Link> },
     ],
   },
   {

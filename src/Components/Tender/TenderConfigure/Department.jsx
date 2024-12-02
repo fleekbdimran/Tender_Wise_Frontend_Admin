@@ -900,6 +900,12 @@ function Department() {
           text: "Department updated successfully!",
           icon: "success",
           confirmButtonText: "OK",
+          customClass: {
+            popup: 'w-72 h-auto p-3',
+            title: 'text-lg',
+            content: 'text-xs',
+            confirmButton: 'bg-teal-500 text-white px-4 py-1 text-sm rounded-md',
+          },
         });
         setIsModalOpen(false);
         fetchCategories();
@@ -909,6 +915,12 @@ function Department() {
           text: response.data.message || "Something went wrong!",
           icon: "error",
           confirmButtonText: "Try Again",
+          customClass: {
+            popup: 'w-72 h-auto p-3',
+            title: 'text-lg',
+            content: 'text-xs',
+            confirmButton: 'bg-teal-500 text-white px-4 py-1 text-sm rounded-md',
+          },
         });
       }
     } catch (error) {
@@ -918,6 +930,12 @@ function Department() {
         text: error.response?.data?.message || "Something went wrong!",
         icon: "error",
         confirmButtonText: "Try Again",
+        customClass: {
+          popup: 'w-72 h-auto p-3',
+          title: 'text-lg',
+          content: 'text-xs',
+          confirmButton: 'bg-teal-500 text-white px-4 py-1 text-sm rounded-md',
+        },
       });
     }
   };

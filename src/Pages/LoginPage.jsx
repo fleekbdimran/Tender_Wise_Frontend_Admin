@@ -99,7 +99,8 @@ function LoginPage({ onLogin }) {
   };
 
   const handleForgotPassword = () => {
-    toast.info('A reset password link has been sent to your email.');
+    // toast.info('A reset password link has been sent to your email.');
+    navigate('/forgot-password');
   };
 
   return (

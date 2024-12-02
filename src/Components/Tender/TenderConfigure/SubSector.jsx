@@ -641,6 +641,12 @@ function DesignationTypeModal({
             title: 'Success!',
             text: 'Sub sector updated successfully!',
             confirmButtonText: 'Okay',
+            customClass: {
+              popup: 'w-72 h-auto p-3',
+              title: 'text-lg',
+              content: 'text-xs',
+              confirmButton: 'bg-teal-500 text-white px-4 py-1 text-sm rounded-md',
+            },
           });
           updateSubSector(sectorData.id, data); // Update the state in SubSector
           setName(''); // Reset the form after successful update
@@ -655,6 +661,12 @@ function DesignationTypeModal({
             title: 'Success!',
             text: 'Sub sector created successfully!',
             confirmButtonText: 'Okay',
+            customClass: {
+              popup: 'w-72 h-auto p-3',
+              title: 'text-lg',
+              content: 'text-xs',
+              confirmButton: 'bg-teal-500 text-white px-4 py-1 text-sm rounded-md',
+            },
           });
           setName(''); // Reset the form after successful creation
           setSelectedSubCategory(''); // Reset the category selection
@@ -664,6 +676,12 @@ function DesignationTypeModal({
             title: 'Failed!',
             text: 'Sector creation failed.',
             confirmButtonText: 'Okay',
+            customClass: {
+              popup: 'w-72 h-auto p-3',
+              title: 'text-lg',
+              content: 'text-xs',
+              confirmButton: 'bg-teal-500 text-white px-4 py-1 text-sm rounded-md',
+            },
           });
         }
       }

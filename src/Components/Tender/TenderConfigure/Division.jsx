@@ -529,6 +529,12 @@ function DesignationTypeModal({ isOpen, onClose, title, onSubmit, division }) {
           text: division ? "Division updated successfully!" : "Division added successfully!",
           icon: "success",
           confirmButtonText: "OK",
+          customClass: {
+            popup: 'w-72 h-auto p-3',
+            title: 'text-lg',
+            content: 'text-xs',
+            confirmButton: 'bg-teal-500 text-white px-4 py-1 text-sm rounded-md',
+          },
         });
         setdivisionName(""); // Reset input after success
       } else {
@@ -537,6 +543,12 @@ function DesignationTypeModal({ isOpen, onClose, title, onSubmit, division }) {
           text: response.data.message || "Something went wrong!",
           icon: "error",
           confirmButtonText: "Try Again",
+          customClass: {
+            popup: 'w-72 h-auto p-3',
+            title: 'text-lg',
+            content: 'text-xs',
+            confirmButton: 'bg-teal-500 text-white px-4 py-1 text-sm rounded-md',
+          },
         });
       }
     } catch (error) {
@@ -546,6 +558,12 @@ function DesignationTypeModal({ isOpen, onClose, title, onSubmit, division }) {
         text: error.response?.data?.message || "Something went wrong!",
         icon: "error",
         confirmButtonText: "Try Again",
+        customClass: {
+          popup: 'w-72 h-auto p-3',
+          title: 'text-lg',
+          content: 'text-xs',
+          confirmButton: 'bg-teal-500 text-white px-4 py-1 text-sm rounded-md',
+        },
       });
     }
   };
