@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import Lottie from 'lottie-react';
 import LoginAnimation from "../Animation/Login.json"; // Path to your animation file
 import PropTypes from 'prop-types';
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Swal from 'sweetalert2';
 import ApiClient from "../Api/ApiClient"; // Custom Axios instance
@@ -42,13 +42,16 @@ function LoginPage({ onLogin }) {
 
     try {
       const response = await ApiClient.post('/admin/auth/login/', { phone, password });
-      const { token, user_type: userRole } = response.data;
+      const { token }  = response.data;
+      const userType = response.data.data.admin_type;
+
+      console.log(userType);
 
       
 
       // Save token and user role in localStorage
       localStorage.setItem('token', token);
-      localStorage.setItem('userRole', userRole);
+      localStorage.setItem('userType', userType);
 
       // Save credentials if "Remember Me" is checked
       if (rememberMe) {

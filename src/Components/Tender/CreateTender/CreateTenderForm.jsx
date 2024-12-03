@@ -124,7 +124,7 @@ const CreateTenderForm = ({ onClose }) => {
         title: 'Success!',
         text: successMessage,
         customClass: {
-          popup: 'w-72 h-auto p-2',
+          popup: 'w-80 h-auto p-2',
           title: 'text-lg',
           content: 'text-xs',
           confirmButton: 'bg-blue-600 text-white px-4 py-1 text-sm rounded-md',
@@ -343,6 +343,22 @@ const CreateTenderForm = ({ onClose }) => {
                 className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
+
+            {/* Org/Company name */}
+            <div>
+              <label className="block text-gray-700 font-medium mb-1">
+                Org/Company name <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                name="invitation_for"
+                value={formDataSubmit.invitation_for}
+                onChange={handleInputChange}
+                placeholder="Enter Company name"
+                className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                required
+              />
+            </div>
             {/* Title */}
             <div>
               <label className="block text-gray-700 font-medium mb-1">
@@ -350,26 +366,12 @@ const CreateTenderForm = ({ onClose }) => {
               </label>
               <input
                 type="text"
-                placeholder="Enter name"
+                placeholder="Enter Tile"
                 name="name" // Ensure this matches the key in formDataSubmit state
                 value={formDataSubmit.name} // Must bind to state
                 onChange={handleInputChange}
                 className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 required
-              />
-            </div>
-            {/* Invitation for */}
-            <div>
-              <label className="block text-gray-700 font-medium mb-1">
-                Invitation for
-              </label>
-              <input
-                type="text"
-                name="invitation_for"
-                value={formDataSubmit.invitation_for}
-                onChange={handleInputChange}
-                placeholder="Enter invitation for"
-                className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
 
@@ -534,6 +536,7 @@ const CreateTenderForm = ({ onClose }) => {
                 value={selectedDivision}
                 onChange={e => setSelectedDivision(e.target.value)}
                 className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                required
               >
                 <option value="" disabled>
                   Select a Division
@@ -555,6 +558,7 @@ const CreateTenderForm = ({ onClose }) => {
                 value={selectedDistrict}
                 onChange={e => setSelectedDistrict(e.target.value)}
                 className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                required
               >
                 <option value="" disabled>
                   Select a District
@@ -615,7 +619,7 @@ const CreateTenderForm = ({ onClose }) => {
             {/* Source Dropdown */}
             <div>
               <label className="block text-gray-700 font-medium mb-1">
-                Source <span className="text-red-500">*</span>
+                Source Name <span className="text-red-500">*</span>
               </label>
               <select
                 name="source_id"
@@ -666,7 +670,7 @@ const CreateTenderForm = ({ onClose }) => {
             {/*  Publish on*/}
             <div>
               <label className="block text-gray-700 font-medium mb-1">
-                Publish on
+                Publish on <span className="text-red-500">*</span>
               </label>
               <input
                 type="date"
@@ -676,6 +680,7 @@ const CreateTenderForm = ({ onClose }) => {
                 // onChange={handlePublishOnDateChange}
                 placeholder="Enter Earnest Money"
                 className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                required
               />
             </div>
             {/*  Opening Date*/}
@@ -755,12 +760,13 @@ const CreateTenderForm = ({ onClose }) => {
             {/* File Upload */}
             <div>
               <label className="block text-gray-700 font-medium mb-1">
-                File Upload
+                File Upload <span className="text-red-500">*</span>
               </label>
               <input
                 type="file"
                 onChange={e => handleFileUpload(e, setFileInput)}
                 className="w-full p-2 border border-gray-300 rounded-lg"
+                required
               />
             </div>
             {/* Logo Upload */}
@@ -779,13 +785,13 @@ const CreateTenderForm = ({ onClose }) => {
               <label className="block text-gray-700 font-medium mb-1">
                 Description
               </label>
-              <input
+              <textarea
                 type="text"
                 placeholder="Enter name"
                 name="description" // Ensure this matches the key in formDataSubmit state
                 value={formDataSubmit.description} // Must bind to state
                 onChange={handleInputChange}
-                className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full p-1.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 required
               />
             </div>

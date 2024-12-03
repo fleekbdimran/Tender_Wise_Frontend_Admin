@@ -1,152 +1,4 @@
 
-
-
-// // import { useState, useEffect } from "react";
-// // import ApiClient from "../../../Api/ApiClient";
-
-// // const ActiveTender = () => {
-// //   const [tenderData, setTenderData] = useState([]); // State to hold API data
-// //   const [loading, setLoading] = useState(true); // Loading state
-
-// //   useEffect(() => {
-// //     const fetchTenders = async () => {
-// //       try {
-// //         const response = await ApiClient.get("/admin/tender");
-// //         // console.log("API Response:", response.data); // Debugging log
-// //         setTenderData(response.data.data || []); // Update state with fetched data
-// //       } catch (error) {
-// //         console.error("Error fetching tenders:", error); // Handle errors
-// //       } finally {
-// //         setLoading(false); // Set loading to false after API call
-// //       }
-// //     };
-
-// //     fetchTenders(); // Call the function
-// //   }, []);
-
-// //   return (
-// //     <div className="p-6 bg-white rounded-lg shadow-md">
-// //       <h2 className="text-2xl font-bold mb-4">Active Tenders</h2>
-// //       {loading ? (
-// //         <p>Loading...</p>
-// //       ) : (
-// //         <div className="overflow-x-auto">
-// //           <table className="min-w-full border-collapse border border-gray-300">
-// //             <thead className="bg-gray-100">
-// //               <tr>
-// //                 <th className="border border-gray-300 px-4 py-2 text-left">ID</th>
-// //                 <th className="border border-gray-300 px-4 py-2 text-left">Tender ID</th>
-// //                 <th className="border border-gray-300 px-4 py-2 text-left">Title</th>
-// //                 <th className="border border-gray-300 px-4 py-2 text-left">Company Name</th>
-// //                 <th className="border border-gray-300 px-4 py-2 text-left">Tender Section</th>
-// //                 <th className="border border-gray-300 px-4 py-2 text-left">Type</th>
-// //               </tr>
-// //             </thead>
-// //             <tbody>
-// //               {tenderData.length > 0 ? (
-// //                 tenderData.map((item, index) => (
-// //                   <tr key={index} className="hover:bg-gray-50">
-// //                     <td className="border border-gray-300 px-4 py-2">{index + 1 || "N/A"}</td>
-// //                     <td className="border border-gray-300 px-4 py-2">{item.tender_id || "N/A"}</td>
-// //                     <td className="border border-gray-300 px-4 py-2">{item.title || "N/A"}</td>
-// //                     <td className="border border-gray-300 px-4 py-2">{item.company_name || "N/A"}</td>
-// //                     <td className="border border-gray-300 px-4 py-2">{item.tender_section || "N/A"}</td>
-// //                     <td className="border border-gray-300 px-4 py-2">{item.type || "N/A"}</td>
-// //                   </tr>
-// //                 ))
-// //               ) : (
-// //                 <tr>
-// //                   <td colSpan="6" className="border border-gray-300 px-4 py-2 text-center">
-// //                     No tenders found.
-// //                   </td>
-// //                 </tr>
-// //               )}
-// //             </tbody>
-// //           </table>
-// //         </div>
-// //       )}
-// //     </div>
-// //   );
-// // };
-
-// // export default ActiveTender;
-
-
-
-
-
-// const ActiveTender = () => {
-//   const tenders = [
-//     {
-//       id: 1,
-//       tenderId: "TENDER-202436",
-//       tenderName: "Tender for buy 32 cars",
-//       sourceName: "Daily Noya Digonto",
-//       type: "free",
-//       publishDate: "2024-11-10",
-//       submissionDate: "2024-11-18",
-//       section: "govt",
-//     },
-//   ];
-
-//   return (
-//     <div className="overflow-x-auto">
-//       <table className="min-w-full border border-gray-200 bg-white text-left">
-//         <thead className="bg-gray-100">
-//           <tr>
-//             <th className="border p-2">S/N</th>
-//             <th className="border p-2">Tender ID</th>
-//             <th className="border p-2">Tender Name</th>
-//             <th className="border p-2">Source Name</th>
-//             <th className="border p-2">Type</th>
-//             <th className="border p-2">Publish Date</th>
-//             <th className="border p-2">Submission Date</th>
-//             <th className="border p-2">Section</th>
-//             <th className="border p-2">Actions
-              
-//             </th>
-//           </tr>
-//         </thead>
-//         <tbody>
-//           {tenders.map((tender, index) => (
-//             <tr key={tender.id} className="text-center">
-//               <td className="border p-2">{index + 1}</td>
-//               <td className="border p-2">{tender.tenderId}</td>
-//               <td className="border p-2">{tender.tenderName}</td>
-//               <td className="border p-2">{tender.sourceName}</td>
-//               <td className="border p-2">{tender.type}</td>
-//               <td className="border p-2">{tender.publishDate}</td>
-//               <td className="border p-2">{tender.submissionDate}</td>
-//               <td className="border p-2">{tender.section}</td>
-//               <td className="border p-2">
-//                 <button className="text-gray-600 hover:text-green-600">
-//                   <svg
-//                     xmlns="http://www.w3.org/2000/svg"
-//                     fill="none"
-//                     viewBox="0 0 24 24"
-//                     strokeWidth="1.5"
-//                     stroke="currentColor"
-//                     className="w-6 h-6"
-//                   >
-//                     <path
-//                       strokeLinecap="round"
-//                       strokeLinejoin="round"
-//                       d="M16.862 2.487c1.102-.628 2.56.16 2.965 1.398.13.399.188.82.15 1.238l-.838 9.116a4.5 4.5 0 01-4.488 4.122h-5.33a4.5 4.5 0 01-4.488-4.122l-.838-9.116a2.25 2.25 0 011.572-2.303l.448-.111M15.75 8.25v.008h.008V8.25h-.008zm-7.5 0v.008h.008V8.25h-.008zm1.65 10.5a3 3 0 005.4 0"
-//                     />
-//                   </svg>
-//                 </button>
-//               </td>
-//             </tr>
-//           ))}
-//         </tbody>
-//       </table>
-//     </div>
-//   );
-// };
-
-// export default ActiveTender;
-
-
 import { EditOutlined, SearchOutlined } from '@ant-design/icons';
 import { Pagination } from 'antd';
 import { AiOutlineFile, AiOutlineClose, AiOutlinePlus } from 'react-icons/ai';
@@ -978,6 +830,11 @@ const CreateTender = () => {
       try {
         const response = await ApiClient.get('/admin/tender');
         console.log('Response Tender:', response.data.data);
+
+             const filterByStatus = response.data?.data?.filter(
+               tender => tender.status === 'active'
+             );
+
         setTenderData(response.data.data); // Assuming the API returns an array of tender data
       } catch (error) {
         console.error('Error fetching tender data:', error);
@@ -1049,15 +906,15 @@ const CreateTender = () => {
   return (
     <div className="p-6 bg-gray-100">
       {!showCreateForm && !viewTenderDetails && !editTender && (
-        <div className="mb-4 flex justify-between items-center">
-          <button
+        <div className="mb-4 flex justify-end items-center">
+          {/* <button
             onClick={() => setShowCreateForm(true)}
             className="bg-teal-500 text-white px-7 py-2 rounded-lg flex items-center"
           >
             <AiOutlinePlus className="mr-2" />
             Create New Tender
-          </button>
-          <div className="flex items-center border border-gray-300 rounded p-2 w-1/4 bg-white">
+          </button> */}
+          <div className="flex items-center  border border-gray-300 rounded p-2 w-1/4 bg-white">
             <SearchOutlined className="text-gray-500 mr-2" />
             <input
               type="text"

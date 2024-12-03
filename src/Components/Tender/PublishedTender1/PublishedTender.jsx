@@ -900,8 +900,12 @@ const CreateTender = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await ApiClient.get('/admin/tender');
+        const response = await ApiClient.get(
+          // '/admin/tender'
+          '/admin/tender?permission=publish'
+        );
         console.log('Response Tender:', response.data.data);
+
         setTenderData(response.data.data); // Assuming the API returns an array of tender data
       } catch (error) {
         console.error('Error fetching tender data:', error);
@@ -973,14 +977,14 @@ const CreateTender = () => {
   return (
     <div className="p-6 bg-gray-100">
       {!showCreateForm && !viewTenderDetails && !editTender && (
-        <div className="mb-4 flex justify-between items-center">
-          <button
+        <div className="mb-4 flex justify-end items-center">
+          {/* <button
             onClick={() => setShowCreateForm(true)}
             className="bg-teal-500 text-white px-7 py-2 rounded-lg flex items-center"
           >
             <AiOutlinePlus className="mr-2" />
             Create New Tender
-          </button>
+          </button> */}
           <div className="flex items-center border border-gray-300 rounded p-2 w-1/4 bg-white">
             <SearchOutlined className="text-gray-500 mr-2" />
             <input
