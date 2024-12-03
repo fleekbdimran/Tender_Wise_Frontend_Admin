@@ -84,7 +84,7 @@ const AllUsers = () => {
                   <th className="py-3 px-6 text-left">Email</th>
                   <th className="py-3 px-6 text-left">Phone</th>
                   <th className="py-3 px-6 text-left">Address</th>
-                  <th className="py-3 px-6 text-left">Status</th>
+                  <th className="py-3 px-6 text-left ">Status</th>
                   {/* <th className="py-3 px-6 text-left">Actions</th> */}
                 </tr>
               </thead>
@@ -101,7 +101,17 @@ const AllUsers = () => {
                     <td className="py-3 px-6 text-left">{admin.email || "N/A"}</td>
                     <td className="py-3 px-6 text-left">{admin.phone || "N/A"}</td>
                     <td className="py-3 px-6 text-left">{admin.address || "N/A"}</td>
-                    <td className="py-3 px-6 text-left">{admin.status || "N/A"}</td>
+                    <td className="py-3 px-6 text-left">
+                    <span
+                    className={`px-2 py-1 rounded-full text-xs ${
+                      admin.otp_status === 1
+                        ? "bg-green-100 text-green-700"
+                        : "bg-red-100 text-red-700"
+                    }`}
+                  >
+                    {admin.otp_status === 1 ? "Active" : "Inactive"}
+                  </span>
+                      </td>
 
                     {/* icon */}
                     {/* <td className="py-3 px-6 text-left">
