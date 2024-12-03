@@ -21,6 +21,7 @@ const AllUsers = () => {
       try {
         const response = await ApiClient.get('/admin/stakeholder'); // Use the ApiClient to make the request
         // console.log("Fetched Data:", response.data); // Debug log for fetched data
+        console.log("user list all:",response.data.data)
         setAdminUserList(response.data.data); // Assuming the API returns a `data` array
       } catch (err) {
         // console.error("Error fetching data:", err.message);
@@ -40,9 +41,11 @@ const AllUsers = () => {
   };
 
   // Filter adminUserList based on the search term
-  const filteredAdminList = adminUserList.filter((admin) =>
-    admin.full_name?.toLowerCase().includes(searchTerm.toLowerCase()) // Search by full name
-  );
+  // const filteredAdminList = adminUserList.filter((admin) =>
+  //   admin.full_name?.toLowerCase().includes(searchTerm.toLowerCase()) // Search by full name
+  // );
+  const filteredAdminList = adminUserList;
+
 
   // Paginate the filteredAdminList
   const paginatedAdminList = filteredAdminList.slice(
@@ -109,7 +112,7 @@ const AllUsers = () => {
                         : "bg-red-100 text-red-700"
                     }`}
                   >
-                    {admin.otp_status === 1 ? "Active" : "Inactive"}
+                    {admin.otp_status === 1 ? "Verified" : "Non-Verified"}
                   </span>
                       </td>
 
