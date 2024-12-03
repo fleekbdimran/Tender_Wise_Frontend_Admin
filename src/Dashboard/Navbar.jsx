@@ -409,7 +409,7 @@ const items = [
   {
     key: "1",
     icon: <MailOutlined />,
-    label: <Link to="/profile">Dashboard</Link>,
+    label: <Link to="/dashboard">Dashboard</Link>,
   },
   {
     key: "2",

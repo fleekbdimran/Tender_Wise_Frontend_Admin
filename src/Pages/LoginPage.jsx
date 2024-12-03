@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Lottie from 'lottie-react';
 import LoginAnimation from "../Animation/Login.json"; // Path to your animation file
 import PropTypes from 'prop-types';
@@ -100,7 +100,7 @@ function LoginPage({ onLogin }) {
 
   const handleForgotPassword = () => {
     // toast.info('A reset password link has been sent to your email.');
-    navigate('/forgot-password');
+    // navigate('/forgot-password');
   };
 
   return (
@@ -161,7 +161,9 @@ function LoginPage({ onLogin }) {
               onClick={handleForgotPassword}
               className="text-sm text-indigo-600 hover:text-indigo-500"
             >
-              Forgot your password?
+              <Link to="/forgot-password" className="text-blue-500 hover:underline">
+            Forgot Password?
+          </Link>
             </button>
           </div>
 
