@@ -35,6 +35,8 @@ const SingleTenderDetails = ({ onClose }) => {
     invitation_for: '',
     ref_no: '',
     type: '',
+    status: '',
+    permission:'',
     sub_sector_id: '',
     sub_department_id: '',
     source_id: '',
@@ -110,6 +112,8 @@ const SingleTenderDetails = ({ onClose }) => {
     formdata.append('invitation_for', formDataSubmit.invitation_for || null);
     formdata.append('ref_no', formDataSubmit.ref_no || null);
     formdata.append('type', formDataSubmit.type || null);
+    formdata.append('status', formDataSubmit.status || null);
+    formdata.append('permission', formDataSubmit.permission || null);
     formdata.append('sub_sector_id', formDataSubmit.sub_sector_id || null);
     formdata.append(
       'sub_department_id',
@@ -373,7 +377,7 @@ const SingleTenderDetails = ({ onClose }) => {
           </div>
         </div>
         <form onSubmit={handleSubmit}>
-          <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-2 2xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-3 2xl:grid-cols-4 gap-6">
             {/* Reference No */}
             <div>
               <label className="block text-gray-700 font-medium mb-1">
@@ -418,6 +422,45 @@ const SingleTenderDetails = ({ onClose }) => {
               />
             </div>
 
+            {/* Tender section Dropdown */}
+            <div>
+              <label className="block text-gray-700 font-medium mb-1">
+                Status <span className="text-red-500">*</span>
+              </label>
+              <select
+                name="status"
+                value={formDataSubmit.status}
+                onChange={handleInputChange}
+                className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                required
+              >
+                <option value="" disabled>
+                  Select status
+                </option>
+                <option value="1">Active</option>
+                <option value="0">In Active</option>
+              </select>
+            </div>
+            {/* permission */}
+            <div>
+              <label className="block text-gray-700 font-medium mb-1">
+                Permission <span className="text-red-500">*</span>
+              </label>
+              <select
+                name="permission"
+                value={formDataSubmit.permission}
+                onChange={handleInputChange}
+                className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                required
+              >
+                <option value="" disabled>
+                  Select Permission
+                </option>
+                <option value="publish">Publish</option>
+                <option value="pending">Pending</option>
+
+              </select>
+            </div>
             {/* Tender section Dropdown */}
             <div>
               <label className="block text-gray-700 font-medium mb-1">
