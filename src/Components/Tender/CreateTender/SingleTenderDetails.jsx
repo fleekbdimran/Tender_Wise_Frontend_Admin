@@ -97,6 +97,11 @@ const SingleTenderDetails = ({ onClose }) => {
       }
     };
     fetchTenderDetails();
+    // Reload after 1 seconds
+    // const interval = setInterval(() => {
+    //   fetchTenderDetails();
+    // }, 1000);
+    // return () => clearInterval(interval);
   }, [id]);
 
   const handleInputChange = e => {

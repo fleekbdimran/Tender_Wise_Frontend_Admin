@@ -297,6 +297,8 @@ function DesignationTypeModal({
       } catch (error) {
         console.error('Failed to fetch categories:', error);
       }
+
+
     };
     fetchCategories();
   }, []);
@@ -453,12 +455,21 @@ function Sector() {
       } catch (error) {
         console.error('Error fetching data:', error);
       }
+      // Reload after 1 seconds
+      const interval = setInterval(() => {
+        fetchSectorData();
+      }, 1000);
+
+      return () => clearInterval(interval);
     };
+
+
+
 
     fetchSectorData();
   }, []);
 
-  const filteredSectors = sector.filter(amenity => 
+  const filteredSectors = sector.filter(amenity =>
     amenity.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 

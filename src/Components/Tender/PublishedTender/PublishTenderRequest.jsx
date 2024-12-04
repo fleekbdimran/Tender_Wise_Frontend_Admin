@@ -124,6 +124,7 @@ const PublishTenderRequest = () => {
                 <th className="px-4 py-2 border">Phone</th>
                 <th className="px-4 py-2 border">Tender Name</th>
                 <th className="px-4 py-2 border">Status</th>
+                <th className="px-4 py-2 border">Category</th>
                 <th className="px-4 py-2 border">Actions</th>
               </tr>
             </thead>
@@ -131,15 +132,21 @@ const PublishTenderRequest = () => {
               {paginatedData.map((item, index) => (
                 <tr key={item.id} className="hover:bg-gray-50">
                   <td className="px-4 py-2 border">{index + 1}</td>
-                  <td className="px-4 py-2 border">{item.name || "N/A"}</td>
-                  <td className="px-4 py-2 border">{item.organization_name || "N/A"}</td>
-                  <td className="px-4 py-2 border">{item.phone || "N/A"}</td>
-                  <td className="px-4 py-2 border">{item.tender_name || "N/A"}</td>
+                  <td className="px-4 py-2 border">{item.name || 'N/A'}</td>
+                  <td className="px-4 py-2 border">
+                    {item.organization_name || 'N/A'}
+                  </td>
+                  <td className="px-4 py-2 border">{item.phone || 'N/A'}</td>
+                  <td className="px-4 py-2 border">
+                    {item.tender_name || 'N/A'}
+                  </td>
                   <td className="px-4 py-2 border">
                     {editingIndex === index ? (
                       <select
-                        value={item.status || ""}
-                        onChange={(e) => handleStatusChange(index, e.target.value)}
+                        value={item.status || ''}
+                        onChange={e =>
+                          handleStatusChange(index, e.target.value)
+                        }
                         className="border rounded px-2 py-1"
                       >
                         <option value="">Select</option>
@@ -156,6 +163,9 @@ const PublishTenderRequest = () => {
                         Published
                       </span>
                     )}
+                  </td>
+                  <td className="px-4 py-2 border">
+                    {item.tender_req_by || 'N/A'}
                   </td>
                   <td className="px-4 py-2 border text-center">
                     <button

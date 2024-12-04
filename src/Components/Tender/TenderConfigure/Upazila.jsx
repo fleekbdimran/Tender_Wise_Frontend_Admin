@@ -184,6 +184,12 @@ function Upazila() {
       } catch (error) {
         console.error('Error fetching data:', error);
       }
+        // Reload after 1 seconds
+        const interval = setInterval(() => {
+          fetchUpazilaData();
+        }, 1000);
+  
+        return () => clearInterval(interval);
     };
 
     fetchUpazilaData();
