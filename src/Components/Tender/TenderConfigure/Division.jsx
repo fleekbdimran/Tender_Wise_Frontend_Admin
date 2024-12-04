@@ -627,6 +627,12 @@ function Division() {
     } catch (error) {
       console.error("Error fetching categories:", error);
     }
+      // Reload after 1 seconds
+      const interval = setInterval(() => {
+        fetchCategories();
+      }, 1000);
+
+      return () => clearInterval(interval);
   };
 
   const handleAdddivision = async (name) => {

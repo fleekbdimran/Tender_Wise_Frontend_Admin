@@ -610,6 +610,7 @@ function DesignationTypeModal({
       } catch (error) {
         console.error('Failed to fetch categories:', error);
       }
+      
     };
 
     fetchSubCategories();
@@ -763,6 +764,14 @@ function SubSector() {
       } catch (error) {
         console.error('Error fetching data:', error);
       }
+        // Reload after 1 seconds
+        const interval = setInterval(() => {
+          fetchSubSectorData();
+        }, 1000);
+  
+        return () => clearInterval(interval);
+       
+      
     };
 
     fetchSubSectorData();

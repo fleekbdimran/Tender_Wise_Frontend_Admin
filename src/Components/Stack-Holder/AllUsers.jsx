@@ -13,37 +13,38 @@ const AllUsers = () => {
   const [loading, setLoading] = useState(true); // Loading state
   const [error, setError] = useState(null); // Error state
 
-  useEffect(() => {
-    // console.log("Fetching data from the API..."); // Debug log
+ 
 
+  useEffect(() => {
     // Fetch data from the API using ApiClient
     const fetchData = async () => {
       try {
         const response = await ApiClient.get('/admin/stakeholder'); // Use the ApiClient to make the request
-        // console.log("Fetched Data:", response.data); // Debug log for fetched data
-        console.log("user list all:",response.data.data)
-        setAdminUserList(response.data.data); // Assuming the API returns a `data` array
+        console.log("Fetched Data:", response.data); // Debug log for fetched data
+        // Filter the users based on otp_status and status
+        const activeUsers = response.data.data.filter(
+          (user) => user.otp_status === 1 || user.status === 'active'
+        );
+        console.log("Filtered Active Users:", activeUsers); // Debug log for active users
+        setAdminUserList(activeUsers); // Update the state with filtered users
       } catch (err) {
-        // console.error("Error fetching data:", err.message);
+        console.error("Error fetching data:", err.message);
         setError(err.message);
       } finally {
-        setLoading(false);
-        // console.log("Fetching complete."); 
+        setLoading(false); // Set loading to false once the data is fetched
       }
     };
-
-    fetchData();
-  }, []); // Empty dependency array to run only once when the component mounts
+  
+    fetchData(); // Fetch data when the component mounts
+  }, []); // Empty dependency array ensures this runs only once after the initial render
+  
 
   // Handle search input change
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
   };
 
-  // Filter adminUserList based on the search term
-  // const filteredAdminList = adminUserList.filter((admin) =>
-  //   admin.full_name?.toLowerCase().includes(searchTerm.toLowerCase()) // Search by full name
-  // );
+
   const filteredAdminList = adminUserList;
 
 
@@ -78,56 +79,60 @@ const AllUsers = () => {
               className="w-full text-sm outline-none"
             />
           </div>
-          <div className="overflow-x-auto">
-            <table className="min-w-full bg-white border border-gray-200">
-              <thead>
-                <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
-                  <th className="py-3 px-6 text-left">Id</th>
-                  <th className="py-3 px-6 text-left">Full Name</th>
-                  <th className="py-3 px-6 text-left">Email</th>
-                  <th className="py-3 px-6 text-left">Phone</th>
-                  <th className="py-3 px-6 text-left">Address</th>
-                  <th className="py-3 px-6 text-left ">Status</th>
-                  {/* <th className="py-3 px-6 text-left">Actions</th> */}
-                </tr>
-              </thead>
-              <tbody className="text-gray-700 text-sm font-light">
-                {paginatedAdminList.map((admin,index) => (
-                  <tr
-                    key={admin.id}
-                    className="border-b border-gray-200 hover:bg-gray-100"
-                  >
-                    <td className="py-3 px-6 text-left whitespace-nowrap">
-                      {index +1}
-                    </td>
-                    <td className="py-3 px-6 text-left">{admin.full_name || "N/A"}</td>
-                    <td className="py-3 px-6 text-left">{admin.email || "N/A"}</td>
-                    <td className="py-3 px-6 text-left">{admin.phone || "N/A"}</td>
-                    <td className="py-3 px-6 text-left">{admin.address || "N/A"}</td>
-                    <td className="py-3 px-6 text-left">
-                    <span
-                    className={`px-2 py-1 rounded-full text-xs ${
-                      admin.otp_status === 1
-                        ? "bg-green-100 text-green-700"
-                        : "bg-red-100 text-red-700"
-                    }`}
-                  >
-                    {admin.otp_status === 1 ? "Verified" : "Non-Verified"}
-                  </span>
-                      </td>
+      
 
-                    {/* icon */}
-                    {/* <td className="py-3 px-6 text-left">
-                      <button className="text-blue-500 hover:underline">
-                        <EditOutlined />
-                      </button>
-                    </td> */}
-                   
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <div className="overflow-x-auto">
+  <table className="min-w-full bg-white border border-gray-200">
+    <thead>
+      <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+        <th className="py-3 px-6 text-left">Id</th>
+        <th className="py-3 px-6 text-left">Full Name</th>
+        <th className="py-3 px-6 text-left">Email</th>
+        <th className="py-3 px-6 text-left">Phone</th>
+        <th className="py-3 px-6 text-left">Address</th>
+        <th className="py-3 px-6 text-left">Otp Status</th>
+        <th className="py-3 px-6 text-left">Status</th>
+      </tr>
+    </thead>
+    <tbody className="text-gray-700 text-sm font-light">
+      {paginatedAdminList.map((admin, index) => (
+        <tr
+          key={admin.id}
+          className="border-b border-gray-200 hover:bg-gray-100"
+        >
+          <td className="py-3 px-6 text-left whitespace-nowrap">{index + 1}</td>
+          <td className="py-3 px-6 text-left">{admin.full_name || "N/A"}</td>
+          <td className="py-3 px-6 text-left">{admin.email || "N/A"}</td>
+          <td className="py-3 px-6 text-left">{admin.phone || "N/A"}</td>
+          <td className="py-3 px-6 text-left">{admin.address || "N/A"}</td>
+          <td className="py-3 px-6 text-left">
+            <span
+              className={`px-2 py-1 rounded-full text-xs ${
+                admin.otp_status === 1
+                  ? "bg-green-100 text-green-700"
+                  : "bg-red-100 text-red-700"
+              }`}
+            >
+              {admin.otp_status === 1 ? "Verified" : "Non-Verified"}
+            </span>
+          </td>
+          <td className="py-3 px-6 text-left">
+            <span
+              className={`px-2 py-1 rounded-full text-xs ${
+                admin.status === "active"
+                  ? "bg-green-100 text-green-700"
+                  : "bg-red-100 text-red-700"
+              }`}
+            >
+              {admin.status === "active" ? "Active" : "Inactive"}
+            </span>
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+
 
           {/* Pagination Component */}
           <div className="mt-4 flex justify-center">

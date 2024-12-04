@@ -291,34 +291,54 @@ const InActiveUser = () => {
   const [loading, setLoading] = useState(true); // Loading state
   const [error, setError] = useState(null); // Error state
 
+  // useEffect(() => {
+  //   // Fetch data from the API using ApiClient
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await ApiClient.get('/admin/stakeholder'); // Use the API client to get the data
+  //       // Filter the fetched data to only include inactive users (status: 'inactive' or status: 0)
+  //       const inactiveUsers = response.data.data.filter(user => user.otp_status === 0|| user.status === 'inactive');
+      
+  //       setAdminUserList(inactiveUsers); // Set the filtered data to state
+       
+       
+  //     } catch (err) {
+  //       setError(err.message); 
+  //     } finally {
+  //       setLoading(false); 
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, []); // Empty dependency array means this will run once on mount
+
   useEffect(() => {
-    // Fetch data from the API using ApiClient
     const fetchData = async () => {
       try {
-        const response = await ApiClient.get('/admin/stakeholder'); // Use the API client to get the data
-        // Filter the fetched data to only include inactive users (status: 'inactive' or status: 0)
-        const inactiveUsers = response.data.data.filter(user => user.otp_status === 0);
-        setAdminUserList(inactiveUsers); // Set the filtered data to state
-        // console.log(response.data);
+        const response = await ApiClient.get('/admin/stakeholder');
+        // Filter to include only inactive users
+        const inactiveUsers = response.data.data.filter(
+          (user) => user.otp_status === 0 || user.status === 'inactive'
+        );
+        setAdminUserList(inactiveUsers);
       } catch (err) {
-        setError(err.message); // Set error message if fetching fails
+        setError(err.message);
       } finally {
-        setLoading(false); // Disable loading after fetching completes
+        setLoading(false);
       }
     };
-
+  
     fetchData();
-  }, []); // Empty dependency array means this will run once on mount
+  }, []);
+  
+
 
   // Handle search input change
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
   };
 
-  // Filter adminUserList based on the search term
-  // const filteredAdminList = adminUserList.filter((admin) =>
-  //   admin.full_name?.toLowerCase().includes(searchTerm.toLowerCase()) // Search by full name
-  // );
+
 
   const filteredAdminList = adminUserList;
 
@@ -336,7 +356,7 @@ const InActiveUser = () => {
 
   return (
     <div className="p-6 bg-gray-100">
-      <h2 className="text-2xl font-bold mb-4">InActive Users</h2>
+      <h2 className="text-2xl font-bold mb-4">In Active Users</h2>
 
       {loading ? (
         <div>Loading...</div>
@@ -354,47 +374,60 @@ const InActiveUser = () => {
               className="w-full text-sm outline-none"
             />
           </div>
-          <div className="overflow-x-auto">
-            <table className="min-w-full bg-white border border-gray-200">
-              <thead>
-                <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
-                  <th className="py-3 px-6 text-left">Id</th>
-                  <th className="py-3 px-6 text-left">Full Name</th>
-                  <th className="py-3 px-6 text-left">Email</th>
-                  <th className="py-3 px-6 text-left">Phone</th>
-                  <th className="py-3 px-6 text-left">Address</th>
-                  <th className="py-3 px-6 text-left">Otp Status</th>
-                </tr>
-              </thead>
-              <tbody className="text-gray-700 text-sm font-light">
-                {paginatedAdminList.map((admin, index) => (
-                  <tr
-                    key={admin.id}
-                    className="border-b border-gray-200 hover:bg-gray-100"
-                  >
-                    <td className="py-3 px-6 text-left whitespace-nowrap">
-                      {index + 1}
-                    </td>
-                    <td className="py-3 px-6 text-left">{admin.full_name || "N/A"}</td>
-                    <td className="py-3 px-6 text-left">{admin.email || "N/A"}</td>
-                    <td className="py-3 px-6 text-left">{admin.phone || "N/A"}</td>
-                    <td className="py-3 px-6 text-left">{admin.address || "N/A"}</td>
-                    <td className="py-3 px-6 text-left">
-                      <span
-                        className={`px-2 py-1 rounded-full text-xs ${
-                          admin.otp_status === 0
-                            ? "bg-red-100 text-red-700"  // Style for Inactive (0)
-                            : "bg-green-100 text-green-700" // Style for Active (non-zero value)
-                        }`}
-                      >
-                        {admin.otp_status === 0 ? "Inactive" : "Active"}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+         
+
+<div className="overflow-x-auto">
+  <table className="min-w-full bg-white border border-gray-200">
+    <thead>
+      <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+        <th className="py-3 px-6 text-left">Id</th>
+        <th className="py-3 px-6 text-left">Full Name</th>
+        <th className="py-3 px-6 text-left">Email</th>
+        <th className="py-3 px-6 text-left">Phone</th>
+        <th className="py-3 px-6 text-left">Address</th>
+        <th className="py-3 px-6 text-left">Otp Status</th>
+        <th className="py-3 px-6 text-left">Status</th>
+      </tr>
+    </thead>
+    <tbody className="text-gray-700 text-sm font-light">
+      {paginatedAdminList.map((admin, index) => (
+        <tr
+          key={admin.id}
+          className="border-b border-gray-200 hover:bg-gray-100"
+        >
+          <td className="py-3 px-6 text-left whitespace-nowrap">{index + 1}</td>
+          <td className="py-3 px-6 text-left">{admin.full_name || 'N/A'}</td>
+          <td className="py-3 px-6 text-left">{admin.email || 'N/A'}</td>
+          <td className="py-3 px-6 text-left">{admin.phone || 'N/A'}</td>
+          <td className="py-3 px-6 text-left">{admin.address || 'N/A'}</td>
+          <td className="py-3 px-6 text-left">
+            <span
+              className={`px-2 py-1 rounded-full text-xs ${
+                admin.otp_status === 0
+                  ? 'bg-red-100 text-red-700'
+                  : 'bg-green-100 text-green-700'
+              }`}
+            >
+              {admin.otp_status === 0 ? 'Non-Verified' : 'Verified'}
+            </span>
+          </td>
+          <td className="py-3 px-6 text-left">
+            <span
+              className={`px-2 py-1 rounded-full text-xs ${
+                admin.status === 'inactive'
+                  ? 'bg-red-100 text-red-700'
+                  : 'bg-green-100 text-green-700'
+              }`}
+            >
+              {admin.status === 'inactive' ? 'Inactive' : 'Active'}
+            </span>
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+
 
           {/* Pagination Component */}
           <div className="mt-4 flex justify-center">
