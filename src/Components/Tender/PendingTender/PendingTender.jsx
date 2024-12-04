@@ -983,18 +983,21 @@ const CreateTender = () => {
         </div>
       ) : (
         <>
-          <div className="overflow-x-auto md:text-xs 2xl:text-lg text-center">
+          <div className="overflow-x-auto md:text-xs 2xl:text-sm text-center">
             <table className="min-w-full md:h-4/5 2xl:h-11/12 bg-white border border-gray-200 ">
               <thead>
                 <tr className="bg-gray-100 ">
                   <th className="p-2 border-b text-center">S/N</th>
                   <th className="p-2 border-b text-center">Tender ID</th>
                   <th className="p-2 border-b text-center">Tender Name</th>
+                  <th className="p-2 border-b text-center">Org/Company Name</th>
                   <th className="p-2 border-b text-center">Source Name</th>
+                  <th className="p-3 border-b text-center">Section</th>
                   <th className="p-2 border-b text-center">Type</th>
                   <th className="p-2 border-b text-center">Publish Date</th>
                   <th className="p-2 border-b text-center">Submission Date</th>
-                  <th className="p-3 border-b text-center">Section</th>
+                  <th className="p-2 border-b text-center">Permission</th>
+                  {/* <th className="p-2 border-b text-center">Status</th> */}
                   <th className="p-2 border-b text-center">Actions</th>
                 </tr>
               </thead>
@@ -1004,11 +1007,17 @@ const CreateTender = () => {
                     <td className="p-2 border-b"> {index + 1}</td>
                     <td className="p-2 border-b">{admin.tender_id}</td>
                     <td className="p-2 border-b">{admin.name}</td>
+                    <td className="p-2 border-b">{admin.invitation_for}</td>
                     <td className="p-2 border-b">{admin.source_name}</td>
+                    <td className="p-2 border-b">{admin.tender_section}</td>
                     <td className="p-2 border-b">{admin.type}</td>
                     <td className="p-2 border-b">{admin.publish_on}</td>
                     <td className="p-2 border-b">{admin.submission_date}</td>
-                    <td className="p-2 border-b">{admin.tender_section}</td>
+                    <td className="p-2 border-b">{admin.permission}</td>
+                    {/* <td className="p-2 border-b">{admin.status}</td> */}
+                    {/* <td className="p-2 border-b">
+                      {admin.status === 1 ? 'Live' : 'Expired'}
+                    </td> */}
                     <td className="p-2 border-b pl-6">
                       {/* <div className="flex items-center space-x-4">
                         <button className="flex items-center space-x-2 text-gray-600 hover:text-blue-600">

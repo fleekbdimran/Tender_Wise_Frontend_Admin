@@ -45,6 +45,7 @@ import PublishTenderRequest from './Components/Tender/PublishedTender/PublishTen
 import Profile from './Components/Profile/Header';
 import ForgotPassword from './Pages/ForgotPassword';
 import Header from './Components/Profile/Header';
+import UpdateUser from './Components/User/UpdateUser';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
@@ -265,6 +266,15 @@ function App() {
                     element={
                       <ProtectedRoute>
                         <PostTender></PostTender>
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    // path="/updateUser/:id"
+                    path="/updateUser"
+                    element={
+                      <ProtectedRoute>
+                        <UpdateUser></UpdateUser>
                       </ProtectedRoute>
                     }
                   />
