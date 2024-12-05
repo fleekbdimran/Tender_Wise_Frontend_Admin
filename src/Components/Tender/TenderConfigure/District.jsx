@@ -461,11 +461,11 @@ function District() {
         console.error('Error fetching data:', error);
       }
         // Reload after 1 seconds
-        const interval = setInterval(() => {
-          fetchDistrictData();
-        }, 1000);
+        // const interval = setInterval(() => {
+        //   fetchDistrictData();
+        // }, 1000);
   
-        return () => clearInterval(interval);
+        // return () => clearInterval(interval);
     };
 
     fetchDistrictData();

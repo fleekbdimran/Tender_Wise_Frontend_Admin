@@ -765,11 +765,11 @@ function SubSector() {
         console.error('Error fetching data:', error);
       }
         // Reload after 1 seconds
-        const interval = setInterval(() => {
-          fetchSubSectorData();
-        }, 1000);
+        // const interval = setInterval(() => {
+        //   fetchSubSectorData();
+        // }, 1000);
   
-        return () => clearInterval(interval);
+        // return () => clearInterval(interval);
        
       
     };

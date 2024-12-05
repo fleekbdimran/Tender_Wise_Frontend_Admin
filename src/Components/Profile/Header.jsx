@@ -105,11 +105,11 @@ const Header = ({ onLogout }) => {
 
      fetchProfileData();
      // Reload after 1 seconds
-     const interval = setInterval(() => {
-       fetchProfileData();
-     }, 1000);
+    //  const interval = setInterval(() => {
+    //    fetchProfileData();
+    //  }, 1000);
 
-     return () => clearInterval(interval);
+    //  return () => clearInterval(interval);
    }, []);
 
   const [isScrolled, setIsScrolled] = useState(false);

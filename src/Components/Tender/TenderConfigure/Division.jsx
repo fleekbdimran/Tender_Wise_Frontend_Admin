@@ -614,26 +614,54 @@ function Division() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
-  const fetchCategories = async () => {
-    try {
-      const response = await ApiClient.get("/admin/tender-config/division", {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer YOUR_TOKEN_HERE`,
-        },
-      });
-      setCategories(response.data.data);
-      setFilteredCategories(response.data.data); // Initially show all categories
-    } catch (error) {
-      console.error("Error fetching categories:", error);
-    }
-      // Reload after 1 seconds
-      const interval = setInterval(() => {
-        fetchCategories();
-      }, 1000);
+  // const fetchCategories = async () => {
+  //   try {
+  //     const response = await ApiClient.get("/admin/tender-config/division", {
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         Authorization: `Bearer YOUR_TOKEN_HERE`,
+  //       },
+  //     });
+  //     setCategories(response.data.data);
+  //     setFilteredCategories(response.data.data); // Initially show all categories
+  //   } catch (error) {
+  //     console.error("Error fetching categories:", error);
+  //   }
+  //     // Reload after 1 seconds
+  //     // const interval = setInterval(() => {
+  //     //   fetchCategories();
+  //     // }, 1000);
 
-      return () => clearInterval(interval);
-  };
+  //     // return () => clearInterval(interval);
+  // };
+  useEffect(() => {
+       const fetchCategories = async () => {
+         try {
+           const response = await ApiClient.get(
+             '/admin/tender-config/division',
+             {
+               headers: {
+                 'Content-Type': 'application/json',
+                 Authorization: `Bearer YOUR_TOKEN_HERE`,
+               },
+             }
+           );
+           setCategories(response.data.data);
+           setFilteredCategories(response.data.data); // Initially show all categories
+         } catch (error) {
+           console.error('Error fetching categories:', error);
+         }
+         // Reload after 1 seconds
+         // const interval = setInterval(() => {
+         //   fetchCategories();
+         // }, 1000);
+
+         // return () => clearInterval(interval);
+    };
+    
+      fetchCategories();
+    }, []);
+
 
   const handleAdddivision = async (name) => {
     try {
@@ -694,9 +722,6 @@ function Division() {
     setCurrentPage(page);
   };
 
-  useEffect(() => {
-    fetchCategories();
-  }, []);
 
   const totalPages = Math.ceil(filteredCategories.length / itemsPerPage);
   const paginatedData = filteredCategories.slice(

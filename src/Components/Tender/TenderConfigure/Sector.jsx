@@ -456,11 +456,11 @@ function Sector() {
         console.error('Error fetching data:', error);
       }
       // Reload after 1 seconds
-      const interval = setInterval(() => {
-        fetchSectorData();
-      }, 1000);
+      // const interval = setInterval(() => {
+      //   fetchSectorData();
+      // }, 1000);
 
-      return () => clearInterval(interval);
+      // return () => clearInterval(interval);
     };
 
 
