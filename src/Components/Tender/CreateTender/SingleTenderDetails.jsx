@@ -983,13 +983,13 @@ const SingleTenderDetails = ({ onClose }) => {
             <button
               type="button"
               onClick={() => navigate('/tenderList')}
-              className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+              className="px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600"
             >
               Back
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
+              className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
             >
               Update
             </button>
