@@ -493,7 +493,7 @@ const Navbar = ({ onLogout }) => {
         },
         { key: '4-1', label: <Link to="/tenderList">Tender List</Link> },
 
-        { key: '4-3', label: <Link to="/activetender">Active Tender</Link> },
+        { key: '4-3', label: <Link to="/activetender">Live Tender</Link> },
         {
           key: '4-4',
           label: <Link to="/publishedtender">Published Tender</Link>,
@@ -504,7 +504,7 @@ const Navbar = ({ onLogout }) => {
         },
         {
           key: '4-5',
-          label: 'Tender Configure',
+          label: 'Tender Dropdown',
           children: [
             { key: '4-6', label: <Link to="/category">Category</Link> },
             { key: '4-7', label: <Link to="/sector">Sector</Link> },

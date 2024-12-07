@@ -26,11 +26,11 @@ import ApiClient from '../../Api/ApiClient';
 import { PHOTO_BASE_URL_Admin } from '../../Api/config';
 import UserPhoto from '../../../src/image/fleekBD.jpg'
 import tenderLogo from '../../../src/image/logo.png';
+import { useNavigate } from 'react-router-dom';
 const Header = ({ onLogout }) => {
+  const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [profileImage, setProfileImage] = useState(
-    'https://via.placeholder.com/150'
-  );
+  const [profileImage, setProfileImage] = useState();
   const menuRef = useRef(null);
 
   const toggleMenu = () => {
@@ -93,11 +93,11 @@ const Header = ({ onLogout }) => {
            photo: response.data.data.photo || '',
            admin_type: response.data.data.admin_type || '',
          });
-        //  setProfileImage(
-        //    response.data.data.photo
-        //      ? `${PHOTO_BASE_URL_Admin}${response.data.data.photo}`
-        //      : null
-        //  );
+         setProfileImage(
+           response.data.data.photo
+             ? `${PHOTO_BASE_URL_Admin}${response.data.data.photo}`
+             : null
+         );
        } catch (error) {
          console.error('Error fetching profile data:', error);
        }
@@ -122,25 +122,33 @@ const Header = ({ onLogout }) => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const handleHomeClick = () => {
+    navigate('/dashboard');
+  }
+
+  const handleProfileClick = () => {
+    navigate('/updateUser');
+  }
+
   return (
     <div className="relative" ref={menuRef}>
       <div className="w-full bg-gray-100 shadow-lg p-4 ">
         {/* Profile Picture */}
-        <div className='flex justify-between'>
-          <div className="">
-            <img src={tenderLogo} alt="" className='h-16' />
+        <div className="flex justify-between">
+          <div className="cursor-pointer" onClick={handleHomeClick}>
+            <img src={tenderLogo} alt="" className="h-16" />
           </div>
           <div
             className="flex items-center space-x-2 cursor-pointer w-1/6  p-1.5 rounded-md border border-gray-200"
             onClick={toggleMenu}
           >
             <img
-              src={UserPhoto}
-              // src={
-              //   profileData?.photo
-              //     ? `${PHOTO_BASE_URL_Admin}${profileData.photo}`
-              //     : 'https://via.placeholder.com/50'
-              // }
+              // src={UserPhoto}
+              src={
+                profileData?.photo
+                  ? `${PHOTO_BASE_URL_Admin}${profileData.photo}`
+                  : 'https://via.placeholder.com/50'
+              }
               alt="User Photo"
               className="h-12 w-12 rounded-full"
             />
@@ -154,10 +162,61 @@ const Header = ({ onLogout }) => {
 
       {/* Dropdown Menu */}
       {isMenuOpen && (
+        <div
+          // ref={dropdownRef}
+          className="absolute right-0 mt-1 w-80 mr-3 bg-white border border-gray-300 shadow-lg rounded-md p-4 text-sm z-30 "
+        >
+          <div className="items-center justify-center mx-auto text-center gap-0 text-lg">
+            {/* my profile */}
+            <div
+              className="cursor-pointer hover:bg-gray-100 p-2 rounded border-b  "
+              onClick={handleProfileClick}
+            >
+              {/* <FaUserCircle className="text-gray-600" /> */}
+              <span>My Profile</span>
+            </div>
+
+            {/* edit my tender */}
+            <div
+              className=" cursor-pointer hover:bg-gray-100 p-2 rounded border-b "
+              // onClick={handleEditMyTenderClick}
+            >
+              <span>Settings</span>
+            </div>
+            <div className=" cursor-pointer hover:bg-gray-100 p-2 rounded border-b ">
+              <button className="" onClick={handleLogout}>
+                {/* <FaSignOutAlt className="text-red-600 mt-1" /> */}
+                Logout
+              </button>
+              {/* {showLogoutModal && (
+                <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50  md:px-0 px-10">
+                  <div className="bg-white md:p-6 p-4 rounded-lg shadow-lg">
+                    <h2 className="md:text-lg text-sm font-bold md:mb-4 mb-2">
+                      Are you sure you want to logout?
+                    </h2>
+                    <div className="flex justify-center space-x-4">
+                      <button
+                        onClick={confirmLogout}
+                        className="bg-red-500 text-white py-2  px-6 rounded-lg hover:bg-red-600"
+                      >
+                        Yes
+                      </button>
+                      <button
+                        onClick={cancelLogout}
+                        className="bg-gray-500 text-white py-2 px-6 rounded-lg hover:bg-gray-600"
+                      >
+                        No
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )} */}
+            </div>
+          </div>
+        </div>
+      )}
+      {/* {isMenuOpen && (
         <div className="absolute right-0 mt-2 w-60 bg-white border border-gray-200 rounded shadow-lg">
-          {/* <div>
-            <h1>My Profile</h1>
-          </div> */}
 
           <label
             htmlFor="upload-image"
@@ -191,7 +250,7 @@ const Header = ({ onLogout }) => {
             Logout
           </button>
         </div>
-      )}
+      )} */}
     </div>
   );
 };

@@ -75,34 +75,34 @@ const CreateTenderForm = ({ onClose }) => {
     e.preventDefault();
 
     const formdata = new FormData();
-    formdata.append('name', formDataSubmit.name || null);
-    formdata.append('invitation_for', formDataSubmit.invitation_for || null);
-    formdata.append('ref_no', formDataSubmit.ref_no || null);
-    formdata.append('type', formDataSubmit.type || null);
-    formdata.append('sub_sector_id', formDataSubmit.sub_sector_id || null);
+    formdata.append('name', formDataSubmit.name || '');
+    formdata.append('invitation_for', formDataSubmit.invitation_for || '');
+    formdata.append('ref_no', formDataSubmit.ref_no || '');
+    formdata.append('type', formDataSubmit.type || '');
+    formdata.append('sub_sector_id', formDataSubmit.sub_sector_id || '');
     formdata.append(
       'sub_department_id',
-      formDataSubmit.sub_department_id || null
+      formDataSubmit.sub_department_id || ''
     );
-    formdata.append('source_id', formDataSubmit.source_id || null);
-    formdata.append('upazila_id', formDataSubmit.upazila_id || null);
-    formdata.append('earnest_money', formDataSubmit.earnest_money || null);
-    formdata.append('documents_price', formDataSubmit.documents_price || null);
-    formdata.append('publish_on', formDataSubmit.publish_on || null);
+    formdata.append('source_id', formDataSubmit.source_id || '');
+    formdata.append('upazila_id', formDataSubmit.upazila_id || '');
+    formdata.append('earnest_money', formDataSubmit.earnest_money || 0.00);
+    formdata.append('documents_price', formDataSubmit.documents_price || 0.00);
+    formdata.append('publish_on', formDataSubmit.publish_on || '');
 
-    formdata.append('opening_date', formDataSubmit.opening_date || null);
-    formdata.append('end_date', formDataSubmit.end_date || null);
+    formdata.append('opening_date', formDataSubmit.opening_date || '');
+    formdata.append('end_date', formDataSubmit.end_date || '');
     formdata.append(
       'purchase_last_date',
-      formDataSubmit.purchase_last_date || null
+      formDataSubmit.purchase_last_date || ''
     );
     formdata.append(
       'prebid_meeting_date',
-      formDataSubmit.prebid_meeting_date || null
+      formDataSubmit.prebid_meeting_date || ''
     );
-    formdata.append('submission_date', formDataSubmit.submission_date || null);
-    formdata.append('description', formDataSubmit.description || null);
-    formdata.append('tender_section', formDataSubmit.tender_section || null);
+    formdata.append('submission_date', formDataSubmit.submission_date || '');
+    formdata.append('description', formDataSubmit.description || '');
+    formdata.append('tender_section', formDataSubmit.tender_section || '');
 
     if (fileInput instanceof File) {
       formdata.append('file_upload', fileInput);
@@ -418,182 +418,6 @@ const CreateTenderForm = ({ onClose }) => {
                 <option value="int_popular">Int Popular Tender</option>
               </select>
             </div>
-
-            {/* Category Dropdown */}
-            <div>
-              <label className="block text-gray-700 font-medium mb-1">
-                Category
-              </label>
-              <select
-                value={selectedCategory}
-                onChange={e => setSelectedCategory(e.target.value)}
-                className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="" disabled>
-                  Select a Category
-                </option>
-                {categories.map(category => (
-                  <option key={category.id} value={category.id}>
-                    {category.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {/* Sector Dropdown */}
-            <div>
-              <label className="block text-gray-700 font-medium mb-1">
-                Sector
-              </label>
-              <select
-                value={selectedSector}
-                onChange={e => setSelectedSector(e.target.value)}
-                className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="" disabled>
-                  Select a Sector
-                </option>
-                {filteredSectors.map(sector => (
-                  <option key={sector.id} value={sector.id}>
-                    {sector.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {/* Subsector Dropdown */}
-            <div>
-              <label className="block text-gray-700 font-medium mb-1">
-                Subsector
-              </label>
-              <select
-                name="sub_sector_id"
-                value={formDataSubmit.sub_sector_id}
-                onChange={handleInputChange}
-                // onChange={handleSectorChange}
-                className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="" disabled>
-                  Select a Subsector
-                </option>
-                {filteredSubsectors.map(subsector => (
-                  <option key={subsector.id} value={subsector.id}>
-                    {subsector.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {/* Department Dropdown */}
-            <div>
-              <label className="block text-gray-700 font-medium mb-1">
-                Department
-              </label>
-              <select
-                value={selectedDepartment}
-                onChange={e => setSelectedDepartment(e.target.value)}
-                className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="" disabled>
-                  Select a Department
-                </option>
-                {departments.map(department => (
-                  <option key={department.id} value={department.id}>
-                    {department.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {/* Subdepartment Dropdown */}
-            <div>
-              <label className="block text-gray-700 font-medium mb-1">
-                Subdepartment
-              </label>
-              <select
-                name="sub_department_id"
-                value={formDataSubmit.sub_department_id}
-                onChange={handleInputChange}
-                className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="" disabled>
-                  Select a Subdepartment
-                </option>
-                {filteredSubdepartments.map(subdepartment => (
-                  <option key={subdepartment.id} value={subdepartment.id}>
-                    {subdepartment.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {/* Division Dropdown */}
-            <div>
-              <label className="block text-gray-700 font-medium mb-1">
-                Division <span className="text-red-500">*</span>
-              </label>
-              <select
-                value={selectedDivision}
-                onChange={e => setSelectedDivision(e.target.value)}
-                className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
-              >
-                <option value="" disabled>
-                  Select a Division
-                </option>
-                {divisions.map(division => (
-                  <option key={division.id} value={division.id}>
-                    {division.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {/* District Dropdown */}
-            <div>
-              <label className="block text-gray-700 font-medium mb-1">
-                District <span className="text-red-500">*</span>
-              </label>
-              <select
-                value={selectedDistrict}
-                onChange={e => setSelectedDistrict(e.target.value)}
-                className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
-              >
-                <option value="" disabled>
-                  Select a District
-                </option>
-                {filteredDistricts.map(district => (
-                  <option key={district.id} value={district.id}>
-                    {district.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {/* Upazila Dropdown */}
-            <div>
-              <label className="block text-gray-700 font-medium mb-1">
-                Upazila <span className="text-red-500">*</span>
-              </label>
-              <select
-                value={formDataSubmit.upazila_id}
-                onChange={handleInputChange}
-                name="upazila_id"
-                required
-                className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="" disabled>
-                  Select an Upazila
-                </option>
-                {filteredUpazilas.map(upazila => (
-                  <option key={upazila.id} value={upazila.id}>
-                    {upazila.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-
             {/* Source Type Dropdown */}
             <div>
               <label className="block text-gray-700 font-medium mb-1">
@@ -628,7 +452,7 @@ const CreateTenderForm = ({ onClose }) => {
                 className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 required
               >
-                <option value="" disabled>
+                <option value="">
                   Select a Source
                 </option>
                 {filteredSources.map(source => (
@@ -639,38 +463,185 @@ const CreateTenderForm = ({ onClose }) => {
               </select>
             </div>
 
-            {/* Earnest Money*/}
+            {/* Department Dropdown */}
             <div>
               <label className="block text-gray-700 font-medium mb-1">
-                Earnest Money
+                Department
               </label>
-              <input
-                type="text"
-                name="earnest_money"
-                value={formDataSubmit.earnest_money}
-                onChange={handleInputChange}
-                placeholder="Enter Earnest Money"
+              <select
+                value={selectedDepartment}
+                onChange={e => setSelectedDepartment(e.target.value)}
                 className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
+              >
+                <option value="">
+                  Select a Department
+                </option>
+                {departments.map(department => (
+                  <option key={department.id} value={department.id}>
+                    {department.name}
+                  </option>
+                ))}
+              </select>
             </div>
-            {/* Document Price*/}
+
+            {/* Subdepartment Dropdown */}
             <div>
               <label className="block text-gray-700 font-medium mb-1">
-                Document Price
+                Sub-Department
               </label>
-              <input
-                type="text"
-                name="documents_price"
-                value={formDataSubmit.documents_price}
+              <select
+                name="sub_department_id"
+                value={formDataSubmit.sub_department_id}
                 onChange={handleInputChange}
-                placeholder="Enter Earnest Money"
                 className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
+              >
+                <option value="">
+                  Select a Sub-department
+                </option>
+                {filteredSubdepartments.map(subdepartment => (
+                  <option key={subdepartment.id} value={subdepartment.id}>
+                    {subdepartment.name}
+                  </option>
+                ))}
+              </select>
             </div>
+
+            {/* Category Dropdown */}
+            <div>
+              <label className="block text-gray-700 font-medium mb-1">
+                Category
+              </label>
+              <select
+                value={selectedCategory}
+                onChange={e => setSelectedCategory(e.target.value)}
+                className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="">
+                  Select a Category
+                </option>
+                {categories.map(category => (
+                  <option key={category.id} value={category.id}>
+                    {category.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Sector Dropdown */}
+            <div>
+              <label className="block text-gray-700 font-medium mb-1">
+                Sector
+              </label>
+              <select
+                value={selectedSector}
+                onChange={e => setSelectedSector(e.target.value)}
+                className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="">
+                  Select a Sector
+                </option>
+                {filteredSectors.map(sector => (
+                  <option key={sector.id} value={sector.id}>
+                    {sector.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Subsector Dropdown */}
+            <div>
+              <label className="block text-gray-700 font-medium mb-1">
+                Sub-Sector
+              </label>
+              <select
+                name="sub_sector_id"
+                value={formDataSubmit.sub_sector_id}
+                onChange={handleInputChange}
+                // onChange={handleSectorChange}
+                className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="">
+                  Select a Sub-sector
+                </option>
+                {filteredSubsectors.map(subsector => (
+                  <option key={subsector.id} value={subsector.id}>
+                    {subsector.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Division Dropdown */}
+            <div>
+              <label className="block text-gray-700 font-medium mb-1">
+                Division <span className="text-red-500">*</span>
+              </label>
+              <select
+                value={selectedDivision}
+                onChange={e => setSelectedDivision(e.target.value)}
+                className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                required
+              >
+                <option value="">
+                  Select a Division
+                </option>
+                {divisions.map(division => (
+                  <option key={division.id} value={division.id}>
+                    {division.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* District Dropdown */}
+            <div>
+              <label className="block text-gray-700 font-medium mb-1">
+                District <span className="text-red-500">*</span>
+              </label>
+              <select
+                value={selectedDistrict}
+                onChange={e => setSelectedDistrict(e.target.value)}
+                className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                required
+              >
+                <option value="">
+                  Select a District
+                </option>
+                {filteredDistricts.map(district => (
+                  <option key={district.id} value={district.id}>
+                    {district.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Upazila Dropdown */}
+            <div>
+              <label className="block text-gray-700 font-medium mb-1">
+                Upazila <span className="text-red-500">*</span>
+              </label>
+              <select
+                value={formDataSubmit.upazila_id}
+                onChange={handleInputChange}
+                name="upazila_id"
+                required
+                className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="">
+                  Select an Upazila
+                </option>
+                {filteredUpazilas.map(upazila => (
+                  <option key={upazila.id} value={upazila.id}>
+                    {upazila.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
             {/*  Publish on*/}
             <div>
               <label className="block text-gray-700 font-medium mb-1">
-                Publish on <span className="text-red-500">*</span>
+                Publish Date <span className="text-red-500">*</span>
               </label>
               <input
                 type="date"
@@ -757,6 +728,47 @@ const CreateTenderForm = ({ onClose }) => {
               />
             </div>
 
+            {/* Earnest Money*/}
+            <div>
+              <label className="block text-gray-700 font-medium mb-1">
+                Earnest Money
+              </label>
+              <input
+                type="text"
+                name="earnest_money"
+                value={formDataSubmit.earnest_money}
+                onChange={handleInputChange}
+                placeholder="Enter Earnest Money"
+                className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                onInput={e => {
+                  e.target.value = e.target.value
+                    .replace(/[^0-9.]/g, '') // Allows only numbers and a decimal point
+                    .replace(/(\..*?)\./g, '$1') // Ensures only one decimal point
+                    .replace(/(\.\d{2})\d+/g, '$1'); // Limits to two digits after the decimal point
+                }}
+              />
+            </div>
+            {/* Document Price*/}
+            <div>
+              <label className="block text-gray-700 font-medium mb-1">
+                Document Price
+              </label>
+              <input
+                type="text"
+                name="documents_price"
+                value={formDataSubmit.documents_price}
+                onChange={handleInputChange}
+                placeholder="Enter Earnest Money"
+                className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                onInput={e => {
+                  e.target.value = e.target.value
+                    .replace(/[^0-9.]/g, '') // Allows only numbers and a decimal point
+                    .replace(/(\..*?)\./g, '$1') // Ensures only one decimal point
+                    .replace(/(\.\d{2})\d+/g, '$1'); // Limits to two digits after the decimal point
+                }}
+              />
+            </div>
+
             {/* File Upload */}
             <div>
               <label className="block text-gray-700 font-medium mb-1">
@@ -769,6 +781,7 @@ const CreateTenderForm = ({ onClose }) => {
                 required
               />
             </div>
+
             {/* Logo Upload */}
             <div>
               <label className="block text-gray-700 font-medium mb-1">
@@ -792,7 +805,6 @@ const CreateTenderForm = ({ onClose }) => {
                 value={formDataSubmit.description} // Must bind to state
                 onChange={handleInputChange}
                 className="w-full p-1.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
               />
             </div>
           </div>

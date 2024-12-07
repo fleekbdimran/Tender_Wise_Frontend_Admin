@@ -74,16 +74,39 @@ const CreateUsers = () => {
   return (
     <div className="block mx-auto p-8 w-full max-w-4xl">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full">
-        <h3 className="text-xl font-semibold mb-6  text-blue-600">Create User</h3>
+        <h3 className="text-xl font-semibold mb-6  text-blue-600">
+          Create User
+        </h3>
         <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            {[ 
-              { label: 'User Name', id: 'usersName', type: 'text', value: usersName, setter: setUsersName },
-              { label: 'User Email *', id: 'usersEmail', type: 'email', value: usersEmail, setter: setUsersEmail },
-              { label: 'User Phone *', id: 'usersPhone', type: 'tel', value: usersPhone, setter: setUsersPhone },
+            {[
+              {
+                label: 'User Name *',
+                id: 'usersName',
+                type: 'text',
+                value: usersName,
+                setter: setUsersName,
+              },
+              {
+                label: 'User Email *',
+                id: 'usersEmail',
+                type: 'email',
+                value: usersEmail,
+                setter: setUsersEmail,
+              },
+              {
+                label: 'User Phone *',
+                id: 'usersPhone',
+                type: 'tel',
+                value: usersPhone,
+                setter: setUsersPhone,
+              },
             ].map(({ label, id, type, value, setter }) => (
               <div key={id} className="w-full">
-                <label className="block text-gray-700 font-medium mb-1" htmlFor={id}>
+                <label
+                  className="block text-gray-700 font-medium mb-1"
+                  htmlFor={id}
+                >
                   {label}
                 </label>
                 <input
@@ -92,25 +115,39 @@ const CreateUsers = () => {
                   className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder={`Enter ${label}`}
                   value={value}
-                  onChange={(e) => setter(e.target.value)}
+                  onChange={e => setter(e.target.value)}
                   required
                 />
               </div>
             ))}
 
             {[
-              { label: 'Password *', value: password, setter: setPassword, show: showPassword, toggle: setShowPassword },
-              { label: 'Re-type Password *', value: retypePassword, setter: setRetypePassword, show: showRetypePassword, toggle: setShowRetypePassword },
+              {
+                label: 'Password *',
+                value: password,
+                setter: setPassword,
+                show: showPassword,
+                toggle: setShowPassword,
+              },
+              {
+                label: 'Re-type Password *',
+                value: retypePassword,
+                setter: setRetypePassword,
+                show: showRetypePassword,
+                toggle: setShowRetypePassword,
+              },
             ].map(({ label, value, setter, show, toggle }, index) => (
               <div key={index} className="w-full">
-                <label className="block text-gray-700 font-medium mb-1">{label}</label>
+                <label className="block text-gray-700 font-medium mb-1">
+                  {label}
+                </label>
                 <div className="relative">
                   <input
                     type={show ? 'text' : 'password'}
                     className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     placeholder={`Enter ${label}`}
                     value={value}
-                    onChange={(e) => setter(e.target.value)}
+                    onChange={e => setter(e.target.value)}
                     required
                   />
                   <button
@@ -125,14 +162,17 @@ const CreateUsers = () => {
             ))}
 
             <div className="w-full">
-              <label className="block text-gray-700 font-medium mb-1" htmlFor="adminType">
-                Admin Type
+              <label
+                className="block text-gray-700 font-medium mb-1"
+                htmlFor="adminType"
+              >
+                Admin Type <span className="text-black-500">*</span>
               </label>
               <select
                 id="adminType"
                 className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 value={adminType}
-                onChange={(e) => setAdminType(e.target.value)}
+                onChange={e => setAdminType(e.target.value)}
                 required
               >
                 <option value="">Select Admin Type</option>
