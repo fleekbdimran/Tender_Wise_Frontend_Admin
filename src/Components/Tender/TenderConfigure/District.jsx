@@ -277,6 +277,164 @@ import { EditOutlined, CloseOutlined, SendOutlined, SearchOutlined } from '@ant-
 import ApiClient from './../../../Api/ApiClient'; // Ensure this is correctly imported
 import Swal from 'sweetalert2';
 
+// function DesignationTypeModal({
+//   isOpen,
+//   onClose,
+//   title,
+// }) {
+//   const [Districts, setDistricts] = useState([]);
+//   const [name, setName] = useState('');
+//   const [selectedCategory, setSelectedCategory] = useState('');
+
+//   // Fetch the district data (for division)
+//   useEffect(() => {
+//     const fetchDistricts = async () => {
+//       try {
+//         const response = await ApiClient.get('/admin/tender-config/division');
+//         if (response.data.success) {
+//           const filteredDistricts = response.data.data.filter(
+//             category => category.status === 1
+//           );
+//           setDistricts(filteredDistricts);
+//         }
+//       } catch (error) {
+//         console.error('Failed to fetch Districts:', error);
+//       }
+//     };
+//     fetchDistricts();
+//   }, []);  // Empty dependency array ensures this runs once when the component mounts
+
+//   // Handle submit logic
+//   const handleSubmit = async e => {
+//     e.preventDefault();
+
+//     if (!name || !selectedCategory) {
+//       Swal.fire({
+//         title: 'Validation Error',
+//         text: 'Please fill in all required fields.',
+//         confirmButtonText: 'Okay',
+//         customClass: {
+//           popup: 'w-72 h-auto p-3',
+//           title: 'text-lg',
+//           content: 'text-xs',
+//           confirmButton: 'bg-teal-500 text-white px-4 py-1 text-sm rounded-md',
+//         },
+//       });
+//       return;
+//     }
+
+//     const data = {
+//       name,
+//       division_id: selectedCategory, // Changed category_id to division_id to match the API
+//     };
+
+//     try {
+//       const token = localStorage.getItem('authToken');
+//       const response = await ApiClient.post('/admin/tender-config/district', data, {
+//         headers: {
+//           Authorization: `Bearer ${token}`,
+//           'Content-Type': 'application/json',
+//         },
+//       });
+
+//       if (response.status === 201) {
+//         Swal.fire({
+//           title: 'Success!',
+//           text: 'District created successfully!',
+//           confirmButtonText: 'Okay',
+//           customClass: {
+//             popup: 'w-72 h-auto p-3',
+//             title: 'text-lg',
+//             content: 'text-xs',
+//             confirmButton: 'bg-blue-500 text-white px-4 py-1 text-sm rounded-md',
+//           },
+//         });
+//         setName('');  // Reset the form state
+//         setSelectedCategory('');
+//         onClose();  // Close the modal after successful submission
+//       } else {
+//         Swal.fire({
+//           title: 'Failed!',
+//           text: 'District creation failed!',
+//           confirmButtonText: 'Okay',
+//           customClass: {
+//             popup: 'w-72 h-auto p-3',
+//             title: 'text-lg',
+//             content: 'text-xs',
+//             confirmButton: 'bg-teal-500 text-white px-4 py-1 text-sm rounded-md',
+//           },
+//         });
+//       }
+//     } catch (error) {
+//       console.error('Error during submission:', error);
+//       Swal.fire({
+//         title: 'Failed!',
+//         text: 'An error occurred. Please try again.',
+//         confirmButtonText: 'Okay',
+//         customClass: {
+//           popup: 'w-72 h-auto p-3',
+//           title: 'text-lg',
+//           content: 'text-xs',
+//           confirmButton: 'bg-teal-500 text-white px-4 py-1 text-sm rounded-md',
+//         },
+//       });
+//     }
+//   };
+
+//   if (!isOpen) return null;
+
+//   return (
+//     <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50 w-full h-full">
+//       <div className="bg-white p-8 rounded-lg shadow-lg w-96 relative">
+//         <button
+//           onClick={onClose}
+//           className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+//         >
+//           <CloseOutlined />
+//         </button>
+//         <h2 className="text-xl font-semibold mb-6">{title}</h2>
+//         <form className="space-y-6" onSubmit={handleSubmit}>
+//           <div>
+//             <label className="block text-sm font-medium text-gray-700">
+//               <span className="text-red-500">*</span> District Name:
+//             </label>
+//             <input
+//               type="text"
+//               value={name}
+//               onChange={e => setName(e.target.value)}
+//               placeholder="Enter District Name"
+//               className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md text-sm shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
+//             />
+//           </div>
+//           <div>
+//             <label className="block text-sm font-medium text-gray-700">
+//               <span className="text-red-500">*</span> Division Name:
+//             </label>
+//             <select
+//               value={selectedCategory}
+//               onChange={e => setSelectedCategory(e.target.value)}
+//               className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md text-sm shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
+//             >
+//               <option value="" disabled>Select a Division</option>
+//               {Districts.map(category => (
+//                 <option key={category.id} value={category.id}>
+//                   {category.name}
+//                 </option>
+//               ))}
+//             </select>
+//           </div>
+//           <button
+//             type="submit"
+//             className="bg-teal-500 text-white px-6 py-3 rounded-lg flex items-center justify-center w-full"
+//           >
+//             <SendOutlined className="mr-2" /> Submit
+//           </button>
+//         </form>
+//       </div>
+//     </div>
+//   );
+// }
+
 function DesignationTypeModal({
   isOpen,
   onClose,
@@ -293,7 +451,7 @@ function DesignationTypeModal({
         const response = await ApiClient.get('/admin/tender-config/division');
         if (response.data.success) {
           const filteredDistricts = response.data.data.filter(
-            category => category.status === 1
+            (category) => category.status === 1
           );
           setDistricts(filteredDistricts);
         }
@@ -302,10 +460,10 @@ function DesignationTypeModal({
       }
     };
     fetchDistricts();
-  }, []);  // Empty dependency array ensures this runs once when the component mounts
+  }, []); // Empty dependency array ensures this runs once when the component mounts
 
   // Handle submit logic
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!name || !selectedCategory) {
@@ -337,48 +495,33 @@ function DesignationTypeModal({
         },
       });
 
-      if (response.status === 201) {
-        Swal.fire({
-          title: 'Success!',
-          text: 'District created successfully!',
-          confirmButtonText: 'Okay',
-          customClass: {
-            popup: 'w-72 h-auto p-3',
-            title: 'text-lg',
-            content: 'text-xs',
-            confirmButton: 'bg-blue-500 text-white px-4 py-1 text-sm rounded-md',
-          },
+      if (response.status === 200 || response.status === 201) {
+        await Swal.fire({
+          title: "Success!",
+          text: "District created successfully!",
+          icon: "success",
+          confirmButtonText: "OK",
         });
-        setName('');  // Reset the form state
-        setSelectedCategory('');
-        onClose();  // Close the modal after successful submission
+        // Optionally, update the UI or state dynamically here
       } else {
         Swal.fire({
-          title: 'Failed!',
-          text: 'District creation failed!',
-          confirmButtonText: 'Okay',
-          customClass: {
-            popup: 'w-72 h-auto p-3',
-            title: 'text-lg',
-            content: 'text-xs',
-            confirmButton: 'bg-teal-500 text-white px-4 py-1 text-sm rounded-md',
-          },
+          title: "Error!",
+          text: response.data.message || "Something went wrong!",
+          icon: "error",
+          confirmButtonText: "Try Again",
         });
       }
     } catch (error) {
-      console.error('Error during submission:', error);
+      console.error("Error adding category:", error);
       Swal.fire({
-        title: 'Failed!',
-        text: 'An error occurred. Please try again.',
-        confirmButtonText: 'Okay',
-        customClass: {
-          popup: 'w-72 h-auto p-3',
-          title: 'text-lg',
-          content: 'text-xs',
-          confirmButton: 'bg-teal-500 text-white px-4 py-1 text-sm rounded-md',
-        },
+        title: "Error!",
+        text: error.response?.data?.message || "Something went wrong!",
+        icon: "error",
+        confirmButtonText: "Try Again",
       });
     }
+
+    onClose(); // Close modal after submit
   };
 
   if (!isOpen) return null;
@@ -401,7 +544,7 @@ function DesignationTypeModal({
             <input
               type="text"
               value={name}
-              onChange={e => setName(e.target.value)}
+              onChange={(e) => setName(e.target.value)}
               placeholder="Enter District Name"
               className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md text-sm shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
             />
@@ -412,11 +555,11 @@ function DesignationTypeModal({
             </label>
             <select
               value={selectedCategory}
-              onChange={e => setSelectedCategory(e.target.value)}
+              onChange={(e) => setSelectedCategory(e.target.value)}
               className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md text-sm shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
             >
               <option value="" disabled>Select a Division</option>
-              {Districts.map(category => (
+              {Districts.map((category) => (
                 <option key={category.id} value={category.id}>
                   {category.name}
                 </option>
@@ -435,11 +578,14 @@ function DesignationTypeModal({
   );
 }
 
+
 function District() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalTitle, setModalTitle] = useState('Add District');
   const [District, setDistrict] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   const openModal = (title, district = {}) => {
     setModalTitle(title);
@@ -461,18 +607,31 @@ function District() {
         console.error('Error fetching data:', error);
       }
         // Reload after 1 seconds
-        const interval = setInterval(() => {
-          fetchDistrictData();
-        }, 1000);
+        // const interval = setInterval(() => {
+        //   fetchDistrictData();
+        // }, 1000);
   
-        return () => clearInterval(interval);
+        // return () => clearInterval(interval);
     };
 
     fetchDistrictData();
-  }, []);  // Empty dependency ensures that this runs once
+  }, [District]);  // Empty dependency ensures that this runs once
 
   const filteredDistricts = District.filter(d =>
     d.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const filteredDistrict = District.filter((subDept) =>
+    subDept.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  const paginatedDistrict = filteredDistrict.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
   );
 
   return (
@@ -520,7 +679,7 @@ function District() {
             </tr>
           </thead>
           <tbody>
-            {filteredDistricts.map((district, index) => (
+            {paginatedDistrict.map((district, index) => (
               <tr key={index} className="hover:bg-gray-50">
                 <td className="px-4 py-2 border-b">{index + 1}</td>
                 <td className="px-4 py-2 border-b">{district.name}</td>
@@ -544,6 +703,22 @@ function District() {
           </tbody>
         </table>
         
+      </div>
+
+      <div className="flex justify-center mt-4">
+        {Array.from(
+          { length: Math.ceil(filteredDistricts.length / itemsPerPage) },
+          (_, i) => (
+            <button
+              key={i}
+              onClick={() => handlePageChange(i + 1)}
+              className={`px-4 py-2 mx-1 rounded ${currentPage === i + 1 ? "bg-teal-500 text-white" : "bg-gray-200"
+                }`}
+            >
+              {i + 1}
+            </button>
+          )
+        )}
       </div>
     </div>
   );

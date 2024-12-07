@@ -508,8 +508,12 @@ const Navbar = ({ onLogout }) => {
           children: [
             { key: '4-6', label: <Link to="/category">Category</Link> },
             { key: '4-7', label: <Link to="/sector">Sector</Link> },
-            { key: '4-8', label: <Link to="/subSector">SubSector</Link> },
+            { key: '4-8', label: <Link to="/subSector">Sub Sector</Link> },
             { key: '4-9', label: <Link to="/department">Department</Link> },
+            {
+              key: '4-19',
+              label: <Link to="/subdepartment">Sub Department</Link>,
+            },
             { key: '4-10', label: <Link to="/division">Division</Link> },
             { key: '4-11', label: <Link to="/district">District</Link> },
             { key: '4-12', label: <Link to="/upazila">Upazila</Link> },

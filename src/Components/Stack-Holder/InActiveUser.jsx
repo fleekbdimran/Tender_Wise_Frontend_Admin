@@ -386,7 +386,7 @@ const InActiveUser = () => {
         <th className="py-3 px-6 text-left">Phone</th>
         <th className="py-3 px-6 text-left">Address</th>
         <th className="py-3 px-6 text-left">Otp Status</th>
-        <th className="py-3 px-6 text-left">Status</th>
+        {/* <th className="py-3 px-6 text-left">Status</th> */}
       </tr>
     </thead>
     <tbody className="text-gray-700 text-sm font-light">
@@ -411,7 +411,7 @@ const InActiveUser = () => {
               {admin.otp_status === 0 ? 'Non-Verified' : 'Verified'}
             </span>
           </td>
-          <td className="py-3 px-6 text-left">
+          {/* <td className="py-3 px-6 text-left">
             <span
               className={`px-2 py-1 rounded-full text-xs ${
                 admin.status === 'inactive'
@@ -421,7 +421,7 @@ const InActiveUser = () => {
             >
               {admin.status === 'inactive' ? 'Inactive' : 'Active'}
             </span>
-          </td>
+          </td> */}
         </tr>
       ))}
     </tbody>

@@ -4,6 +4,161 @@ import { EditOutlined, CloseOutlined, SendOutlined, SearchOutlined } from '@ant-
 import ApiClient from './../../../Api/ApiClient';
 import Swal from 'sweetalert2';
 
+// function DesignationTypeModal({
+//   isOpen,
+//   onClose,
+//   title,
+//   currentStatus,
+//   onStatusChange,
+// }) {
+//   const [categories, setCategories] = useState([]);
+//   const [name, setName] = useState('');
+//   const [selectedCategory, setSelectedCategory] = useState('');
+
+//   useEffect(() => {
+//     const fetchCategories = async () => {
+//       try {
+//         const response = await ApiClient.get('/admin/tender-config/district');
+//         if (response.data.success) {
+//           const filteredCategories = response.data.data.filter(
+//             category => category.status === 1
+//           );
+//           setCategories(filteredCategories);
+//         }
+//       } catch (error) {
+//         console.error('Failed to fetch categories:', error);
+//       }
+//     };
+//     fetchCategories();
+//   }, []);
+
+//   const handleSubmit = async e => {
+//     e.preventDefault();
+
+//     if (!name || !selectedCategory) {
+//       Swal.fire({
+//         title: 'Validation Error',
+//         text: 'Please fill in all required fields.',
+//         confirmButtonText: 'Okay',
+//         customClass: {
+//           popup: 'w-72 h-auto p-3',
+//           title: 'text-lg',
+//           content: 'text-xs',
+//           confirmButton: 'bg-teal-500 text-white px-4 py-1 text-sm rounded-md',
+//         },
+//       });
+//       return;
+//     }
+
+//     const data = {
+//       name,
+//       district_id: selectedCategory,
+//     };
+
+//     try {
+//       const response = await ApiClient.post(
+//         '/admin/tender-config/upazila',
+//         data
+//       );
+//       // const result = await response.text();
+//       console.log(response.data);
+//       if (response.status === 201) {
+//         Swal.fire({
+//           title: 'Success!',
+//           text: 'Upazila created successfully!',
+//           confirmButtonText: 'Okay',
+//           customClass: {
+//             popup: 'w-72 h-auto p-3',
+//             title: 'text-lg',
+//             content: 'text-xs',
+//             confirmButton: 'bg-blue-500 text-white px-4 py-1 text-sm rounded-md',
+//           },
+//         });
+//         setName('');
+//         setSelectedCategory('');
+//         onClose();
+//       } else {
+//         Swal.fire({
+//           title: 'Failed!',
+//           text: 'Upazila creation failed!',
+//           confirmButtonText: 'Okay',
+//           customClass: {
+//             popup: 'w-72 h-auto p-3',
+//             title: 'text-lg',
+//             content: 'text-xs',
+//             confirmButton: 'bg-teal-500 text-white px-4 py-1 text-sm rounded-md',
+//           },
+//         });
+//       }
+//     } catch (error) {
+//       Swal.fire({
+//         title: 'Failed!',
+//         text: 'An error occurred. Please try again.',
+//         confirmButtonText: 'Okay',
+//         customClass: {
+//           popup: 'w-72 h-auto p-3',
+//           title: 'text-lg',
+//           content: 'text-xs',
+//           confirmButton: 'bg-teal-500 text-white px-4 py-1 text-sm rounded-md',
+//         },
+//       });
+//     }
+//   };
+
+//   if (!isOpen) return null;
+
+//   return (
+//     <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50 w-full h-full">
+//       <div className="bg-white p-8 rounded-lg shadow-lg w-96 relative">
+//         <button
+//           onClick={onClose}
+//           className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+//         >
+//           <CloseOutlined />
+//         </button>
+//         <h2 className="text-xl font-semibold mb-6">{title}</h2>
+//         <form className="space-y-6" onSubmit={handleSubmit}>
+//           <div>
+//             <label className="block text-sm font-medium text-gray-700">
+//               <span className="text-red-500">*</span> Upazila Name:
+//             </label>
+//             <input
+//               type="text"
+//               value={name}
+//               onChange={e => setName(e.target.value)}
+//               placeholder="Enter Upazila Name"
+//               className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md text-sm shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
+//             />
+//           </div>
+//           <div>
+//             <label className="block text-sm font-medium text-gray-700">
+//               <span className="text-red-500">*</span> District Name:
+//             </label>
+//             <select
+//               value={selectedCategory}
+//               onChange={e => setSelectedCategory(e.target.value)}
+//               className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md text-sm shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
+//             >
+//               <option value="" disabled>Select a District</option>
+//               {categories.map(category => (
+//                 <option key={category.id} value={category.id}>
+//                   {category.name}
+//                 </option>
+//               ))}
+//             </select>
+//           </div>
+//           <button
+//             type="submit"
+//             className="bg-teal-500 text-white px-6 py-3 rounded-lg flex items-center justify-center w-full"
+//           >
+//             <SendOutlined className="mr-2" /> Submit
+//           </button>
+//         </form>
+//       </div>
+//     </div>
+//   );
+// }
+
 function DesignationTypeModal({
   isOpen,
   onClose,
@@ -21,7 +176,7 @@ function DesignationTypeModal({
         const response = await ApiClient.get('/admin/tender-config/district');
         if (response.data.success) {
           const filteredCategories = response.data.data.filter(
-            category => category.status === 1
+            (category) => category.status === 1
           );
           setCategories(filteredCategories);
         }
@@ -32,7 +187,7 @@ function DesignationTypeModal({
     fetchCategories();
   }, []);
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!name || !selectedCategory) {
@@ -60,49 +215,38 @@ function DesignationTypeModal({
         '/admin/tender-config/upazila',
         data
       );
-      // const result = await response.text();
       console.log(response.data);
-      if (response.status === 201) {
-        Swal.fire({
+
+      if (response.status === 200 || response.status === 201) {
+        await Swal.fire({
           title: 'Success!',
           text: 'Upazila created successfully!',
-          confirmButtonText: 'Okay',
-          customClass: {
-            popup: 'w-72 h-auto p-3',
-            title: 'text-lg',
-            content: 'text-xs',
-            confirmButton: 'bg-blue-500 text-white px-4 py-1 text-sm rounded-md',
-          },
+          icon: 'success',
+          confirmButtonText: 'OK',
         });
-        setName('');
-        setSelectedCategory('');
-        onClose();
+        setCategories((prevCategories) => [
+          ...prevCategories,
+          response.data, // Assuming the response contains the new category data
+        ]);
       } else {
         Swal.fire({
-          title: 'Failed!',
-          text: 'Upazila creation failed!',
-          confirmButtonText: 'Okay',
-          customClass: {
-            popup: 'w-72 h-auto p-3',
-            title: 'text-lg',
-            content: 'text-xs',
-            confirmButton: 'bg-teal-500 text-white px-4 py-1 text-sm rounded-md',
-          },
+          title: 'Error!',
+          text: response.data.message || 'Something went wrong!',
+          icon: 'error',
+          confirmButtonText: 'Try Again',
         });
       }
     } catch (error) {
+      console.error('Error adding category:', error);
       Swal.fire({
-        title: 'Failed!',
-        text: 'An error occurred. Please try again.',
-        confirmButtonText: 'Okay',
-        customClass: {
-          popup: 'w-72 h-auto p-3',
-          title: 'text-lg',
-          content: 'text-xs',
-          confirmButton: 'bg-teal-500 text-white px-4 py-1 text-sm rounded-md',
-        },
+        title: 'Error!',
+        text: error.response?.data?.message || 'Something went wrong!',
+        icon: 'error',
+        confirmButtonText: 'Try Again',
       });
     }
+
+    onClose(); // Close modal after submission
   };
 
   if (!isOpen) return null;
@@ -125,7 +269,7 @@ function DesignationTypeModal({
             <input
               type="text"
               value={name}
-              onChange={e => setName(e.target.value)}
+              onChange={(e) => setName(e.target.value)}
               placeholder="Enter Upazila Name"
               className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md text-sm shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
             />
@@ -136,11 +280,13 @@ function DesignationTypeModal({
             </label>
             <select
               value={selectedCategory}
-              onChange={e => setSelectedCategory(e.target.value)}
+              onChange={(e) => setSelectedCategory(e.target.value)}
               className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md text-sm shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
             >
-              <option value="" disabled>Select a District</option>
-              {categories.map(category => (
+              <option value="" disabled>
+                Select a District
+              </option>
+              {categories.map((category) => (
                 <option key={category.id} value={category.id}>
                   {category.name}
                 </option>
@@ -159,12 +305,15 @@ function DesignationTypeModal({
   );
 }
 
+
 function Upazila() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalTitle, setModalTitle] = useState('Add Designation Type');
   const [currentStatus, setCurrentStatus] = useState('Available');
   const [Upazila, setUpazila] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   const openModal = (title, Upazila) => {
     setModalTitle(title);
@@ -185,18 +334,31 @@ function Upazila() {
         console.error('Error fetching data:', error);
       }
         // Reload after 1 seconds
-        const interval = setInterval(() => {
-          fetchUpazilaData();
-        }, 1000);
+        // const interval = setInterval(() => {
+        //   fetchUpazilaData();
+        // }, 1000);
   
-        return () => clearInterval(interval);
+        // return () => clearInterval(interval);
     };
 
     fetchUpazilaData();
-  }, []);
+  }, [Upazila]);
 
-  const filteredUpazilas = Upazila.filter(amenity => 
-    amenity.name.toLowerCase().includes(searchTerm.toLowerCase())
+  // const filteredUpazilas = Upazila.filter(amenity => 
+  //   amenity.name.toLowerCase().includes(searchTerm.toLowerCase())
+  // );
+
+  const filteredUpazila = Upazila.filter((subDept) =>
+    subDept.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  const paginatedUpazila = filteredUpazila.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
   );
 
   return (
@@ -245,7 +407,7 @@ function Upazila() {
             </tr>
           </thead>
           <tbody>
-            {filteredUpazilas.map((Upazila, index) => (
+            {paginatedUpazila.map((Upazila, index) => (
               <tr key={index} className="hover:bg-gray-50">
                 <td className="px-4 py-2 border-b">{index + 1}</td>
                 <td className="px-4 py-2 border-b">{Upazila.name}</td>
@@ -270,6 +432,21 @@ function Upazila() {
             ))}
           </tbody>
         </table>
+      </div>
+      <div className="flex justify-center mt-4">
+        {Array.from(
+          { length: Math.ceil(filteredUpazila.length / itemsPerPage) },
+          (_, i) => (
+            <button
+              key={i}
+              onClick={() => handlePageChange(i + 1)}
+              className={`px-4 py-2 mx-1 rounded ${currentPage === i + 1 ? "bg-teal-500 text-white" : "bg-gray-200"
+                }`}
+            >
+              {i + 1}
+            </button>
+          )
+        )}
       </div>
     </div>
   );

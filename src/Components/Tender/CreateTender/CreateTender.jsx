@@ -334,6 +334,7 @@ const CreateTenderForm = ({ onClose }) => {
           <AiOutlineClose />
         </button>
       </div>
+      {/* <h2 className="text-2xl font-semibold">All Tender</h2> */}
       <div className="bg-white p-8 rounded-lg shadow-lg w-full">
         <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-3 2xl:grid-cols-4 gap-6">

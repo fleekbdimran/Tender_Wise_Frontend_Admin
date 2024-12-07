@@ -508,6 +508,102 @@ import { EditOutlined, CloseOutlined, SendOutlined, SearchOutlined } from "@ant-
 import ApiClient from "../../../Api/ApiClient";
 import Swal from "sweetalert2"; // Import Swal for notifications
 
+// function DesignationTypeModal({ isOpen, onClose, title, onSubmit, division }) {
+//   const [divisionName, setdivisionName] = useState(division ? division.name : "");
+
+//   useEffect(() => {
+//     if (division) {
+//       setdivisionName(division.name);
+//     }
+//   }, [division]);
+
+//   if (!isOpen) return null;
+
+//   const handleFormSubmit = async (e) => {
+//     e.preventDefault();
+//     try {
+//       const response = await onSubmit(divisionName, division?.id); // Pass name and ID for edit
+//       if (response.status === 200 || response.status === 201) {
+//         await Swal.fire({
+//           title: "Success!",
+//           text: division ? "Division updated successfully!" : "Division added successfully!",
+//           icon: "success",
+//           confirmButtonText: "OK",
+//           customClass: {
+//             popup: 'w-72 h-auto p-3',
+//             title: 'text-lg',
+//             content: 'text-xs',
+//             confirmButton: 'bg-teal-500 text-white px-4 py-1 text-sm rounded-md',
+//           },
+//         });
+//         setdivisionName(""); // Reset input after success
+//       } else {
+//         Swal.fire({
+//           title: "Error!",
+//           text: response.data.message || "Something went wrong!",
+//           icon: "error",
+//           confirmButtonText: "Try Again",
+//           customClass: {
+//             popup: 'w-72 h-auto p-3',
+//             title: 'text-lg',
+//             content: 'text-xs',
+//             confirmButton: 'bg-teal-500 text-white px-4 py-1 text-sm rounded-md',
+//           },
+//         });
+//       }
+//     } catch (error) {
+//       console.error("Error in API Call:", error);
+//       Swal.fire({
+//         title: "Error!",
+//         text: error.response?.data?.message || "Something went wrong!",
+//         icon: "error",
+//         confirmButtonText: "Try Again",
+//         customClass: {
+//           popup: 'w-72 h-auto p-3',
+//           title: 'text-lg',
+//           content: 'text-xs',
+//           confirmButton: 'bg-teal-500 text-white px-4 py-1 text-sm rounded-md',
+//         },
+//       });
+//     }
+//   };
+
+//   return (
+//     <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50 w-full h-full">
+//       <div className="bg-white p-8 rounded-lg shadow-lg w-96 relative">
+//         <button
+//           onClick={onClose}
+//           className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+//         >
+//           <CloseOutlined />
+//         </button>
+//         <h2 className="text-xl font-semibold mb-6">{title}</h2>
+//         <form onSubmit={handleFormSubmit} className="space-y-6">
+//           <div>
+//             <label className="block text-sm font-medium text-gray-700">
+//               <span className="text-red-500">*</span> Name:
+//             </label>
+//             <input
+//               type="text"
+//               value={divisionName}
+//               onChange={(e) => setdivisionName(e.target.value)}
+//               placeholder="Enter division Name"
+//               className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md text-sm shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
+//               required
+//             />
+//           </div>
+//           <button
+//             type="submit"
+//             className="bg-teal-500 text-white px-6 py-3 rounded-lg flex items-center justify-center w-full"
+//           >
+//             <SendOutlined className="mr-2" /> {division ? "Update" : "Submit"}
+//           </button>
+//         </form>
+//       </div>
+//     </div>
+//   );
+// }
+
 function DesignationTypeModal({ isOpen, onClose, title, onSubmit, division }) {
   const [divisionName, setdivisionName] = useState(division ? division.name : "");
 
@@ -526,46 +622,29 @@ function DesignationTypeModal({ isOpen, onClose, title, onSubmit, division }) {
       if (response.status === 200 || response.status === 201) {
         await Swal.fire({
           title: "Success!",
-          text: division ? "Division updated successfully!" : "Division added successfully!",
+          text: "Division created successfully!",
           icon: "success",
           confirmButtonText: "OK",
-          customClass: {
-            popup: 'w-72 h-auto p-3',
-            title: 'text-lg',
-            content: 'text-xs',
-            confirmButton: 'bg-teal-500 text-white px-4 py-1 text-sm rounded-md',
-          },
         });
-        setdivisionName(""); // Reset input after success
       } else {
         Swal.fire({
           title: "Error!",
           text: response.data.message || "Something went wrong!",
           icon: "error",
           confirmButtonText: "Try Again",
-          customClass: {
-            popup: 'w-72 h-auto p-3',
-            title: 'text-lg',
-            content: 'text-xs',
-            confirmButton: 'bg-teal-500 text-white px-4 py-1 text-sm rounded-md',
-          },
         });
       }
     } catch (error) {
-      console.error("Error in API Call:", error);
+      console.error("Error adding category:", error);
       Swal.fire({
         title: "Error!",
         text: error.response?.data?.message || "Something went wrong!",
         icon: "error",
         confirmButtonText: "Try Again",
-        customClass: {
-          popup: 'w-72 h-auto p-3',
-          title: 'text-lg',
-          content: 'text-xs',
-          confirmButton: 'bg-teal-500 text-white px-4 py-1 text-sm rounded-md',
-        },
       });
     }
+    setdivisionName(""); // Reset the input field
+    onClose(); // Close the modal after submission
   };
 
   return (
@@ -604,6 +683,8 @@ function DesignationTypeModal({ isOpen, onClose, title, onSubmit, division }) {
   );
 }
 
+
+
 function Division() {
   const [categories, setCategories] = useState([]);
   const [filteredCategories, setFilteredCategories] = useState([]);
@@ -614,26 +695,35 @@ function Division() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
-  const fetchCategories = async () => {
-    try {
-      const response = await ApiClient.get("/admin/tender-config/division", {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer YOUR_TOKEN_HERE`,
-        },
-      });
-      setCategories(response.data.data);
-      setFilteredCategories(response.data.data); // Initially show all categories
-    } catch (error) {
-      console.error("Error fetching categories:", error);
-    }
-      // Reload after 1 seconds
-      const interval = setInterval(() => {
-        fetchCategories();
-      }, 1000);
 
-      return () => clearInterval(interval);
-  };
+  useEffect(() => {
+       const fetchCategories = async () => {
+         try {
+           const response = await ApiClient.get(
+             '/admin/tender-config/division',
+             {
+               headers: {
+                 'Content-Type': 'application/json',
+                 Authorization: `Bearer YOUR_TOKEN_HERE`,
+               },
+             }
+           );
+           setCategories(response.data.data);
+           setFilteredCategories(response.data.data); // Initially show all categories
+         } catch (error) {
+           console.error('Error fetching categories:', error);
+         }
+         // Reload after 1 seconds
+         // const interval = setInterval(() => {
+         //   fetchCategories();
+         // }, 1000);
+
+         // return () => clearInterval(interval);
+    };
+    
+      fetchCategories();
+    }, [categories]);
+
 
   const handleAdddivision = async (name) => {
     try {
@@ -694,9 +784,6 @@ function Division() {
     setCurrentPage(page);
   };
 
-  useEffect(() => {
-    fetchCategories();
-  }, []);
 
   const totalPages = Math.ceil(filteredCategories.length / itemsPerPage);
   const paginatedData = filteredCategories.slice(

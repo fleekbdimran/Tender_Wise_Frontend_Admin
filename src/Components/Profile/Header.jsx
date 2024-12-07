@@ -84,7 +84,7 @@ const Header = ({ onLogout }) => {
        try {
          const response = await ApiClient.get('/admin/profile/single/');
 
-         console.log(response.data.data);
+        //  console.log(response.data.data);
         //  setProfileId(response.data.data.id);
 
          // Assuming the response contains profile data
@@ -105,11 +105,11 @@ const Header = ({ onLogout }) => {
 
      fetchProfileData();
      // Reload after 1 seconds
-     const interval = setInterval(() => {
-       fetchProfileData();
-     }, 1000);
+    //  const interval = setInterval(() => {
+    //    fetchProfileData();
+    //  }, 1000);
 
-     return () => clearInterval(interval);
+    //  return () => clearInterval(interval);
    }, []);
 
   const [isScrolled, setIsScrolled] = useState(false);

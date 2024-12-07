@@ -58,18 +58,101 @@ const CreateTenderForm = ({ onClose }) => {
     }));
   };
 
+  // const handleFileUpload = (e, setImage) => {
+  //   const file = e.target.files[0];
+  //   const { name } = e.target;
+
+  //   if (file) {
+  //     // Set the actual file object
+  //     setImage(file);
+
+  //     // Validate the file type if the input name is 'tender_file'
+  //     if (name === 'tender_file') {
+  //       if (file.type !== 'application/pdf') {
+  //         // Show an error message for invalid file type
+  //         Swal.fire({
+  //           title: 'Not Accept!',
+  //           text: 'Please upload a valid PDF file.',
+  //           customClass: {
+  //             popup: 'w-72 h-auto p-3',
+  //             title: 'text-sm',
+  //             content: 'text-xs',
+  //             confirmButton:
+  //               'bg-headerBtn text-white px-4 py-1 text-sm rounded-md',
+  //           },
+  //         });
+
+  //         // Update errors state
+  //         // setErrors(prevErrors => ({
+  //         //   ...prevErrors,
+  //         //   tender_file: 'Please upload a valid PDF file.',
+  //         // }));
+
+  //         // Clear the input to prevent uploading an invalid file
+  //         e.target.value = null;
+  //         return;
+  //       } else {
+  //         // Clear any existing errors if the file is valid
+  //         // setErrors(prevErrors => ({
+  //         //   ...prevErrors,
+  //         //   tender_file: '',
+  //         // }));
+  //       }
+  //     }
+  //   }
+  // };
+
+  // const handleLogoUpload = (e, setImage) => {
+  //   const file = e.target.files[0];
+  //   const { name } = e.target;
+
+  //   if (file) {
+  //     // Store the actual file object
+  //     setImage(file);
+
+  //     // Validate the file type if the input name is 'company_logo'
+  //     if (
+  //       name === 'company_logo' &&
+  //       !['image/png', 'image/jpeg', 'image/webp'].includes(file.type)
+  //     ) {
+  //       // Show error message for invalid file type
+  //       Swal.fire({
+  //         title: 'Not Accept!',
+  //         text: 'Please upload a valid image (PNG, JPEG, or WEBP).',
+  //         customClass: {
+  //           popup: 'w-72 h-auto p-3',
+  //           title: 'text-sm',
+  //           content: 'text-xs',
+  //           confirmButton:
+  //             'bg-headerBtn text-white px-4 py-1 text-sm rounded-md',
+  //         },
+  //       });
+
+  //       // Clear the input to prevent uploading an invalid file
+  //       e.target.value = null;
+  //       return;
+  //     }
+
+
+  //   }
+  // };
+
+
+
   const handleFileUpload = (e, setImage) => {
     const file = e.target.files[0];
     if (file) {
       setImage(file); // Store the actual File object
     }
   };
+
   const handleLogoUpload = (e, setImage) => {
     const file = e.target.files[0];
     if (file) {
       setImage(file); // Store the actual File object
     }
   };
+
 
   const handleSubmit = async e => {
     e.preventDefault();
@@ -106,6 +189,21 @@ const CreateTenderForm = ({ onClose }) => {
 
     if (fileInput instanceof File) {
       formdata.append('file_upload', fileInput);
+    } else {
+      Swal.fire({
+        title: 'Not Accept!',
+        text: 'Please upload a valid image (PNG, JPEG, or WEBP).',
+        customClass: {
+          popup: 'w-72 h-auto p-3',
+          title: 'text-sm',
+          content: 'text-xs',
+          confirmButton: 'bg-headerBtn text-white px-4 py-1 text-sm rounded-md',
+        },
+      });
+
+      // Clear the input to prevent uploading an invalid file
+      e.target.value = null;
+      return;
     }
     if (logoInput instanceof File) {
       formdata.append('company_logo', logoInput);

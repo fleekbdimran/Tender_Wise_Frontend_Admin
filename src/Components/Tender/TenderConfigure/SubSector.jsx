@@ -584,6 +584,167 @@ import { EditOutlined, CloseOutlined, SendOutlined, SearchOutlined } from '@ant-
 import ApiClient from './../../../Api/ApiClient';
 import Swal from 'sweetalert2';
 
+// function DesignationTypeModal({
+//   isOpen,
+//   onClose,
+//   title,
+//   currentStatus,
+//   onStatusChange,
+//   updateSubSector,
+//   sectorData,
+// }) {
+//   const [categories, setCategories] = useState([]);
+//   const [name, setName] = useState(sectorData?.name || '');
+//   const [selectedSubCategory, setSelectedSubCategory] = useState(sectorData?.sector_id || '');
+
+//   useEffect(() => {
+//     const fetchSubCategories = async () => {
+//       try {
+//         const response = await ApiClient.get('/admin/tender-config/sector');
+//         if (response.data.success) {
+//           const filteredCategories = response.data.data.filter(
+//             (category) => category.sector_status === 1
+//           );
+//           setCategories(filteredCategories);
+//         }
+//       } catch (error) {
+//         console.error('Failed to fetch categories:', error);
+//       }
+      
+//     };
+
+//     fetchSubCategories();
+//   }, []);
+
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+
+//     if (!name || !selectedSubCategory) {
+//       Swal.fire({
+//         title: 'Validation Error',
+//         text: 'Please fill in all required fields.',
+//         confirmButtonText: 'Okay',
+//       });
+//       return;
+//     }
+
+//     const data = {
+//       name,
+//       sector_id: selectedSubCategory,
+//     };
+
+//     try {
+//       if (sectorData) {
+//         // If it's an update
+//         const response = await ApiClient.patch(`/admin/tender-config/sub-sector/${sectorData.id}`, data);
+//         if (response.status === 200) {
+//           Swal.fire({
+//             title: 'Success!',
+//             text: 'Sub sector updated successfully!',
+//             confirmButtonText: 'Okay',
+//             customClass: {
+//               popup: 'w-72 h-auto p-3',
+//               title: 'text-lg',
+//               content: 'text-xs',
+//               confirmButton: 'bg-teal-500 text-white px-4 py-1 text-sm rounded-md',
+//             },
+//           });
+//           updateSubSector(sectorData.id, data); // Update the state in SubSector
+//           setName(''); // Reset the form after successful update
+//           setSelectedSubCategory(''); // Reset the category selection
+//           onClose(); // Close the modal
+//         }
+//       } else {
+//         // If it's a create
+//         const response = await ApiClient.post('/admin/tender-config/sub-sector', data);
+//         if (response.status === 201) {
+//           Swal.fire({
+//             title: 'Success!',
+//             text: 'Sub sector created successfully!',
+//             confirmButtonText: 'Okay',
+//             customClass: {
+//               popup: 'w-72 h-auto p-3',
+//               title: 'text-lg',
+//               content: 'text-xs',
+//               confirmButton: 'bg-teal-500 text-white px-4 py-1 text-sm rounded-md',
+//             },
+//           });
+//           setName(''); // Reset the form after successful creation
+//           setSelectedSubCategory(''); // Reset the category selection
+//           onClose(); // Close the modal
+//         } else {
+//           Swal.fire({
+//             title: 'Failed!',
+//             text: 'Sector creation failed.',
+//             confirmButtonText: 'Okay',
+//             customClass: {
+//               popup: 'w-72 h-auto p-3',
+//               title: 'text-lg',
+//               content: 'text-xs',
+//               confirmButton: 'bg-teal-500 text-white px-4 py-1 text-sm rounded-md',
+//             },
+//           });
+//         }
+//       }
+//     } catch (error) {
+//       Swal.fire({
+//         title: 'Failed!',
+//         text: 'Error occurred while saving data.',
+//         confirmButtonText: 'Okay',
+//       });
+//     }
+//   };
+
+//   if (!isOpen) return null;
+
+//   return (
+//     <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
+//       <div className="bg-white p-8 rounded-lg shadow-lg w-96 relative">
+//         <button onClick={onClose} className="absolute top-2 right-2 text-gray-500">
+//           <CloseOutlined />
+//         </button>
+//         <h2 className="text-xl font-semibold mb-6">{title}</h2>
+//         <form onSubmit={handleSubmit} className="space-y-6">
+//           <div>
+//             <label className="block text-sm font-medium text-gray-700">
+//               <span className="text-red-500">*</span> Sub Sector Name:
+//             </label>
+//             <input
+//               type="text"
+//               value={name}
+//               onChange={(e) => setName(e.target.value)}
+//               placeholder="Enter sector name"
+//               className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md"
+//             />
+//           </div>
+//           <div>
+//             <label className="block text-sm font-medium text-gray-700">
+//               <span className="text-red-500">*</span> Sector Name:
+//             </label>
+//             <select
+//               value={selectedSubCategory}
+//               onChange={(e) => setSelectedSubCategory(e.target.value)}
+//               className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md"
+//             >
+//               <option value="" disabled>
+//                 Select a Sector
+//               </option>
+//               {categories.map((category) => (
+//                 <option key={category.id} value={category.id}>
+//                   {category.name}
+//                 </option>
+//               ))}
+//             </select>
+//           </div>
+//           <button type="submit" className="bg-teal-500 text-white px-6 py-3 rounded-lg w-full">
+//             <SendOutlined className="mr-2" /> Submit
+//           </button>
+//         </form>
+//       </div>
+//     </div>
+//   );
+// }
+
 function DesignationTypeModal({
   isOpen,
   onClose,
@@ -610,7 +771,6 @@ function DesignationTypeModal({
       } catch (error) {
         console.error('Failed to fetch categories:', error);
       }
-      
     };
 
     fetchSubCategories();
@@ -634,64 +794,48 @@ function DesignationTypeModal({
     };
 
     try {
+      let response;
       if (sectorData) {
         // If it's an update
-        const response = await ApiClient.patch(`/admin/tender-config/sub-sector/${sectorData.id}`, data);
-        if (response.status === 200) {
-          Swal.fire({
-            title: 'Success!',
-            text: 'Sub sector updated successfully!',
-            confirmButtonText: 'Okay',
-            customClass: {
-              popup: 'w-72 h-auto p-3',
-              title: 'text-lg',
-              content: 'text-xs',
-              confirmButton: 'bg-teal-500 text-white px-4 py-1 text-sm rounded-md',
-            },
-          });
-          updateSubSector(sectorData.id, data); // Update the state in SubSector
-          setName(''); // Reset the form after successful update
-          setSelectedSubCategory(''); // Reset the category selection
-          onClose(); // Close the modal
-        }
+        response = await ApiClient.patch(`/admin/tender-config/sub-sector/${sectorData.id}`, data);
       } else {
         // If it's a create
-        const response = await ApiClient.post('/admin/tender-config/sub-sector', data);
-        if (response.status === 201) {
-          Swal.fire({
-            title: 'Success!',
-            text: 'Sub sector created successfully!',
-            confirmButtonText: 'Okay',
-            customClass: {
-              popup: 'w-72 h-auto p-3',
-              title: 'text-lg',
-              content: 'text-xs',
-              confirmButton: 'bg-teal-500 text-white px-4 py-1 text-sm rounded-md',
-            },
-          });
-          setName(''); // Reset the form after successful creation
-          setSelectedSubCategory(''); // Reset the category selection
-          onClose(); // Close the modal
-        } else {
-          Swal.fire({
-            title: 'Failed!',
-            text: 'Sector creation failed.',
-            confirmButtonText: 'Okay',
-            customClass: {
-              popup: 'w-72 h-auto p-3',
-              title: 'text-lg',
-              content: 'text-xs',
-              confirmButton: 'bg-teal-500 text-white px-4 py-1 text-sm rounded-md',
-            },
-          });
+        response = await ApiClient.post('/admin/tender-config/sub-sector', data);
+      }
+
+      if (response.status === 200 || response.status === 201) {
+        await Swal.fire({
+          title: 'Success!',
+          text: sectorData ? 'Sub sector updated successfully!' : 'Sub sector created successfully!',
+          icon: 'success',
+          confirmButtonText: 'OK',
+        });
+        
+        // Update state or refresh data
+        if (sectorData) {
+          updateSubSector(sectorData.id, data);
         }
+        setName(''); // Reset the form after successful submission
+        setSelectedSubCategory('');
+        onClose(); // Close the modal
+      } else {
+        Swal.fire({
+          title: 'Error!',
+          text: response.data.message || 'Something went wrong!',
+          icon: 'error',
+          confirmButtonText: 'Try Again',
+        });
       }
     } catch (error) {
+      console.error('Error adding category:', error);
       Swal.fire({
-        title: 'Failed!',
-        text: 'Error occurred while saving data.',
-        confirmButtonText: 'Okay',
+        title: 'Error!',
+        text: error.response?.data?.message || 'Something went wrong!',
+        icon: 'error',
+        confirmButtonText: 'Try Again',
       });
+    } finally {
+      setIsModalOpen(false); // Close modal after submit
     }
   };
 
@@ -765,17 +909,17 @@ function SubSector() {
         console.error('Error fetching data:', error);
       }
         // Reload after 1 seconds
-        const interval = setInterval(() => {
-          fetchSubSectorData();
-        }, 1000);
+        // const interval = setInterval(() => {
+        //   fetchSubSectorData();
+        // }, 1000);
   
-        return () => clearInterval(interval);
+        // return () => clearInterval(interval);
        
       
     };
 
     fetchSubSectorData();
-  }, []);
+  }, [subSector]);
 
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);

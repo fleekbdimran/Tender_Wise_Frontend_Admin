@@ -462,6 +462,7 @@ const PendingPublishTender = () => {
                 <th className="px-4 py-2 border">Phone</th>
                 <th className="px-4 py-2 border">Tender Name</th>
                 <th className="px-4 py-2 border">Status</th>
+                <th className="px-4 py-2 border">Category</th>
                 <th className="px-4 py-2 border">Actions</th>
               </tr>
             </thead>
@@ -469,15 +470,21 @@ const PendingPublishTender = () => {
               {paginatedData.map((item, index) => (
                 <tr key={item.id} className="hover:bg-gray-50">
                   <td className="px-4 py-2 border">{index + 1}</td>
-                  <td className="px-4 py-2 border">{item.name || "N/A"}</td>
-                  <td className="px-4 py-2 border">{item.organization_name || "N/A"}</td>
-                  <td className="px-4 py-2 border">{item.phone || "N/A"}</td>
-                  <td className="px-4 py-2 border">{item.tender_name || "N/A"}</td>
+                  <td className="px-4 py-2 border">{item.name || 'N/A'}</td>
+                  <td className="px-4 py-2 border">
+                    {item.organization_name || 'N/A'}
+                  </td>
+                  <td className="px-4 py-2 border">{item.phone || 'N/A'}</td>
+                  <td className="px-4 py-2 border">
+                    {item.tender_name || 'N/A'}
+                  </td>
                   <td className="px-4 py-2 border">
                     {editingIndex === index ? (
                       <select
-                        value={item.status || ""}
-                        onChange={(e) => handleStatusChange(index, e.target.value)}
+                        value={item.status || ''}
+                        onChange={e =>
+                          handleStatusChange(index, e.target.value)
+                        }
                         className="border rounded px-2 py-1"
                       >
                         <option value="">Select</option>
@@ -489,18 +496,25 @@ const PendingPublishTender = () => {
                     ) : (
                       <span
                         onClick={() => setEditingIndex(index)}
-                        className={`cursor-pointer ${getStatusColor(item.status)}`}
+                        className={`cursor-pointer ${getStatusColor(
+                          item.status
+                        )}`}
                       >
-                        {item.status || "Edit"}
+                        {item.status || 'Edit'}
                       </span>
                     )}
+                  </td>
+                  <td className="px-4 py-2 border">
+                    {item.tender_req_by || 'N/A'}
                   </td>
                   <td className="px-4 py-2 border">
                     <button
                       onClick={() => handleView(item.id)}
                       className="text-blue-600 hover:underline"
                     >
-                      <button className="text-gray-600 hover:text-gray-800">👁</button>
+                      <button className="text-gray-600 hover:text-gray-800">
+                        👁
+                      </button>
                     </button>
                   </td>
                 </tr>

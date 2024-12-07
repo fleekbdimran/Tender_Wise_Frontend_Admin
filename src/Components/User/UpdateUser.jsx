@@ -73,9 +73,9 @@ const UpdateUser = () => {
     const formData = new FormData();
 
     // Append personal details to FormData
-    formData.append('name', profileData.name);
-    formData.append('email', profileData.email);
-    formData.append('photo', profileData.photo);
+    formData.append('name', profileData.name || '');
+    formData.append('email', profileData.email || '');
+    formData.append('photo', profileData.photo || '');
     // formData.append('description', profileData.description);
 
     // Append files (ensure these are File objects)
@@ -133,7 +133,7 @@ const UpdateUser = () => {
     <div className="block mx-auto p-8 w-full max-w-4xl">
       <div className="bg-tenderDetails p-8 rounded-lg shadow-lg w-full">
         <h3 className="text-xl font-semibold mb-6  text-blue-600">
-          Create User
+          Update User
         </h3>
         <form onSubmit={handleSaveClick}>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -221,7 +221,7 @@ const UpdateUser = () => {
               </div>
             ))} */}
 
-            <div className="w-full">
+            {/* <div className="w-full">
               <label
                 className="block text-gray-700 font-medium"
                 htmlFor="adminType"
@@ -241,7 +241,7 @@ const UpdateUser = () => {
                 <option value="admin">Admin</option>
                 <option value="super-admin">Super Admin</option>
               </select>
-            </div>
+            </div> */}
             {/* Photo */}
             <div className=" w-full">
               <label className="block text-gray-700 font-medium ">Photo:</label>

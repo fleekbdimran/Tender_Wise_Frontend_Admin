@@ -762,7 +762,7 @@ function Category() {
           icon: "success",
           confirmButtonText: "OK",
         });
-        fetchCategories(); // Refresh the category list
+        // fetchCategories(); // Refresh the category list
       } else {
         Swal.fire({
           title: "Error!",
@@ -803,7 +803,7 @@ function Category() {
           icon: "success",
           confirmButtonText: "OK",
         });
-        fetchCategories(); // Refresh the category list
+        // fetchCategories(); // Refresh the category list
       } else {
         Swal.fire({
           title: "Error!",
@@ -884,7 +884,7 @@ function Category() {
 
   useEffect(() => {
     fetchCategories();
-  }, []);
+  }, [categories]);
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
