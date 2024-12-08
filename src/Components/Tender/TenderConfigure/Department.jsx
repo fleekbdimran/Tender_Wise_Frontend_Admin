@@ -1054,7 +1054,10 @@ function Department() {
                     <EditOutlined className="mr-1" /> Edit
                   </button>
                 </td>
+                
               </tr>
+
+              
             ))}
           </tbody>
         </table>

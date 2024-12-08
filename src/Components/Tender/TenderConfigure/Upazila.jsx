@@ -163,12 +163,13 @@ function DesignationTypeModal({
   isOpen,
   onClose,
   title,
-  currentStatus,
+  // currentStatus,
   onStatusChange,
 }) {
   const [categories, setCategories] = useState([]);
   const [name, setName] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
+  const [currentStatus, setCurrentStatus] = useState("");
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -262,19 +263,7 @@ function DesignationTypeModal({
         </button>
         <h2 className="text-xl font-semibold mb-6">{title}</h2>
         <form className="space-y-6" onSubmit={handleSubmit}>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              <span className="text-red-500">*</span> Upazila Name:
-            </label>
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Enter Upazila Name"
-              className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md text-sm shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
-            />
-          </div>
-          <div>
+        <div>
             <label className="block text-sm font-medium text-gray-700">
               <span className="text-red-500">*</span> District Name:
             </label>
@@ -293,6 +282,33 @@ function DesignationTypeModal({
               ))}
             </select>
           </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              <span className="text-red-500">*</span> Upazila Name:
+            </label>
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Enter Upazila Name"
+              className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md text-sm shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Availability:
+            </label>
+            <select
+              value={currentStatus}
+              onChange={(e) => setCurrentStatus(e.target.value)} // Updated to dynamically set the current status
+              className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md text-sm shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
+            >
+              <option value="available">Available</option>
+              <option value="unavailable">Unavailable</option>
+            </select>
+          </div>
+          
           <button
             type="submit"
             className="bg-teal-500 text-white px-6 py-3 rounded-lg flex items-center justify-center w-full"

@@ -881,6 +881,7 @@ function Division() {
                     <EditOutlined className="mr-1" /> Edit
                   </button>
                 </td>
+                
               </tr>
             ))}
           </tbody>
