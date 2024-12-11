@@ -113,19 +113,62 @@ const SingleTenderDetails = ({ onClose }) => {
     }));
   };
 
-  const handleFileUpload = (e, setImage) => {
+  // const handleFileUpload = (e, setImage) => {
+  //   const file = e.target.files[0];
+  //   if (file) {
+  //     setImage(file); // Store the actual File object
+  //   }
+  // };
+
+  const handleFileUpload = (e, setFileInput) => {
     const file = e.target.files[0];
     if (file) {
-      setImage(file); // Store the actual File object
-    }
-  };
-  const handleLogoUpload = (e, setImage) => {
-    const file = e.target.files[0];
-    if (file) {
-      setImage(file); // Store the actual File object
+      // Validating the file type (only PDF and DOC/DOCX are allowed)
+      const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document']; // MIME types for PDF, DOC, DOCX
+      if (!allowedTypes.includes(file.type)) {
+        Swal.fire({
+          title: 'Error!',
+          text: 'Only PDF and DOC files are allowed.',
+          icon: 'error',
+          confirmButtonText: 'Okay',
+        });
+        e.target.value = ''; // Clear the input if the file type is invalid
+        return; // Stop further processing if file type is invalid
+      }
+  
+      // If the file type is valid, store the file
+      setFileInput(file); // Store the actual File object
     }
   };
 
+  
+  // const handleLogoUpload = (e, setImage) => {
+  //   const file = e.target.files[0];
+  //   if (file) {
+  //     setImage(file); // Store the actual File object
+  //   }
+  // };
+  const handleLogoUpload = (e, setImage) => {
+    const file = e.target.files[0];
+    if (file) {
+      // Validating the file type (only JPG, PNG, and JPEG are allowed)
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg']; // MIME types for JPG, PNG, JPEG
+      if (!allowedTypes.includes(file.type)) {
+        Swal.fire({
+          title: 'Error!',
+          text: 'Only JPG, PNG, and JPEG files are allowed.',
+          icon: 'error',
+          confirmButtonText: 'Okay',
+        });
+        e.target.value = ''; // Clear the input if the file type is invalid
+        return; // Stop further processing if file type is invalid
+      }
+  
+      // If the file type is valid, store the file
+      setImage(file); // Store the actual File object
+    }
+  };
+  
   const handleSubmit = async e => {
     e.preventDefault();
 
@@ -381,7 +424,7 @@ const SingleTenderDetails = ({ onClose }) => {
         />
       </div>
       <div className="bg-tenderDetails shadow-md rounded-md p-6 border border-blue-300">
-        <div className="flex justify-between items-center mb-6">
+        {/* <div className="flex justify-between items-center mb-6">
           <div className="flex items-center space-x-4">
             <img
               src={
@@ -398,7 +441,53 @@ const SingleTenderDetails = ({ onClose }) => {
               <p className="text-gray-500">{orgName}</p>
             </div>
           </div>
-        </div>
+
+          <div className="flex gap-2 mt-2 items-center">
+                  <p>View Tender Details in pdf: </p>
+                  <a
+                    href={`${PHOTO_BASE_URL_Admin}${tenderFileName}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex justify-center items-center border border-gray-300 px-2 py-2 text-xs rounded-md shadow-sm w-full sm:w-1/3 bg-white text-black hover:text-blue-600 hover:border-blue-600"
+                  >
+                    📄 View PDF
+                  </a>
+                </div>
+        </div> */}
+
+<div className="flex justify-between items-center mb-6">
+  <div className="flex items-center space-x-4">
+    <img
+      src={
+        logo
+          ? `${PHOTO_BASE_URL_Admin}${logo}` // Dynamically set logo if available
+          : 'https://via.placeholder.com/50' // Placeholder if logo is missing
+      }
+      alt="Organization Logo"
+      className="w-16 h-16 rounded-full"
+    />
+    <div>
+      <h2 className="text-lg font-bold">{tenderName}</h2>
+      <p className="text-gray-500">{orgName}</p>
+    </div>
+  </div>
+
+  <div className="flex gap-2 items-center mt-2">
+  <p className="">Tender Details View In PDF: </p>
+  <a
+    href={`${PHOTO_BASE_URL_Admin}${tenderFileName}`}
+    target="_blank"
+    rel="noopener noreferrer"
+    className="flex justify-center items-center border border-gray-300 px-2 py-2 text-xs rounded-md shadow-sm w-full sm:w-auto bg-white text-black hover:text-blue-600 hover:border-blue-600"
+  >
+    📄 View PDF
+  </a>
+</div>
+
+
+</div>
+
+
         <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-3 2xl:grid-cols-4 gap-6">
             {/* Reference No */}
@@ -891,7 +980,7 @@ const SingleTenderDetails = ({ onClose }) => {
             </div>
 
             {/* File Upload */}
-            <div>
+            {/* <div>
               <label className="block text-gray-700 font-medium mb-1">
                 File Upload
               </label>
@@ -901,18 +990,7 @@ const SingleTenderDetails = ({ onClose }) => {
                 className="w-full p-2 border border-gray-300 rounded-lg bg-white"
               />
               {tenderFileName && (
-                // <div className="flex flex-col md:flex-row md:items-center md:space-x-4">
-                //   <label
-                //     htmlFor="company_logo"
-                //     className="block md:text-sm text-xs font-medium text-gray-700 md:w-1/3 md:mb-0 mb-1"
-                //   >
-                //     Previous
-                //   </label>
-                // </div>
-                // <p className="text-sm text-gray-500 p-2">
-                //   <strong>Previous File: </strong>
-                //   {tenderFileName}
-                // </p>
+               
                 <div className="flex gap-2 mt-2 items-center">
                   <p>Previous File: </p>
                   <a
@@ -925,9 +1003,34 @@ const SingleTenderDetails = ({ onClose }) => {
                   </a>
                 </div>
               )}
-            </div>
+            </div> */}
+
+<div>
+  <label className="block text-gray-700 font-medium mb-1">
+    File Upload
+  </label>
+  <input
+    type="file"
+    onChange={e => handleFileUpload(e, setFileInput)}
+    className="w-full p-2 border border-gray-300 rounded-lg bg-white"
+  />
+  {tenderFileName && (
+    <div className="flex gap-2 mt-2 items-center">
+      <p>Previous File: </p>
+      <a
+        href={`${PHOTO_BASE_URL_Admin}${tenderFileName}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="flex justify-center items-center border border-gray-300 px-2 py-2 text-xs rounded-md shadow-sm w-full sm:w-1/3 bg-white text-black hover:text-blue-600 hover:border-blue-600"
+      >
+        📄 View PDF
+      </a>
+    </div>
+  )}
+</div>
+
             {/* Logo Upload */}
-            <div>
+            {/* <div>
               <label className="block text-gray-700 font-medium mb-1">
                 Organization Logo
               </label>
@@ -937,18 +1040,7 @@ const SingleTenderDetails = ({ onClose }) => {
                 className="w-full p-2 border border-gray-300 rounded-lg bg-white"
               />
               {companyLogoPreview && (
-                // <div className="flex flex-col md:flex-row md:items-center md:space-x-4">
-                //   <label
-                //     htmlFor="company_logo"
-                //     className="block md:text-sm text-xs font-medium text-gray-700 md:w-1/3 md:mb-0 mb-1"
-                //   >
-                //     Previous Logo
-                //   </label>
-                // </div>
-                // <p className="text-sm text-gray-500 p-2">
-                //   <strong>Previous Logo: </strong>
-                //   {companyLogoPreview}
-                // </p>
+              
                 <div className="flex gap-2 mt-2 items-center">
                   <p>Previous Logo: </p>
                   <a
@@ -961,7 +1053,32 @@ const SingleTenderDetails = ({ onClose }) => {
                   </a>
                 </div>
               )}
-            </div>
+            </div> */}
+
+<div>
+  <label className="block text-gray-700 font-medium mb-1">
+    Organization Logo
+  </label>
+  <input
+    type="file"
+    onChange={e => handleLogoUpload(e, setLogoInput)}
+    className="w-full p-2 border border-gray-300 rounded-lg bg-white"
+  />
+  {companyLogoPreview && (
+    <div className="flex gap-2 mt-2 items-center">
+      <p>Previous Logo: </p>
+      <a
+        href={`${PHOTO_BASE_URL_Admin}${companyLogoPreview}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="flex justify-center items-center border border-gray-300 px-2 py-2 text-xs rounded-md shadow-sm w-full sm:w-1/3 bg-white text-black hover:text-blue-600 hover:border-blue-600"
+      >
+        📄 View Logo
+      </a>
+    </div>
+  )}
+</div>
+
             {/* Description */}
             <div>
               <label className="block text-gray-700 font-medium mb-1">

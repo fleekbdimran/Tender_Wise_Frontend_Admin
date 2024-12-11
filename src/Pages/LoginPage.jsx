@@ -125,7 +125,7 @@ function LoginPage({ onLogin }) {
               type="text"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
-              placeholder="880 Phone Number"
+              placeholder="880 phone number"
               className="block w-full px-3 py-2 mt-1 text-gray-900 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
             />
           </div>
@@ -138,7 +138,7 @@ function LoginPage({ onLogin }) {
                 type={showPassword ? 'text' : 'password'}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="Password at least 8 character long"
+                placeholder="Password at least 8 characters long"
                 className="block w-full px-3 py-2 mt-1 text-gray-900 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
               />
               <button

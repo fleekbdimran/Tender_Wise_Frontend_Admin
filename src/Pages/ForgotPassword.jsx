@@ -240,7 +240,7 @@ const ForgotPassword = () => {
                 id="phoneNumber"
                 value={phoneNumber}
                 onChange={(e) => setPhoneNumber(e.target.value)}
-                placeholder="880 Phone Number"
+                placeholder="880 phone number"
                 required
                 className="mt-1 w-full px-4 py-2 border rounded-md focus:ring-blue-500 focus:border-blue-500"
               />

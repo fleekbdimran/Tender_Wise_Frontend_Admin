@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import ApiClient from '../../Api/ApiClient';
 import Swal from 'sweetalert2';
+import { FaTimes } from 'react-icons/fa'; // Import the cross icon
 
 const UpdateUser = () => {
   const [profileId, setProfileId] = useState('');
@@ -11,6 +12,7 @@ const UpdateUser = () => {
     admin_type: '',
     photo: null,
   });
+  const [isPhotoUploaded, setIsPhotoUploaded] = useState(false); // Track if the photo is uploaded
 
   useEffect(() => {
     const fetchProfileData = async () => {
@@ -54,10 +56,30 @@ const UpdateUser = () => {
     const { name, value, files } = e.target;
 
     if (name === 'photo' && files && files.length > 0) {
+      const file = files[0];
+
+      // Validate file type
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+      if (!allowedTypes.includes(file.type)) {
+        // If the file type is not valid, reset the input field
+        e.target.value = ''; // Reset the file input
+        Swal.fire({
+          title: 'Error!',
+          text: 'Only JPG, JPEG, and PNG files are allowed.',
+          icon: 'error',
+          confirmButtonText: 'Okay',
+        });
+        return;
+      }
+
+      // If file type is valid, update the profile data
       setProfileData({
         ...profileData,
         [name]: files[0], // Set the selected file
       });
+
+      // Set photo uploaded flag
+      setIsPhotoUploaded(true);
     } else {
       setProfileData({
         ...profileData,
@@ -69,6 +91,17 @@ const UpdateUser = () => {
   // update personal data
   const handleSaveClick = async event => {
     event.preventDefault();
+
+    // Check if the photo is uploaded
+    if (!profileData.photo) {
+      Swal.fire({
+        title: 'Error!',
+        text: 'Please choose a profile photo.',
+        icon: 'error',
+        confirmButtonText: 'Okay',
+      });
+      return; // Don't submit if photo is not selected
+    }
 
     const formData = new FormData();
 
@@ -129,6 +162,12 @@ const UpdateUser = () => {
       }
     }
   };
+
+  // Function to handle "cross" icon click and navigate back
+  const handleCancelClick = () => {
+    window.history.back();
+  };
+
   return (
     <div className="block mx-auto p-8 w-full max-w-4xl">
       <div className="bg-tenderDetails p-8 rounded-lg shadow-lg w-full">
@@ -151,6 +190,7 @@ const UpdateUser = () => {
                 className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
+
             {/* Email */}
             <div className=" w-full">
               <label className="block text-gray-700 font-medium ">
