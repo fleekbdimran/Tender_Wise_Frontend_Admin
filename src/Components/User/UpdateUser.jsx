@@ -19,7 +19,7 @@ const UpdateUser = () => {
       try {
         const response = await ApiClient.get('/admin/profile/single');
 
-        console.log(response.data.data);
+        // console.log(response.data.data);
 
          setProfileId(response.data.data.id);
 

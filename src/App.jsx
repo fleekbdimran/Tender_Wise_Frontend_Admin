@@ -46,6 +46,9 @@ import Profile from './Components/Profile/Header';
 import ForgotPassword from './Pages/ForgotPassword';
 import Header from './Components/Profile/Header';
 import UpdateUser from './Components/User/UpdateUser';
+import ResetPassword from './Components/Profile/ResetPassword';
+import AllSubscriberList from './Components/Packages/AllSubscriberList';
+
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
@@ -278,6 +281,7 @@ function App() {
                       </ProtectedRoute>
                     }
                   />
+                  <Route path="/reset-password" element={<ResetPassword />} />
                   <Route
                     path="/user-list"
                     element={
@@ -521,6 +525,14 @@ function App() {
                       </ProtectedRoute>
                     }
                   />
+                  <Route
+                    path="/allsubscriberlist"
+                    element={
+                      <ProtectedRoute>
+                        <AllSubscriberList />
+                      </ProtectedRoute>
+                    }
+                  />
                   {/* <Route
                 path="/viewpage"
                 element={
@@ -547,6 +559,8 @@ function App() {
                     path="*"
                     element={<Navigate to="/dashboard" replace />}
                   />
+
+
                 </Routes>
               </div>
             {/* </div> */}

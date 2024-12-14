@@ -34,9 +34,14 @@ const Header = ({ onLogout }) => {
     onLogout();
   };
 
-  const handleResetPassword = () => {
-    alert('Reset Password clicked!');
+  {/* -----------------Reset Password---------------------- */ }
+
+
+  const handleNavigate = () => {
+    navigate('/reset-password'); // This will navigate to the ResetPassword route
   };
+
+  {/* -----------------Reset Password---------------------- */ }
 
   // Close the menu when clicking outside
   useEffect(() => {
@@ -52,35 +57,35 @@ const Header = ({ onLogout }) => {
   }, []);
 
 
-   const [profileData, setProfileData] = useState({
-     name: '',
-     photo: '',
-   });
+  const [profileData, setProfileData] = useState({
+    name: '',
+    photo: '',
+  });
 
-   useEffect(() => {
-     const fetchProfileData = async () => {
-       try {
-         const response = await ApiClient.get('/admin/profile/single/');
+  useEffect(() => {
+    const fetchProfileData = async () => {
+      try {
+        const response = await ApiClient.get('/admin/profile/single/');
 
-       
-         setProfileData({
-           name: response.data.data.name || '',
-           photo: response.data.data.photo || '',
-           admin_type: response.data.data.admin_type || '',
-         });
-         setProfileImage(
-           response.data.data.photo
-             ? `${PHOTO_BASE_URL_Admin}${response.data.data.photo}`
-             : null
-         );
-       } catch (error) {
-         console.error('Error fetching profile data:', error);
-       }
-     };
 
-     fetchProfileData();
-   
-   }, []);
+        setProfileData({
+          name: response.data.data.name || '',
+          photo: response.data.data.photo || '',
+          admin_type: response.data.data.admin_type || '',
+        });
+        setProfileImage(
+          response.data.data.photo
+            ? `${PHOTO_BASE_URL_Admin}${response.data.data.photo}`
+            : null
+        );
+      } catch (error) {
+        console.error('Error fetching profile data:', error);
+      }
+    };
+
+    fetchProfileData();
+
+  }, []);
 
   const [isScrolled, setIsScrolled] = useState(false);
   useEffect(() => {
@@ -99,6 +104,7 @@ const Header = ({ onLogout }) => {
   const handleProfileClick = () => {
     navigate('/updateUser');
   }
+
 
   return (
     <div className="relative" ref={menuRef}>
@@ -146,24 +152,34 @@ const Header = ({ onLogout }) => {
               <span>My Profile</span>
             </div>
 
-            {/* edit my tender */}
+            {/* edit my tender
             <div
               className=" cursor-pointer hover:bg-gray-100 p-2 rounded border-b "
               // onClick={handleEditMyTenderClick}
             >
               <span>Settings</span>
+            </div> */}
+
+            {/* -----------------Reset Password---------------------- */}
+            <div>
+              <button onClick={handleNavigate}>
+                Change Password
+              </button>
             </div>
+            {/* -----------------Reset Password---------------------- */}
+
+
             <div className=" cursor-pointer hover:bg-gray-100 p-2 rounded border-b ">
               <button className="" onClick={handleLogout}>
-           
+
                 Logout
               </button>
-             
+
             </div>
           </div>
         </div>
       )}
-      
+
     </div>
   );
 };
