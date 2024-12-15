@@ -146,6 +146,7 @@ const Navbar = ({ onLogout }) => {
       label: 'Subscription',
       children: [
         { key: '11-1', label: <Link to="/allsubscriberlist">All Subscriber List</Link> },
+        // { key: '11-2', label: <Link to="/subscriberdetails">Subscriber Details</Link> },
        
       ],
     },

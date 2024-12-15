@@ -209,3 +209,9 @@ const AllPublishTender = () => {
 };
 
 export default AllPublishTender;
+
+
+
+
+
+

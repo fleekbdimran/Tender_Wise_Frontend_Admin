@@ -904,7 +904,7 @@ const CreateTender = () => {
           // '/admin/tender'
           '/admin/tender?permission=publish'
         );
-        console.log('Response Tender:', response.data.data);
+        // console.log('Response Tender:', response.data.data);
 
         setTenderData(response.data.data); // Assuming the API returns an array of tender data
       } catch (error) {

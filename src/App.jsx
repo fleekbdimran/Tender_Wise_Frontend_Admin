@@ -48,6 +48,7 @@ import Header from './Components/Profile/Header';
 import UpdateUser from './Components/User/UpdateUser';
 import ResetPassword from './Components/Profile/ResetPassword';
 import AllSubscriberList from './Components/Packages/AllSubscriberList';
+import SubscriberDetails from './Components/Packages/SubscriberDetails';
 
 
 function App() {
@@ -533,23 +534,25 @@ function App() {
                       </ProtectedRoute>
                     }
                   />
-                  {/* <Route
-                path="/viewpage"
-                element={
-                  <ProtectedRoute>
-                    <ViewPage></ViewPage>
-                  </ProtectedRoute>
-                }
-                
-              /> */}
+                  
+                  <Route
+                    path="//SubscriberDetails/:id"
+                    element={
+                      <ProtectedRoute>
+                      
+                        <SubscriberDetails></SubscriberDetails>
+                      </ProtectedRoute>
+                    }
+                  />
+                         
+                 
+                 
 
                   <Route
                     path="/publishedtender/:id"
                     element={
                       <ProtectedRoute>
-                        {/* <TenderDetails></TenderDetails> */}
-                        {/* <BackupTenderDetails></BackupTenderDetails> */}
-                        {/* <SingleTenderDetails></SingleTenderDetails> */}
+                       
                         <ViewPage></ViewPage>
                       </ProtectedRoute>
                     }
