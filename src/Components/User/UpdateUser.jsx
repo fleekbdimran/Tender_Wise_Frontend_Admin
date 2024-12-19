@@ -32,19 +32,7 @@ const UpdateUser = () => {
           photo: response.data.data.photo || null,
         });
 
-        // setProfileImage(
-        //   response.data.data.photo
-        //     ? `${baseUrl}${response.data.data.photo}`
-        //     : null
-        // );
-        //  setNidImage(
-        //    response.data.nidcard_picture
-        //      ? // ? // ? `${response.data.nidcard_picture}`
-        //        //   `/` + response.data.nidcard_picture.split('/').pop()
-        //        // : null
-        //        `${baseUrl}${response.data.nidcard_picture}`
-        //      : null
-        //  );
+        
       } catch (error) {
         console.error('Error fetching profile data:', error);
       }
@@ -109,13 +97,7 @@ const UpdateUser = () => {
     formData.append('name', profileData.name || '');
     formData.append('email', profileData.email || '');
     formData.append('photo', profileData.photo || '');
-    // formData.append('description', profileData.description);
-
-    // Append files (ensure these are File objects)
-    // if (profileImage instanceof File) {
-    //   formData.append('photo', profileImage);
-    // }
-    // Debugging: Log FormData content to check
+    
     for (const [key, value] of formData.entries()) {
       console.log(`${key}:`, value);
     }
@@ -221,67 +203,7 @@ const UpdateUser = () => {
               />
             </div>
 
-            {/* {[
-              {
-                label: 'Password *',
-                value: password,
-                setter: setPassword,
-                show: showPassword,
-                toggle: setShowPassword,
-              },
-              {
-                label: 'Re-type Password *',
-                value: retypePassword,
-                setter: setRetypePassword,
-                show: showRetypePassword,
-                toggle: setShowRetypePassword,
-              },
-            ].map(({ label, value, setter, show, toggle }, index) => (
-              <div key={index} className="w-full">
-                <label className="block text-gray-700 font-medium">
-                  {label}
-                </label>
-                <div className="relative">
-                  <input
-                    type={show ? 'text' : 'password'}
-                    className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder={`Enter ${label}`}
-                    value={value}
-                    onChange={e => setter(e.target.value)}
-                    required
-                  />
-                  <button
-                    type="button"
-                    onClick={() => toggle(!show)}
-                    className="absolute inset-y-0 right-3 flex items-center text-gray-600"
-                  >
-                    {show ? 'Hide' : 'Show'}
-                  </button>
-                </div>
-              </div>
-            ))} */}
-
-            {/* <div className="w-full">
-              <label
-                className="block text-gray-700 font-medium"
-                htmlFor="adminType"
-              >
-                Admin Type <span className="text-black-500">*</span>
-              </label>
-              <select
-                id="adminType"
-                className="w-full p-3 border border-gray-300 rounded-lgfocus:outline-none focus:ring-0"
-                // value={adminType}
-                value={profileData.admin_type}
-                // onChange={e => setAdminType(e.target.value)}
-                required
-                readOnly
-              >
-                <option value="">Select Admin Type</option>
-                <option value="admin">Admin</option>
-                <option value="super-admin">Super Admin</option>
-              </select>
-            </div> */}
+            
             {/* Photo */}
             <div className=" w-full">
               <label className="block text-gray-700 font-medium ">Photo:</label>

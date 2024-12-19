@@ -8,7 +8,7 @@ import ApiClient from '../../Api/ApiClient'; // Import the ApiClient
 const AllUsers = () => {
   const [searchTerm, setSearchTerm] = useState(''); // State to store the search term
   const [currentPage, setCurrentPage] = useState(1); // State for current page
-  const [pageSize, setPageSize] = useState(5); // State for page size
+  const [pageSize, setPageSize] = useState(10); // State for page size
   const [adminUserList, setAdminUserList] = useState([]); // State for storing fetched user data
   const [loading, setLoading] = useState(true); // Loading state
   const [error, setError] = useState(null); // Error state

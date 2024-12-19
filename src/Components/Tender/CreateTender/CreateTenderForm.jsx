@@ -4,7 +4,10 @@ import ApiClient from './../../../Api/ApiClient';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 
+
+
 const CreateTenderForm = ({ onClose }) => {
+
   const navigate = useNavigate();
   const [categories, setCategories] = useState([]);
   const [departments, setDepartments] = useState([]);
@@ -26,6 +29,20 @@ const CreateTenderForm = ({ onClose }) => {
   // State for source
   const [selectedSourceType, setSelectedSourceType] = useState('');
   const [filteredSources, setFilteredSources] = useState([]);
+
+  {/* ------------New department search by name------------------------- */}
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filteredDepartments, setFilteredDepartments] = useState([]);
+  const [isSelected, setIsSelected] = useState(false); // Track selection state
+  {/* ------------New department search by name------------------------- */}
+
+  {/* ------------New sub-department search by name------------------------- */}
+  const [searchQuerysubdepartment, setSearchQuerysubdepartment] = useState('');
+  const [filteredDepartmentssubdepartment, setFilteredDepartmentssubdepartment] = useState([]);
+  const [selectedSubdepartment, setSelectedSubdepartment] = useState('');
+
+  {/* ------------New sub-department search by name------------------------- */}
+
 
   const [formDataSubmit, setFormDataSubmit] = useState({
     name: '',
@@ -59,93 +76,6 @@ const CreateTenderForm = ({ onClose }) => {
     }));
   };
 
-  // const handleFileUpload = (e, setImage) => {
-  //   const file = e.target.files[0];
-  //   const { name } = e.target;
-
-  //   if (file) {
-  //     // Set the actual file object
-  //     setImage(file);
-
-  //     // Validate the file type if the input name is 'tender_file'
-  //     if (name === 'tender_file') {
-  //       if (file.type !== 'application/pdf') {
-  //         // Show an error message for invalid file type
-  //         Swal.fire({
-  //           title: 'Not Accept!',
-  //           text: 'Please upload a valid PDF file.',
-  //           customClass: {
-  //             popup: 'w-72 h-auto p-3',
-  //             title: 'text-sm',
-  //             content: 'text-xs',
-  //             confirmButton:
-  //               'bg-headerBtn text-white px-4 py-1 text-sm rounded-md',
-  //           },
-  //         });
-
-  //         // Update errors state
-  //         // setErrors(prevErrors => ({
-  //         //   ...prevErrors,
-  //         //   tender_file: 'Please upload a valid PDF file.',
-  //         // }));
-
-  //         // Clear the input to prevent uploading an invalid file
-  //         e.target.value = null;
-  //         return;
-  //       } else {
-  //         // Clear any existing errors if the file is valid
-  //         // setErrors(prevErrors => ({
-  //         //   ...prevErrors,
-  //         //   tender_file: '',
-  //         // }));
-  //       }
-  //     }
-  //   }
-  // };
-
-  // const handleLogoUpload = (e, setImage) => {
-  //   const file = e.target.files[0];
-  //   const { name } = e.target;
-
-  //   if (file) {
-  //     // Store the actual file object
-  //     setImage(file);
-
-  //     // Validate the file type if the input name is 'company_logo'
-  //     if (
-  //       name === 'company_logo' &&
-  //       !['image/png', 'image/jpeg', 'image/webp'].includes(file.type)
-  //     ) {
-  //       // Show error message for invalid file type
-  //       Swal.fire({
-  //         title: 'Not Accept!',
-  //         text: 'Please upload a valid image (PNG, JPEG, or WEBP).',
-  //         customClass: {
-  //           popup: 'w-72 h-auto p-3',
-  //           title: 'text-sm',
-  //           content: 'text-xs',
-  //           confirmButton:
-  //             'bg-headerBtn text-white px-4 py-1 text-sm rounded-md',
-  //         },
-  //       });
-
-  //       // Clear the input to prevent uploading an invalid file
-  //       e.target.value = null;
-  //       return;
-  //     }
-
-
-  //   }
-  // };
-
-
-
-  // const handleFileUpload = (e, setImage) => {
-  //   const file = e.target.files[0];
-  //   if (file) {
-  //     setImage(file); // Store the actual File object
-  //   }
-  // };
 
   const handleFileUpload = (e, setImage) => {
     const file = e.target.files[0];
@@ -168,12 +98,7 @@ const CreateTenderForm = ({ onClose }) => {
     }
   };
 
-  // const handleLogoUpload = (e, setImage) => {
-  //   const file = e.target.files[0];
-  //   if (file) {
-  //     setImage(file); // Store the actual File object
-  //   }
-  // };
+ 
 
   const handleLogoUpload = (e, setImage) => {
     const file = e.target.files[0];
@@ -365,6 +290,34 @@ const CreateTenderForm = ({ onClose }) => {
     fetchDepartments();
   }, []);
 
+
+  // -------------New search by name department--------------
+
+  // Update filtered departments when search query changes
+  useEffect(() => {
+    if (searchQuery) {
+      setFilteredDepartments(
+        departments.filter(department =>
+          department.name.toLowerCase().includes(searchQuery.toLowerCase())
+        )
+      );
+    } else {
+      setFilteredDepartments([]);
+    }
+  }, [searchQuery, departments]);
+
+  const handleSelectDepartment = (departmentId, departmentName) => {
+    setSearchQuery(departmentName);  // Update the input with selected department name
+    setSelectedDepartment(departmentId); // Set the selected department
+    setFilteredDepartments([]); // Clear the filtered department list
+  };
+
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+    setSelectedDepartment(null); // Reset selected department when search query changes
+  };
+  // -------------New search by name department--------------
+
   // Fetch subdepartments based on selected department
   useEffect(() => {
     if (selectedDepartment) {
@@ -381,7 +334,6 @@ const CreateTenderForm = ({ onClose }) => {
     }
   }, [selectedDepartment, departments]);
 
-
   // Sub-department get api
   const fetchSubDepartments = async () => {
     try {
@@ -393,17 +345,42 @@ const CreateTenderForm = ({ onClose }) => {
           skip: ''   // Provide skip if needed
         }
       });
-      
+
       // Log the response data
       // console.log('Sub-department data:', response.data);
-  
+
     } catch (error) {
       console.error('Error fetching sub-departments:', error.response?.data || error.message);
     }
   };
-  
+
   // Call the function to fetch data
   fetchSubDepartments();
+
+  {/* ------------New Sub-department search by name------------------------- */}
+           
+         // Handle search input change
+  const handleSearchChangesubdepartment = (event) => {
+    const query = event.target.value;
+    setSearchQuerysubdepartment(query);
+
+    if (query) {
+      const filtered = subdepartments.filter((subdepartment) =>
+        subdepartment.name.toLowerCase().includes(query.toLowerCase())
+      );
+      setFilteredDepartmentssubdepartment(filtered);
+    } else {
+      setFilteredDepartmentssubdepartment([]);
+    }
+  };
+
+  // Handle selecting a sub-department
+  const handleSelectSubDepartment = (id, name) => {
+    setSelectedSubdepartment(name);
+    setSearchQuerysubdepartment(name); // Set the input field value to the selected sub-department
+    setFilteredDepartmentssubdepartment([]);
+  };
+  {/* ------------New Sub-department search by name------------------------- */}
 
   // Fetch divisions with districts
   useEffect(() => {
@@ -481,248 +458,6 @@ const CreateTenderForm = ({ onClose }) => {
       setFilteredSources([]);
     }
   }, [selectedSourceType]);
-
-
-  // Category Plus icon add with 
-  const [isAdding, setIsAdding] = useState(false);
-  const [newCategory, setNewCategory] = useState("");
-
-
-
-  const handleAddCategory = async () => {
-    if (newCategory.trim()) {
-      try {
-        console.log("Adding category:", newCategory.trim());
-
-        // API call to add category to the backend
-        const response = await ApiClient.post(
-          "/admin/tender-config/category",
-          { name: newCategory.trim() },
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer YOUR_TOKEN_HERE`,
-            },
-          }
-        );
-
-        // console.log("API response:", response);
-
-        // Assuming the response contains the created category object
-        const newCategoryObject = { id: response.data.id, name: newCategory.trim() };
-
-        // console.log("New category object:", newCategoryObject);
-
-        // Update local state with the new category
-        setSelectedCategory([...categories, newCategoryObject]);
-
-        // Clear the input and hide the form
-        setNewCategory("");
-        setIsAdding(false);
-
-        // console.log("Category added successfully!");
-
-      } catch (error) {
-        // console.error("Error adding category:", error);
-      }
-    } else {
-      // console.log("Category name is empty, cannot add.");
-    }
-  };
-
-
-
-  // Sector Plus icon add
-
-  const [isAddingSector, setIsAddingSector] = useState(false);
-  const [newSector, setNewSector] = useState("");
-
-  // Handle adding a new sector
-  const handleAddSector = () => {
-    if (newSector.trim()) {
-      const newSectorObject = { id: filteredSectors.length + 1, name: newSector.trim() };
-      setFilteredSectors([...filteredSectors, newSectorObject]); // Add the new sector to the list
-      setNewSector(""); // Clear the input
-      setIsAddingSector(false); // Hide the input field after adding
-    }
-  };
-
-  // Sub-Sector Plus icon add
-
-  const [isAddingSubSector, setIsAddingSubSector] = useState(false);
-  const [newSubSector, setNewSubSector] = useState("");
-
-  // Handle adding a new Sub-Sector
-  const handleAddSubSector = () => {
-    if (newSubSector.trim()) {
-      const newSubSectorObject = { id: filteredSubsectors.length + 1, name: newSubSector.trim() };
-      setFilteredSubsectors([...filteredSubsectors, newSubSectorObject]); // Add new Sub-Sector to the list
-      setNewSubSector(""); // Clear input field
-      setIsAddingSubSector(false); // Hide input field after adding
-    }
-  };
-
-  // Department Plus icon with api
-  const [isAddingDepartment, setIsAddingDepartment] = useState(false);
-  const [newDepartment, setNewDepartment] = useState("");
-
-
-  // Function to handle adding a new department with API integration
-  const handleAddDepartment = async (name) => {
-    try {
-      const response = await ApiClient.post(
-        "/admin/tender-config/department",
-        { name },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer YOUR_TOKEN_HERE`,
-          },
-        }
-      );
-      if (response.status === 200 || response.status === 201) {
-        await Swal.fire({
-          title: "Success!",
-          text: "Department created successfully!",
-          icon: "success",
-          confirmButtonText: "OK",
-        });
-        setIsAddingDepartment(false); // Close the input form
-        setDepartments([...departments, { id: response.data.id, name }]); // Add the new department to the list
-      } else {
-        Swal.fire({
-          title: "Error!",
-          text: response.data.message || "Something went wrong!",
-          icon: "error",
-          confirmButtonText: "Try Again",
-        });
-      }
-    } catch (error) {
-      console.error("Error adding Department:", error);
-      Swal.fire({
-        title: "Error!",
-        text: error.response?.data?.message || "Something went wrong!",
-        icon: "error",
-        confirmButtonText: "Try Again",
-      });
-    }
-  };
-
-
-  // SubDepartment + icon
-  // const [selectedDepartment, setSelectedDepartment] = useState('');
-  const [newSubDepartment, setNewSubDepartment] = useState('');
-  const [subDepartments, setSubDepartments] = useState([]); // Sub-department array
-  const [isAddingSubDepartment, setIsAddingSubDepartment] = useState(false);
-  // const [formDataSubmit, setFormDataSubmit] = useState({ sub_department_id: '' }); // Form data for sub-department
-
-  // Function to create sub-department via API
-  const createSubDepartment = async (name, departmentId) => {
-    try {
-      const response = await ApiClient.post('/admin/tender-config/sub-department', {
-        name,
-        department_id: departmentId,
-      });
-      console.log('API Response:', response.data); // Handle the successful response
-      // Update the subDepartments list with the newly created sub-department
-      setSubDepartments([...subDepartments, response.data]);
-    } catch (error) {
-      console.error('Error creating sub-department:', error.response?.data || error.message);
-    }
-  };
-
-  // Function to handle adding a new sub-department
-  const handleAddSubDepartment = () => {
-    if (newSubDepartment.trim()) {
-      const newSubDepartmentObject = {
-        id: subDepartments.length + 1,
-        name: newSubDepartment.trim(),
-        department_id: selectedDepartment, // Associate with selected department
-      };
-      setSubDepartments([...subDepartments, newSubDepartmentObject]); // Add new sub-department to the list
-      setNewSubDepartment(''); // Clear input field
-      setIsAddingSubDepartment(false); // Hide input field after adding
-
-      // Optionally, you can call the API to save it
-      createSubDepartment(newSubDepartment, selectedDepartment);
-    }
-  };
-
-
-  // Division Plus icon
-  const [isAddingDivision, setIsAddingDivision] = useState(false);
-  const [newDivision, setNewDivision] = useState("");
-
-  const handleAddDivision = async () => {
-    if (newDivision.trim()) {
-      try {
-        console.log("Adding division:", newDivision.trim());
-
-        // API call to add division to the backend
-        const response = await ApiClient.post(
-          "/admin/tender-config/division",
-          { name: newDivision.trim() },
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer YOUR_TOKEN_HERE`,
-            },
-          }
-        );
-
-        console.log("API response:", response);
-
-        // Assuming the response contains the created division object
-        const newDivisionObject = { id: response.data.id, name: newDivision.trim() };
-
-        console.log("New division object:", newDivisionObject);
-
-        // Update local state with the new division
-        setDivisions([...divisions, newDivisionObject]);
-
-        // Clear the input and hide the form
-        setNewDivision("");
-        setIsAddingDivision(false);
-
-        console.log("Division added successfully!");
-
-      } catch (error) {
-        console.error("Error adding division:", error);
-        // Optionally handle error (e.g., show an error message)
-      }
-    } else {
-      console.log("Division name is empty, cannot add.");
-    }
-  };
-
-  // District plus icon add
-  const [isAddingDistrict, setIsAddingDistrict] = useState(false);
-  const [newDistrict, setNewDistrict] = useState("");
-
-  // Handle adding a new District
-  const handleAddDistrict = () => {
-    if (newDistrict.trim()) {
-      const newDistrictObject = { id: districts.length + 1, name: newDistrict.trim() };
-      setDistricts([...districts, newDistrictObject]); // Add new district to the list
-      setNewDistrict(""); // Clear input field
-      setIsAddingDistrict(false); // Hide input field after adding
-    }
-  };
-  // Upazilla plus add icon
-  const [isAddingUpazila, setIsAddingUpazila] = useState(false);
-  const [newUpazila, setNewUpazila] = useState("");
-
-  // Handle adding a new Upazila
-  const handleAddUpazila = () => {
-    if (newUpazila.trim()) {
-      const newUpazilaObject = { id: upazilas.length + 1, name: newUpazila.trim() };
-      setUpazilas([...upazilas, newUpazilaObject]); // Add new upazila to the list
-      setNewUpazila(""); // Clear input field
-      setIsAddingUpazila(false); // Hide input field after adding
-    }
-  };
-
-
 
 
 
@@ -896,55 +631,37 @@ const CreateTenderForm = ({ onClose }) => {
               </select>
             </div> */}
 
-            <div className="mb-1">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-2">
-                  <label className="block text-gray-700 font-medium mb-1">Department</label>
-                  {/* Add the "+" icon next to the department label */}
-                  <button
-                    onClick={() => setIsAddingDepartment(!isAddingDepartment)} // Toggle the "Add new department" form
-                    className="p-1 w-6 h-6 bg-blue-500 text-white rounded-full hover:bg-blue-600 focus:outline-none text-center"
-                  >
-                    +
-                  </button>
-                </div>
-              </div>
+            {/* ----------------New department search by name----------- */}
+            <div>
+              <label className="block text-gray-700 font-medium mb-1">Department</label>
 
-              {/* Dropdown to select a department */}
-              <div className="flex items-center space-x-2">
-                <select
-                  value={selectedDepartment}
-                  onChange={(e) => setSelectedDepartment(e.target.value)} // Set selected department
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="">Select a Department</option>
-                  {departments.map((department) => (
-                    <option key={department.id} value={department.id}>
-                      {department.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={handleSearchChange}
+                placeholder="Search for a department"
+                className="w-full p-2 border border-gray-300 rounded-lg mb-2"
+              />
 
-              {/* Input field to add a new department */}
-              {isAddingDepartment && (
-                <div className="mt-2 flex space-x-2">
-                  <input
-                    type="text"
-                    value={newDepartment}
-                    onChange={(e) => setNewDepartment(e.target.value)} // Update new department name
-                    placeholder="New department name"
-                    className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                  <button
-                    onClick={() => handleAddDepartment(newDepartment)} // Pass the newDepartment value to the function
-                    className="p-2 bg-green-500 text-white rounded-lg hover:bg-green-600 focus:outline-none"
-                  >
-                    Submit
-                  </button>
-                </div>
+              {/* Show filtered departments */}
+              {!selectedDepartment && searchQuery && filteredDepartments.length > 0 && (
+                <ul className="border border-gray-300 rounded-lg mt-2 max-h-48 overflow-y-auto">
+                  {[...new Map(filteredDepartments.map(department =>
+                    [department.name, department])).values()].map(department => (
+                      <li
+                        key={department.id}
+                        className="p-2 cursor-pointer hover:bg-gray-200"
+                        onClick={() => {
+                          handleSelectDepartment(department.id, department.name);
+                        }}
+                      >
+                        {department.name}
+                      </li>
+                    ))}
+                </ul>
               )}
             </div>
+            {/* ------------New department search by name------------------------- */}
 
 
 
@@ -969,72 +686,86 @@ const CreateTenderForm = ({ onClose }) => {
                 ))}
               </select>
             </div> */}
-            
 
-            <div>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-2">
-                  <label className="block text-gray-700 font-medium mb-1">Sub-Department</label>
-                  {/* Add the "+" icon next to the sub-department label */}
-                  <button
-                    onClick={() => setIsAddingSubDepartment(!isAddingSubDepartment)} // Toggle the "Add new sub-department" form
-                    className="p-1 w-6 h-6 bg-blue-500 text-white rounded-full hover:bg-blue-600 focus:outline-none text-center"
-                  >
-                    +
-                  </button>
-                </div>
-              </div>
+             {/* ------------New Sub-department search by name------------------------- */}
+             {/* <div>
+              <label className="block text-gray-700 font-medium mb-1">Sub-Department</label>
 
-              {/* Dropdown to select a sub-department */}
-              <div className="flex items-center space-x-2">
-                <select
-                  name="sub_department_id"
-                  value={formDataSubmit.sub_department_id}
-                  onChange={(e) =>
-                    setFormDataSubmit({
-                      ...formDataSubmit,
-                      sub_department_id: e.target.value,
-                    })
-                  } // Set selected sub-department
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="">Select a Sub-department</option>
-                  {subDepartments
-                    .filter((subDept) => subDept.department_id === selectedDepartment) // Filter by selected department
-                    .map((subdepartment) => (
-                      <option key={subdepartment.id} value={subdepartment.id}>
+              <input
+                type="text"
+                value={searchQuerysubdepartment}
+                onChange={handleSearchChangesubdepartment}
+                placeholder="Search for a sub-department"
+                className="w-full p-2 border border-gray-300 rounded-lg mb-2"
+              />
+
+              
+              {!selectedSubdepartment && searchQuerysubdepartment && filteredDepartmentssubdepartment.length > 0 && (
+                <ul className="border border-gray-300 rounded-lg mt-2 max-h-48 overflow-y-auto">
+                  {[...new Map(filteredDepartments.map(subdepartment =>
+                    [subdepartment.name, subdepartment])).values()].map(subdepartment => (
+                      <li
+                        key={subdepartment.id}
+                        className="p-2 cursor-pointer hover:bg-gray-200"
+                        onClick={() => {
+                          handleSelectDepartment(subdepartment.id, subdepartment.name);
+                        }}
+                      >
                         {subdepartment.name}
-                      </option>
+                      </li>
                     ))}
-                </select>
-              </div>
-
-              {/* Input field to add a new sub-department */}
-              {isAddingSubDepartment && (
-                <div className="mt-2 flex space-x-2">
-                  <input
-                    type="text"
-                    value={newSubDepartment}
-                    onChange={(e) => setNewSubDepartment(e.target.value)} // Update new sub-department name
-                    placeholder="New sub-department name"
-                    className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                  <button
-                    onClick={handleAddSubDepartment} // Handle adding the new sub-department
-                    className="p-2 bg-green-500 text-white rounded-lg hover:bg-green-600 focus:outline-none"
-                  >
-                    Submit
-                  </button>
-                </div>
+                </ul>
               )}
+            </div> */}
+
+<div>
+  <label className="block text-gray-700 font-medium mb-1">Sub-Department</label>
+
+  <input
+    type="text"
+    value={searchQuerysubdepartment}
+    onChange={handleSearchChangesubdepartment}
+    placeholder="Search for a sub-department"
+    className="w-full p-2 border border-gray-300 rounded-lg mb-2"
+  />
+
+  {/* Show filtered sub-departments */}
+  {!selectedSubdepartment && searchQuerysubdepartment && filteredSubdepartments.length > 0 && (
+    <ul className="border border-gray-300 rounded-lg mt-2 max-h-48 overflow-y-auto">
+      {filteredSubdepartments.map((subdepartment) => (
+        <li
+          key={subdepartment.id}
+          className="p-2 cursor-pointer hover:bg-gray-200"
+          onClick={() => handleSelectSubDepartment(subdepartment.id, subdepartment.name)}
+        >
+          {subdepartment.name}
+        </li>
+      ))}
+    </ul>
+  )}
+
+  {/* Optional: Selected sub-department */}
+  {selectedSubdepartment && (
+    <div className="mt-4 p-2 bg-green-100 border border-green-300 rounded-lg">
+      <p className="text-green-700">
+        Selected Sub-Department: <strong>{selectedSubdepartment.name}</strong>
+      </p>
+    </div>
+  )}
+</div>
 
 
-            </div>
+
+
+             {/* ------------New Sub-department search by name------------------------- */}
+
+
+
 
 
             {/* Category Dropdown */}
             {/* 1st er ta */}
-            {/* <div>
+            <div>
               <label className="block text-gray-700 font-medium mb-1">
                 Category
               </label>
@@ -1052,76 +783,16 @@ const CreateTenderForm = ({ onClose }) => {
                   </option>
                 ))}
               </select>
-            </div> */}
-
-
-
-            {/* 3rd ta */}
-
-            <div className="mb-1">
-              {/* <div className="flex items-center justify-between">
-                <label className="block text-gray-700 font-medium mb-1">Category</label>
-
-                <button
-                  onClick={() => setIsAdding(!isAdding)} // Toggle the "Add new category" form
-                  className="p-1 w-6 h-6 bg-blue-500 text-white rounded-full hover:bg-blue-600 focus:outline-none text-center"
-                >
-                  +
-                </button>
-              </div> */}
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-2">
-                  <label className="block text-gray-700 font-medium mb-1">Category</label>
-                  {/* Add the "+" icon next to the category label */}
-                  <button
-                    onClick={() => setIsAdding(!isAdding)} // Toggle the "Add new category" form
-                    className="p-1 w-6 h-6 bg-blue-500 text-white rounded-full hover:bg-blue-600 focus:outline-none text-center"
-                  >
-                    +
-                  </button>
-                </div>
-              </div>
-
-
-              {/* Dropdown to select a category */}
-              <div className="flex items-center space-x-2">
-                <select
-                  value={selectedCategory}
-                  onChange={e => setSelectedCategory(e.target.value)} // Set selected category
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="">Select a Category</option>
-                  {categories.map(category => (
-                    <option key={category.id} value={category.id}>
-                      {category.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Input field to add a new category */}
-              {isAdding && (
-                <div className="mt-2 flex space-x-2">
-                  <input
-                    type="text"
-                    value={newCategory}
-                    onChange={(e) => setNewCategory(e.target.value)} // Update new category name
-                    placeholder="New category name"
-                    className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                  <button
-                    onClick={handleAddCategory} // Handle adding the new category
-                    className="p-2 bg-green-500 text-white rounded-lg hover:bg-green-600 focus:outline-none"
-                  >
-                    Submit
-                  </button>
-                </div>
-              )}
             </div>
 
 
+
+
+
+
+
             {/* Sector Dropdown */}
-            {/* <div>
+            <div>
               <label className="block text-gray-700 font-medium mb-1">
                 Sector
               </label>
@@ -1139,61 +810,13 @@ const CreateTenderForm = ({ onClose }) => {
                   </option>
                 ))}
               </select>
-            </div> */}
-
-            <div className="mb-1">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-2">
-                  <label className="block text-gray-700 font-medium mb-1">Sector</label>
-                  <button
-                    onClick={() => setIsAddingSector(!isAddingSector)} // Toggle the "Add new sector" form
-                    className="p-1 w-6 h-6 bg-blue-500 text-white rounded-full hover:bg-blue-600 focus:outline-none text-center"
-                  >
-                    +
-                  </button>
-                </div>
-
-              </div>
-
-              {/* Dropdown to select a sector */}
-              <div className="flex items-center space-x-2">
-                <select
-                  value={selectedSector}
-                  onChange={e => setSelectedSector(e.target.value)} // Set selected sector
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="">Select a Sector</option>
-                  {filteredSectors.map(sector => (
-                    <option key={sector.id} value={sector.id}>
-                      {sector.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Input field to add a new sector */}
-              {isAddingSector && (
-                <div className="mt-2 flex space-x-2">
-                  <input
-                    type="text"
-                    value={newSector}
-                    onChange={(e) => setNewSector(e.target.value)} // Update new sector name
-                    placeholder="New sector name"
-                    className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                  <button
-                    onClick={handleAddSector} // Handle adding the new sector
-                    className="p-2 bg-green-500 text-white rounded-lg hover:bg-green-600 focus:outline-none"
-                  >
-                    Submit
-                  </button>
-                </div>
-              )}
             </div>
 
 
+
+
             {/* Subsector Dropdown */}
-            {/* <div>
+            <div>
               <label className="block text-gray-700 font-medium mb-1">
                 Sub-Sector
               </label>
@@ -1213,61 +836,12 @@ const CreateTenderForm = ({ onClose }) => {
                   </option>
                 ))}
               </select>
-            </div> */}
-
-            <div className="mb-1">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-2">
-                  <label className="block text-gray-700 font-medium mb-1">Sub-Sector</label>
-                  <button
-                    onClick={() => setIsAddingSubSector(!isAddingSubSector)} // Toggle the "Add new sub-sector" form
-                    className="p-1 w-6 h-6 bg-blue-500 text-white rounded-full hover:bg-blue-600 focus:outline-none text-center"
-                  >
-                    +
-                  </button>
-                </div>
-
-              </div>
-
-              {/* Dropdown to select a sub-sector */}
-              <div className="flex items-center space-x-2">
-                <select
-                  name="sub_sector_id"
-                  value={formDataSubmit.sub_sector_id}
-                  onChange={handleInputChange} // Handle change in sub-sector selection
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="">Select a Sub-sector</option>
-                  {filteredSubsectors.map(subsector => (
-                    <option key={subsector.id} value={subsector.id}>
-                      {subsector.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Input field to add a new sub-sector */}
-              {isAddingSubSector && (
-                <div className="mt-2 flex space-x-2">
-                  <input
-                    type="text"
-                    value={newSubSector}
-                    onChange={(e) => setNewSubSector(e.target.value)} // Update the new sub-sector name
-                    placeholder="New sub-sector name"
-                    className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                  <button
-                    onClick={handleAddSubSector} // Handle adding the new sub-sector
-                    className="p-2 bg-green-500 text-white rounded-lg hover:bg-green-600 focus:outline-none"
-                  >
-                    Submit
-                  </button>
-                </div>
-              )}
             </div>
 
+
+
             {/* Division Dropdown */}
-            {/* <div>
+            <div>
               <label className="block text-gray-700 font-medium mb-1">
                 Division <span className="text-red-500">*</span>
               </label>
@@ -1286,60 +860,12 @@ const CreateTenderForm = ({ onClose }) => {
                   </option>
                 ))}
               </select>
-            </div> */}
-
-            <div className="mb-1">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-2">
-                  <label className="block text-gray-700 font-medium mb-1">Division</label>
-                  <button
-                    onClick={() => setIsAddingDivision(!isAddingDivision)} // Toggle the "Add new division" form
-                    className="p-1 w-6 h-6 bg-blue-500 text-white rounded-full hover:bg-blue-600 focus:outline-none text-center"
-                  >
-                    +
-                  </button>
-                </div>
-
-              </div>
-
-              {/* Dropdown to select a division */}
-              <div className="flex items-center space-x-2">
-                <select
-                  value={selectedDivision}
-                  onChange={e => setSelectedDivision(e.target.value)} // Set selected division
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="">Select a Division</option>
-                  {divisions.map(division => (
-                    <option key={division.id} value={division.id}>
-                      {division.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Input field to add a new division */}
-              {isAddingDivision && (
-                <div className="mt-2 flex space-x-2">
-                  <input
-                    type="text"
-                    value={newDivision}
-                    onChange={(e) => setNewDivision(e.target.value)} // Update new division name
-                    placeholder="New division name"
-                    className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                  <button
-                    onClick={handleAddDivision} // Handle adding the new division
-                    className="p-2 bg-green-500 text-white rounded-lg hover:bg-green-600 focus:outline-none"
-                  >
-                    Submit
-                  </button>
-                </div>
-              )}
             </div>
 
+
+
             {/* District Dropdown */}
-            {/* <div>
+            <div>
               <label className="block text-gray-700 font-medium mb-1">
                 District <span className="text-red-500">*</span>
               </label>
@@ -1358,60 +884,12 @@ const CreateTenderForm = ({ onClose }) => {
                   </option>
                 ))}
               </select>
-            </div> */}
-
-            <div className="mb-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-2">
-                  <label className="block text-gray-700 font-medium mb-1">District</label>
-                  <button
-                    onClick={() => setIsAddingDistrict(!isAddingDistrict)} // Toggle the "Add new district" form
-                    className="p-1 w-6 h-6 bg-blue-500 text-white rounded-full hover:bg-blue-600 focus:outline-none text-center"
-                  >
-                    +
-                  </button>
-                </div>
-
-              </div>
-
-              {/* Dropdown to select a district */}
-              <div className="flex items-center space-x-2">
-                <select
-                  value={selectedDistrict}
-                  onChange={e => setSelectedDistrict(e.target.value)} // Set selected district
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="">Select a District</option>
-                  {districts.map(district => (
-                    <option key={district.id} value={district.id}>
-                      {district.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Input field to add a new district */}
-              {isAddingDistrict && (
-                <div className="mt-2 flex space-x-2">
-                  <input
-                    type="text"
-                    value={newDistrict}
-                    onChange={(e) => setNewDistrict(e.target.value)} // Update new district name
-                    placeholder="New district name"
-                    className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                  <button
-                    onClick={handleAddDistrict} // Handle adding the new district
-                    className="p-2 bg-green-500 text-white rounded-lg hover:bg-green-600 focus:outline-none"
-                  >
-                    Submit
-                  </button>
-                </div>
-              )}
             </div>
 
+
+
             {/* Upazila Dropdown */}
-            {/* <div>
+            <div>
               <label className="block text-gray-700 font-medium mb-1">
                 Upazila <span className="text-red-500">*</span>
               </label>
@@ -1431,64 +909,10 @@ const CreateTenderForm = ({ onClose }) => {
                   </option>
                 ))}
               </select>
-            </div> */}
-
-
-            <div className="mb-1">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-2">
-                  <label className="block text-gray-700 font-medium mb-1">
-                    Upazila <span className="text-red-500">*</span>
-                  </label>
-                  <button
-                    onClick={() => setIsAddingUpazila(!isAddingUpazila)} // Toggle the "Add new Upazila" form
-                    className="p-1 w-6 h-6 bg-blue-500 text-white rounded-full hover:bg-blue-600 focus:outline-none text-center"
-                  >
-                    +
-                  </button>
-                </div>
-
-              </div>
-
-              {/* Dropdown to select an Upazila */}
-              <div className="flex items-center space-x-2">
-                <select
-                  value={formDataSubmit.upazila_id}
-                  onChange={handleInputChange} // Handle selecting Upazila
-                  name="upazila_id"
-                  required
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="">
-                    Select an Upazila
-                  </option>
-                  {filteredUpazilas.map(upazila => (
-                    <option key={upazila.id} value={upazila.id}>
-                      {upazila.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Input field to add a new Upazila */}
-              {isAddingUpazila && (
-                <div className="mt-2 flex space-x-2">
-                  <input
-                    type="text"
-                    value={newUpazila}
-                    onChange={(e) => setNewUpazila(e.target.value)} // Update new upazila name
-                    placeholder="New Upazila name"
-                    className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                  <button
-                    onClick={handleAddUpazila} // Handle adding the new Upazila
-                    className="p-2 bg-green-500 text-white rounded-lg hover:bg-green-600 focus:outline-none"
-                  >
-                    Submit
-                  </button>
-                </div>
-              )}
             </div>
+
+
+
 
 
 

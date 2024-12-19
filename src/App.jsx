@@ -32,6 +32,7 @@ import AllPublishTender from './Components/Tender/PublishedTender/AllPublishTend
 import PendingPublishTender from './Components/Tender/PublishedTender/PendingPublishTender';
 import TenderDetails from './Components/Tender/CreateTender/TenderDetails';
 import CreateTenderForm from './Components/Tender/CreateTender/CreateTenderForm';
+
 import BackupTenderDetails from './Components/Tender/CreateTender/BackupTenderDetails';
 import ViewTenderDetails from './Components/Tender/ViewTenderDetails/ViewTenderDetails';
 import PostTender from './Components/Tender/PostTender/PostTender';
@@ -72,6 +73,8 @@ function App() {
   const ProtectedRoute = ({ children }) => {
     return isLoggedIn ? children : <Navigate to="/" replace />;
   };
+
+
 
   return (
     <Router>
@@ -388,6 +391,7 @@ function App() {
                       </ProtectedRoute>
                     }
                   />
+           
                   <Route
                     path="/tenderList"
                     element={

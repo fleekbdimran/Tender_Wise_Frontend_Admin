@@ -1,3 +1,4 @@
+//  -----------------status A/U not------------
 
 import { useState, useEffect } from "react";
 import { EditOutlined, CloseOutlined, SendOutlined, SearchOutlined } from "@ant-design/icons";
@@ -319,7 +320,7 @@ function Category() {
             <button
               key={i}
               onClick={() => handlePageChange(i + 1)}
-              className={`px-4 py-2 mx-1 rounded ${currentPage === i + 1 ? "bg-teal-500 text-white" : "bg-gray-200"
+              className={`px-4 py-2 mx-1 rounded ${currentPage === i + 1 ? "bg-blue-500 text-white" : "bg-gray-200"
                 }`}
             >
               {i + 1}
@@ -332,6 +333,7 @@ function Category() {
 }
 
 export default Category;
+//  -----------------status A/U not------------
 
 
 
