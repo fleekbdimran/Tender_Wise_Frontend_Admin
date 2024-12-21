@@ -30,18 +30,46 @@ const CreateTenderForm = ({ onClose }) => {
   const [selectedSourceType, setSelectedSourceType] = useState('');
   const [filteredSources, setFilteredSources] = useState([]);
 
-  {/* ------------New department search by name------------------------- */}
+  {/* ------------New department search by name------------------------- */ }
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredDepartments, setFilteredDepartments] = useState([]);
   const [isSelected, setIsSelected] = useState(false); // Track selection state
-  {/* ------------New department search by name------------------------- */}
+  {/* ------------New department search by name------------------------- */ }
 
-  {/* ------------New sub-department search by name------------------------- */}
+  {/* ------------New sub-department search by name------------------------- */ }
   const [searchQuerysubdepartment, setSearchQuerysubdepartment] = useState('');
   const [filteredDepartmentssubdepartment, setFilteredDepartmentssubdepartment] = useState([]);
   const [selectedSubdepartment, setSelectedSubdepartment] = useState('');
 
-  {/* ------------New sub-department search by name------------------------- */}
+  {/* ------------New sub-department search by name------------------------- */ }
+
+
+  {/* ------------New Category search by name------------------------- */ }
+  const [searchQueryCategory, setSearchQueryCategory] = useState('');
+  const [filteredCategory, setFilteredCategory] = useState([]);
+  // const [selectedCategory, setSelectedCategory] = useState(null);
+
+
+  {/* ------------New Category search by name------------------------- */ }
+
+  {/* ------------New Sector search by name------------------------- */ }
+
+  const [searchQuerySector, setSearchQuerySector] = useState(''); // Holds the current search query for sectors
+  const [filteredSubdepartmentSector, setFilteredSubdepartmentSector] = useState([]); // Holds the filtered list of sectors based on the search query
+  // const [selectedSector, setSelectedSector] = useState(null); // Holds the selected sector object
+  // const [sectors, setSectors] = useState([]); // Holds the full list of sectors (this should be populated with your data)
+
+  {/* ------------New Sector search by name------------------------- */ }
+
+
+  {/* ------------New Sub-Sector search by name------------------------- */ }
+  const [searchQuerySubSector, setSearchQuerySubSector] = useState(''); // Track the search query
+  const [selectedSubSector, setSelectedSubSector] = useState(null); // Track the selected sub-sector
+  const [filteredSubSector, setFilteredSubSector] = useState([]); // Store filtered sub-sectors
+  const [subSectors, setSubSectors] = useState([]); // Store all sub-sectors
+  const [debouncedQuery, setDebouncedQuery] = useState(searchQuerySubSector);
+
+  {/* ------------New Sub-Sector search by name------------------------- */ }
 
 
   const [formDataSubmit, setFormDataSubmit] = useState({
@@ -98,7 +126,7 @@ const CreateTenderForm = ({ onClose }) => {
     }
   };
 
- 
+
 
   const handleLogoUpload = (e, setImage) => {
     const file = e.target.files[0];
@@ -232,6 +260,35 @@ const CreateTenderForm = ({ onClose }) => {
     fetchCategories();
   }, []);
 
+  {/* ------------New Category search by name------------------------- */ }
+
+  useEffect(() => {
+    if (searchQueryCategory) {
+      setFilteredCategory(
+        categories.filter(category =>
+          category.name.toLowerCase().includes(searchQueryCategory.toLowerCase())
+        )
+      );
+    } else {
+      setFilteredCategory([]);
+    }
+  }, [searchQueryCategory, categories]);
+
+  const handleSelectCategory = (categoryId, categoryName) => {
+    setSearchQueryCategory(categoryName); // Update the input with the selected category name
+    setSelectedCategory({ id: categoryId, name: categoryName }); // Set the selected category
+    setFilteredCategory([]); // Clear the filtered category list
+  };
+
+  const handleSearchChangeCategory = (e) => {
+    setSearchQueryCategory(e.target.value); // Update the search query
+    setSelectedCategory(null); // Reset the selected category when search query changes
+  };
+
+
+
+  {/* ------------New Category search by name------------------------- */ }
+
   // Fetch all sectors once
   useEffect(() => {
     const fetchAllSectors = async () => {
@@ -246,6 +303,33 @@ const CreateTenderForm = ({ onClose }) => {
     };
     fetchAllSectors();
   }, []);
+
+  {/* ------------New Sector search by name------------------------- */ }
+
+  useEffect(() => {
+    if (searchQuerySector) {
+      setFilteredSubdepartmentSector(
+        sectors.filter(sector =>
+          sector.name.toLowerCase().includes(searchQuerySector.toLowerCase())
+        )
+      );
+    } else {
+      setFilteredSubdepartmentSector([]); // Clear filtered sectors when input is empty
+    }
+  }, [searchQuerySector, sectors]); // 'sectors' is the array containing all sector data
+
+  const handleSelectSector = (sectorId, sectorName) => {
+    setSearchQuerySector(sectorName); // Update input value to the selected sector name
+    setSelectedSector({ id: sectorId, name: sectorName }); // Set the selected sector
+    setFilteredSubdepartmentSector([]); // Clear the filtered sector list
+  };
+
+  const handleSearchChangeSector = (e) => {
+    setSearchQuerySector(e.target.value);
+    setSelectedSector(null); // Reset selected sector when search query changes
+  };
+
+  {/* ------------New Sector search by name------------------------- */ }
 
   // Fetch subsectors based on selected sector
   useEffect(() => {
@@ -262,6 +346,67 @@ const CreateTenderForm = ({ onClose }) => {
       setFilteredSubsectors([]);
     }
   }, [selectedSector, sectors]);
+
+
+  {/* ------------New Sub-Sector search by name------------------------- */ }
+
+
+  // Effect to fetch sub-sectors from the API
+  useEffect(() => {
+    const fetchSubSectors = async () => {
+      try {
+        const response = await ApiClient.get('/admin/tender-config/sub-sector');
+        // console.log('Fetched Sub-Sectors:', response.data);
+
+        // Ensure that response.data contains the expected structure and the 'data' property is an array
+        if (Array.isArray(response.data.data)) {
+          setSubSectors(response.data.data); // Store the fetched sub-sectors
+        } else {
+          console.error('Response data does not contain an array of sub-sectors:', response.data);
+        }
+      } catch (error) {
+        console.error('Failed to fetch sub-sectors', error);
+      }
+    };
+
+    fetchSubSectors();
+  }, []); // Only run once on mount
+
+  // Debounce the search query
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedQuery(searchQuerySubSector);
+    }, 300); // 300ms debounce delay
+
+    return () => clearTimeout(timer); // Cleanup on every search change
+  }, [searchQuerySubSector]);
+
+  // Effect to filter sub-sectors when the debounced query changes
+  useEffect(() => {
+    if (debouncedQuery.trim() !== '') {
+      setFilteredSubSector(
+        subSectors.filter(subsector =>
+          subsector.name.toLowerCase().includes(debouncedQuery.toLowerCase())
+        )
+      );
+    } else {
+      setFilteredSubSector([]); // Clear filtered list if query is empty
+    }
+  }, [debouncedQuery, subSectors]); // Runs whenever debounced query or subSectors change
+
+  // Handler for input change (updating search query)
+  const handleSearchChangeSubSector = (e) => {
+    setSearchQuerySubSector(e.target.value); // Update the search query
+    setSelectedSubSector(null); // Reset selected sub-sector when search query changes
+  };
+
+  // Handler for selecting a sub-sector
+  const handleSelectSubSector = (subSectorId, subSectorName) => {
+    setSearchQuerySubSector(subSectorName); // Set input field to selected sub-sector name
+    setSelectedSubSector({ id: subSectorId, name: subSectorName }); // Update selected sub-sector
+    setFilteredSubSector([]); // Clear filtered list after selection
+  };
+  {/* ------------New Sub-Sector search by name------------------------- */ }
 
   // Filter sectors based on selected category
   useEffect(() => {
@@ -357,9 +502,9 @@ const CreateTenderForm = ({ onClose }) => {
   // Call the function to fetch data
   fetchSubDepartments();
 
-  {/* ------------New Sub-department search by name------------------------- */}
-           
-         // Handle search input change
+  {/* ------------New Sub-department search by name------------------------- */ }
+
+  // Handle search input change
   const handleSearchChangesubdepartment = (event) => {
     const query = event.target.value;
     setSearchQuerysubdepartment(query);
@@ -380,7 +525,11 @@ const CreateTenderForm = ({ onClose }) => {
     setSearchQuerysubdepartment(name); // Set the input field value to the selected sub-department
     setFilteredDepartmentssubdepartment([]);
   };
-  {/* ------------New Sub-department search by name------------------------- */}
+
+
+
+
+  {/* ------------New Sub-department search by name------------------------- */ }
 
   // Fetch divisions with districts
   useEffect(() => {
@@ -687,8 +836,10 @@ const CreateTenderForm = ({ onClose }) => {
               </select>
             </div> */}
 
-             {/* ------------New Sub-department search by name------------------------- */}
-             {/* <div>
+            {/* ------------New Sub-department search by name------------------------- */}
+
+
+            <div>
               <label className="block text-gray-700 font-medium mb-1">Sub-Department</label>
 
               <input
@@ -699,65 +850,33 @@ const CreateTenderForm = ({ onClose }) => {
                 className="w-full p-2 border border-gray-300 rounded-lg mb-2"
               />
 
-              
-              {!selectedSubdepartment && searchQuerysubdepartment && filteredDepartmentssubdepartment.length > 0 && (
+
+              {!selectedSubdepartment && searchQuerysubdepartment && filteredSubdepartments.length > 0 && (
                 <ul className="border border-gray-300 rounded-lg mt-2 max-h-48 overflow-y-auto">
-                  {[...new Map(filteredDepartments.map(subdepartment =>
-                    [subdepartment.name, subdepartment])).values()].map(subdepartment => (
-                      <li
-                        key={subdepartment.id}
-                        className="p-2 cursor-pointer hover:bg-gray-200"
-                        onClick={() => {
-                          handleSelectDepartment(subdepartment.id, subdepartment.name);
-                        }}
-                      >
-                        {subdepartment.name}
-                      </li>
-                    ))}
+                  {filteredSubdepartments.map((subdepartment) => (
+                    <li
+                      key={subdepartment.id}
+                      className="p-2 cursor-pointer hover:bg-gray-200"
+                      onClick={() => handleSelectSubDepartment(subdepartment.id, subdepartment.name)}
+                    >
+                      {subdepartment.name}
+                    </li>
+                  ))}
                 </ul>
               )}
-            </div> */}
 
-<div>
-  <label className="block text-gray-700 font-medium mb-1">Sub-Department</label>
 
-  <input
-    type="text"
-    value={searchQuerysubdepartment}
-    onChange={handleSearchChangesubdepartment}
-    placeholder="Search for a sub-department"
-    className="w-full p-2 border border-gray-300 rounded-lg mb-2"
-  />
-
-  {/* Show filtered sub-departments */}
-  {!selectedSubdepartment && searchQuerysubdepartment && filteredSubdepartments.length > 0 && (
-    <ul className="border border-gray-300 rounded-lg mt-2 max-h-48 overflow-y-auto">
-      {filteredSubdepartments.map((subdepartment) => (
-        <li
-          key={subdepartment.id}
-          className="p-2 cursor-pointer hover:bg-gray-200"
-          onClick={() => handleSelectSubDepartment(subdepartment.id, subdepartment.name)}
-        >
-          {subdepartment.name}
-        </li>
-      ))}
-    </ul>
-  )}
-
-  {/* Optional: Selected sub-department */}
-  {selectedSubdepartment && (
-    <div className="mt-4 p-2 bg-green-100 border border-green-300 rounded-lg">
-      <p className="text-green-700">
-        Selected Sub-Department: <strong>{selectedSubdepartment.name}</strong>
-      </p>
-    </div>
-  )}
-</div>
+            </div>
 
 
 
 
-             {/* ------------New Sub-department search by name------------------------- */}
+
+
+
+
+
+            {/* ------------New Sub-department search by name------------------------- */}
 
 
 
@@ -765,7 +884,7 @@ const CreateTenderForm = ({ onClose }) => {
 
             {/* Category Dropdown */}
             {/* 1st er ta */}
-            <div>
+            {/* <div>
               <label className="block text-gray-700 font-medium mb-1">
                 Category
               </label>
@@ -783,7 +902,45 @@ const CreateTenderForm = ({ onClose }) => {
                   </option>
                 ))}
               </select>
+            </div> */}
+
+
+            {/* ------------New Category search by name------------------------- */}
+
+            <div>
+              <label className="block text-gray-700 font-medium mb-1">Category</label>
+
+              <input
+                type="text"
+                value={searchQueryCategory}
+                onChange={handleSearchChangeCategory}
+                placeholder="Search for a Category"
+                className="w-full p-2 border border-gray-300 rounded-lg mb-2"
+              />
+
+              {/* Show filtered categories */}
+              {!selectedCategory && searchQueryCategory && filteredCategory.length > 0 && (
+                <ul className="border border-gray-300 rounded-lg mt-2 max-h-48 overflow-y-auto">
+                  {[...new Map(filteredCategory.map(category =>
+                    [category.name, category])).values()].map(category => (
+                      <li
+                        key={category.id}
+                        className="p-2 cursor-pointer hover:bg-gray-200"
+                        onClick={() => {
+                          handleSelectCategory(category.id, category.name);
+                        }}
+                      >
+                        {category.name}
+                      </li>
+                    ))}
+                </ul>
+              )}
             </div>
+
+
+
+
+            {/* ------------New Category search by name------------------------- */}
 
 
 
@@ -792,7 +949,7 @@ const CreateTenderForm = ({ onClose }) => {
 
 
             {/* Sector Dropdown */}
-            <div>
+            {/* <div>
               <label className="block text-gray-700 font-medium mb-1">
                 Sector
               </label>
@@ -810,13 +967,49 @@ const CreateTenderForm = ({ onClose }) => {
                   </option>
                 ))}
               </select>
+            </div> */}
+
+
+
+
+
+            {/* ------------New Sector search by name------------------------- */}
+
+            <div>
+              <label className="block text-gray-700 font-medium mb-1">Sector</label>
+
+              <input
+                type="text"
+                value={searchQuerySector}
+                onChange={handleSearchChangeSector}
+                placeholder="Search for a Sector"
+                className="w-full p-2 border border-gray-300 rounded-lg mb-2"
+              />
+
+              {/* Show filtered sectors based on the search query */}
+              {!selectedSector && searchQuerySector && filteredSubdepartmentSector.length > 0 && (
+                <ul className="border border-gray-300 rounded-lg mt-2 max-h-48 overflow-y-auto">
+                  {[...new Map(filteredSubdepartmentSector.map(sector =>
+                    [sector.name, sector])).values()].map(Sector => (
+                      <li
+                        key={Sector.id}
+                        className="p-2 cursor-pointer hover:bg-gray-200"
+                        onClick={() => handleSelectSector(Sector.id, Sector.name)}
+                      >
+                        {Sector.name}
+                      </li>
+                    ))}
+                </ul>
+              )}
             </div>
+
+            {/* ------------New Sector search by name------------------------- */}
 
 
 
 
             {/* Subsector Dropdown */}
-            <div>
+            {/* <div>
               <label className="block text-gray-700 font-medium mb-1">
                 Sub-Sector
               </label>
@@ -836,7 +1029,48 @@ const CreateTenderForm = ({ onClose }) => {
                   </option>
                 ))}
               </select>
+            </div> */}
+
+
+            {/* ------------New Sub-Sector search by name------------------------- */}
+            <div>
+              <label className="block text-gray-700 font-medium mb-1">Sub-Sector</label>
+
+              {/* Input field for searching Sub-Sector */}
+              <input
+                type="text"
+                value={searchQuerySubSector}
+                onChange={handleSearchChangeSubSector}
+                placeholder="Search for a Sub-Sector"
+                className="w-full p-2 border border-gray-300 rounded-lg mb-2"
+              />
+
+              {/* Display filtered sub-sectors */}
+              {!selectedSubSector && searchQuerySubSector && filteredSubSector.length > 0 && (
+                <ul className="border border-gray-300 rounded-lg mt-2 max-h-48 overflow-y-auto">
+                  {[...new Map(filteredSubSector.map(subsector => [subsector.name, subsector])).values()].map(subsector => (
+                    <li
+                      key={subsector.id}
+                      className="p-2 cursor-pointer hover:bg-gray-200"
+                      onClick={() => handleSelectSubSector(subsector.id, subsector.name)}
+                    >
+                      {subsector.name}
+                    </li>
+                  ))}
+                </ul>
+              )}
+
+              {/* Display selected sub-sector */}
+              {/* {selectedSubSector && (
+        <div className="mt-4 p-2 bg-green-100 border border-green-300 rounded-lg">
+          <p className="text-green-700">
+            Selected Sub-Sector: <strong>{selectedSubSector.name}</strong>
+          </p>
+        </div>
+      )} */}
             </div>
+
+            {/* ------------New Sub-Sector search by name------------------------- */}
 
 
 

@@ -5,6 +5,8 @@ import { PHOTO_BASE_URL_Admin } from '../../Api/config';
 import UserPhoto from '../../../src/image/fleekBD.jpg'
 import tenderLogo from '../../../src/image/logo.png';
 import { useNavigate } from 'react-router-dom';
+
+
 const Header = ({ onLogout }) => {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -107,7 +109,12 @@ const Header = ({ onLogout }) => {
 
 
   return (
-    <div className="relative" ref={menuRef}>
+
+    <>
+    
+      
+      <div className="relative" ref={menuRef}>
+      
       <div className="w-full bg-gray-100 shadow-lg p-4 ">
         {/* Profile Picture */}
         <div className="flex justify-between">
@@ -129,6 +136,7 @@ const Header = ({ onLogout }) => {
               className="h-12 w-12 rounded-full"
             />
             <div>
+              
               <p className="font-medium text-gray-800"> {profileData?.name}</p>
               <p className="text-sm text-gray-600">{profileData?.admin_type}</p>
             </div>
@@ -181,6 +189,8 @@ const Header = ({ onLogout }) => {
       )}
 
     </div>
+    </>
+    
   );
 };
 

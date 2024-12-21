@@ -21,6 +21,7 @@ import { MdSpaceDashboard } from "react-icons/md";
 import { AiFillEdit } from "react-icons/ai";
 
 
+
 const Navbar = ({ onLogout }) => {
   const [stateOpenKeys, setStateOpenKeys] = useState([]);
     const [adminType, setAdminType] = useState(
@@ -222,8 +223,9 @@ const Navbar = ({ onLogout }) => {
   };
 
   return (
-
-    <div style={{ display: 'flex', height: '100vh' }}>
+    <>
+    
+         <div style={{ display: 'flex', height: '100vh' }}>
       {/* Sidebar */}
       <div
         style={{
@@ -279,6 +281,8 @@ const Navbar = ({ onLogout }) => {
         {/* Add main content here */}
       </div>
     </div>
+    </>
+
   );
   
 

@@ -1,4 +1,4 @@
-//  -----------------status A/U not------------
+
 
 import { useState, useEffect } from "react";
 import { EditOutlined, CloseOutlined, SendOutlined, SearchOutlined } from "@ant-design/icons";
@@ -45,7 +45,10 @@ function DesignationTypeModal({ isOpen, onClose, title, onSubmit, category }) {
               className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md text-sm shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
               required
             />
+
           </div>
+       
+          
           <button
             type="submit"
             className="bg-teal-500 text-white px-6 py-3 rounded-lg flex items-center justify-center w-full"
@@ -333,7 +336,9 @@ function Category() {
 }
 
 export default Category;
-//  -----------------status A/U not------------
+
+
+
 
 
 

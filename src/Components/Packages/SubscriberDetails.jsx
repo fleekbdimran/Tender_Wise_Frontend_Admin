@@ -67,74 +67,78 @@ const SubscriberDetails = () => {
   }, [id]); // Add ID as a dependency to re-fetch when it changes
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-6 space-y-6">
-      {/* Profile Component */}
-      <Profile user_name={subscriberInfo.user_name} photo={subscriberInfo.photo} />
+    <>
+     {/* Profile Component */}
+     <Profile user_name={subscriberInfo.user_name} photo={subscriberInfo.photo} />
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-6 space-y-6">
+        
 
-      {/* Subscriber Information */}
-      <div className="flex w-full gap-5">
-        <div className="bg-white rounded-lg shadow-lg w-1/2 p-6">
-          <h3 className="text-xl font-semibold mb-4 text-center">Subscriber Information</h3>
-          <div className="space-y-4">
-            {Object.entries(subscriberInfo).map(([key, value]) => (
-              <div key={key} className="flex items-center space-x-2">
-                <p className="font-medium capitalize">{key.replace(/_/g, " ")}:</p>
-                <p>{value}</p>
-              </div>
-            ))}
+        {/* Subscriber Information */}
+        <div className="flex w-full gap-5">
+          <div className="bg-white rounded-lg shadow-lg w-1/2 p-6">
+            <h3 className="text-xl font-semibold mb-4 text-center">Subscriber Information</h3>
+            <div className="space-y-4">
+              {Object.entries(subscriberInfo).map(([key, value]) => (
+                <div key={key} className="flex items-center space-x-2">
+                  <p className="font-medium capitalize">{key.replace(/_/g, " ")}:</p>
+                  <p>{value}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Package Information */}
+          <div className="bg-white rounded-lg shadow-lg w-1/2 p-6">
+            <h3 className="text-xl font-semibold mb-4 text-center">Package Information</h3>
+            <div className="space-y-4">
+              {Object.entries(packageInfo).map(([key, value]) => (
+                <div key={key} className="flex items-center space-x-2">
+                  <p className="font-medium capitalize">{key.replace(/_/g, " ")}:</p>
+                  <p>{value}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
-        {/* Package Information */}
-        <div className="bg-white rounded-lg shadow-lg w-1/2 p-6">
-          <h3 className="text-xl font-semibold mb-4 text-center">Package Information</h3>
-          <div className="space-y-4">
-            {Object.entries(packageInfo).map(([key, value]) => (
-              <div key={key} className="flex items-center space-x-2">
-                <p className="font-medium capitalize">{key.replace(/_/g, " ")}:</p>
-                <p>{value}</p>
+        {/* Payment Transaction Details */}
+        <h2 className="text-xl font-bold mb-4 text-center">Payment Transaction Details</h2>
+        <div className="flex w-full gap-6">
+          {[paymentDetails].map((section, cardIndex) => (
+            <React.Fragment key={cardIndex}>
+              {/* First Card */}
+              <div className="flex-1 bg-white rounded-lg shadow-lg p-6">
+                <div className="space-y-4">
+                  {Object.entries(section)
+                    .slice(0, 9)
+                    .map(([key, value], index) => (
+                      <div key={index} className="flex items-center space-x-2">
+                        <p className="font-medium capitalize">{key.replace(/_/g, " ")}:</p>
+                        <p>{value || "N/A"}</p>
+                      </div>
+                    ))}
+                </div>
               </div>
-            ))}
-          </div>
+
+              {/* Second Card */}
+              <div className="flex-1 bg-white rounded-lg shadow-lg p-6">
+                <div className="space-y-4">
+                  {Object.entries(section)
+                    .slice(9, 18)
+                    .map(([key, value], index) => (
+                      <div key={index} className="flex items-center space-x-2">
+                        <p className="font-medium capitalize">{key.replace(/_/g, " ")}:</p>
+                        <p>{value || "N/A"}</p>
+                      </div>
+                    ))}
+                </div>
+              </div>
+            </React.Fragment>
+          ))}
         </div>
       </div>
-
-      {/* Payment Transaction Details */}
-      <h2 className="text-xl font-bold mb-4 text-center">Payment Transaction Details</h2>
-      <div className="flex w-full gap-6">
-        {[paymentDetails].map((section, cardIndex) => (
-          <React.Fragment key={cardIndex}>
-            {/* First Card */}
-            <div className="flex-1 bg-white rounded-lg shadow-lg p-6">
-              <div className="space-y-4">
-                {Object.entries(section)
-                  .slice(0, 9)
-                  .map(([key, value], index) => (
-                    <div key={index} className="flex items-center space-x-2">
-                      <p className="font-medium capitalize">{key.replace(/_/g, " ")}:</p>
-                      <p>{value || "N/A"}</p>
-                    </div>
-                  ))}
-              </div>
-            </div>
-
-            {/* Second Card */}
-            <div className="flex-1 bg-white rounded-lg shadow-lg p-6">
-              <div className="space-y-4">
-                {Object.entries(section)
-                  .slice(9, 18)
-                  .map(([key, value], index) => (
-                    <div key={index} className="flex items-center space-x-2">
-                      <p className="font-medium capitalize">{key.replace(/_/g, " ")}:</p>
-                      <p>{value || "N/A"}</p>
-                    </div>
-                  ))}
-              </div>
-            </div>
-          </React.Fragment>
-        ))}
-      </div>
-    </div>
+    </>
+ 
   );
 };
 

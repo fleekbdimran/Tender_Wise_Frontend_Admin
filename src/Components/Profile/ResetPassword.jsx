@@ -24,7 +24,7 @@ function ResetPassword() {
       if (response.data && response.data.phone) {
         setPhoneNumber(response.data.phone); // Set phone number if available
       } else {
-        
+        console.log()
       }
     } catch (error) {
       console.error('Error fetching profile:', error);

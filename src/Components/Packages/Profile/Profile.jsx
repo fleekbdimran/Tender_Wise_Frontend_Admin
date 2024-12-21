@@ -3,11 +3,11 @@ import { PHOTO_BASE_URL } from "../../../Api/config"; // Ensure correct import p
 
 const Profile = ({ user_name, photo }) => {
   // Log values inside the component for debugging
-  console.log("UserName:", user_name);
-  console.log("Photo:", photo);
+  // console.log("UserName:", user_name);
+  // console.log("Photo:", photo);
 
   return (
-    <div className="flex items-center space-x-4">
+    <div className="flex items-center space-x-4 justify-start">
       {/* Image section */}
       <img
         src={
