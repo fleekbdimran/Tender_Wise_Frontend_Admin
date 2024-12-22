@@ -610,6 +610,63 @@ const CreateTenderForm = ({ onClose }) => {
 
 
 
+  // -------------Source------------------
+  const [isPopupVisible, setIsPopupVisible] = useState(false);
+  const [sourceName, setSourceName] = useState("");
+  
+  const togglePopup = () => {
+    setIsPopupVisible(!isPopupVisible);
+    console.log("Popup visibility toggled:", isPopupVisible);
+  };
+  
+  const handleSubmitSource = async (e) => {
+    e.preventDefault();
+    console.log("Form submitted with sourceName:", sourceName);
+  
+    const payload = {
+      name: sourceName,
+      type: "Website",
+      details: `Collected from Website on ${new Date().toLocaleDateString()}`,
+    };
+  
+    console.log("Payload to be sent:", payload);
+  
+    try {
+      const response = await ApiClient.post("/admin/tender-config/source", payload);
+      console.log("API Response:", response);
+  
+      if (response.status === 200 || response.status === 201) {
+        await Swal.fire({
+          title: "Success!",
+          text: "Source created successfully!",
+          icon: "success",
+          confirmButtonText: "OK",
+        });
+        setSourceName(""); // Reset the input field
+        togglePopup(); // Close the modal
+      } else {
+        Swal.fire({
+          title: "Error!",
+          text: response.data.message || "Something went wrong!",
+          icon: "error",
+          confirmButtonText: "Try Again",
+        });
+      }
+    } catch (error) {
+      console.error("Error during API call:", error);
+  
+      Swal.fire({
+        title: "Error!",
+        text: error.response?.data?.message || "Something went wrong!",
+        icon: "error",
+        confirmButtonText: "Try Again",
+      });
+    }
+  };
+  
+  // -------------Source------------------
+
+
   return (
     <div className="block mx-auto md:p-2 p-1 w-full">
       <div className="flex justify-between items-center mb-6">
@@ -738,9 +795,65 @@ const CreateTenderForm = ({ onClose }) => {
             </div>
             {/* Source Dropdown */}
             <div>
-              <label className="block text-gray-700 font-medium mb-1">
-                Source Name <span className="text-red-500">*</span>
-              </label>
+
+            
+
+              <div>
+                {/* + Icon and Source Label */}
+                <div className="flex items-center space-x-2">
+                  <label className="block text-black font-medium">
+                    Source Name <span className="text-red-500">*</span>
+                  </label>
+                  <button
+                    onClick={togglePopup}
+                    className="bg-gray-200 text-black p-1 rounded-full shadow-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                  >
+                    +
+                  </button>
+                </div>
+
+                {/* Popup Modal */}
+                {isPopupVisible && (
+                  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                    <div className="bg-white rounded-lg shadow-lg p-6 w-[90%] max-w-sm relative">
+                      {/* Cross Icon */}
+                      <button
+                        onClick={togglePopup}
+                        className="absolute top-3 right-3 text-gray-600 hover:text-gray-900 focus:outline-none"
+                      >
+                        ✕
+                      </button>
+
+                      {/* Source Name Input */}
+                      <div>
+                        <label className="block text-gray-700 font-medium mb-2">
+                          <span className="text-red-500">*</span> Source Name:
+                        </label>
+                        <input
+                          type="text"
+                          value={sourceName}
+                          onChange={(e) => setSourceName(e.target.value)}
+                          placeholder="Enter source name"
+                          className="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                          required
+                        />
+                      </div>
+
+                      {/* Submit Button */}
+                      <button
+                        onClick={handleSubmitSource}
+                        className="w-full mt-4 bg-teal-500 text-white py-2 rounded-lg flex items-center justify-center hover:bg-teal-600"
+                      >
+                        <span className="mr-2">➤</span> Submit
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+
+
+
               <select
                 name="source_id"
                 value={formDataSubmit.source_id}

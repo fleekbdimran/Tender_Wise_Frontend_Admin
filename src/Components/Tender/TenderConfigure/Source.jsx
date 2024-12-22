@@ -43,15 +43,7 @@ const DesignationTypeModal = ({
     { value: 'Website', label: 'Website' },
     { value: 'Manual', label: 'Manual' },
   ];
-    // const sourceTypeOptions = [
-    //   { value: 'e-GP', label: 'e-GP' },
-    //   { value: 'newspaper', label: 'Newspaper' },
-    //   { value: 'online', label: 'Online' },
-    //   { value: 'advertisement', label: 'Advertisement' },
-    //   { value: 'website', label: 'Website' },
-    //   { value: 'manual', label: 'Manual' },
-    // ];
-
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
