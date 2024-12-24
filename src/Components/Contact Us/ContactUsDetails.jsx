@@ -58,7 +58,7 @@ const MessageBox = () => {
             <strong>Phone:</strong> <span className="font-normal">{message.phone}</span>
           </p>
           <p className="text-gray-800 font-semibold">
-            <strong>Subject:</strong> <span className="font-normal">{message.subject}</span>
+            <strong>Message:</strong> <span className="font-normal">{message.subject}</span>
           </p>
           {message.message && (
             <p className="text-gray-800 font-semibold">

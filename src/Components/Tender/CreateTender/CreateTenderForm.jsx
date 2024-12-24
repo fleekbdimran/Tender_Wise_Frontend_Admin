@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 
 
 
-const CreateTenderForm = ({ onClose }) => {
+const CreateTenderForm = ({ onClose, sourceData }) => {
 
   const navigate = useNavigate();
   const [categories, setCategories] = useState([]);
@@ -610,31 +610,32 @@ const CreateTenderForm = ({ onClose }) => {
 
 
 
-  // -------------Source------------------
+  // -------------Source New Create Api------------------
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const [sourceName, setSourceName] = useState("");
-  
+
+
   const togglePopup = () => {
     setIsPopupVisible(!isPopupVisible);
     console.log("Popup visibility toggled:", isPopupVisible);
   };
-  
+
   const handleSubmitSource = async (e) => {
     e.preventDefault();
     console.log("Form submitted with sourceName:", sourceName);
-  
+
     const payload = {
       name: sourceName,
-      type: "Website",
+      type: "Website,",
       details: `Collected from Website on ${new Date().toLocaleDateString()}`,
     };
-  
+
     console.log("Payload to be sent:", payload);
-  
+
     try {
       const response = await ApiClient.post("/admin/tender-config/source", payload);
       console.log("API Response:", response);
-  
+
       if (response.status === 200 || response.status === 201) {
         await Swal.fire({
           title: "Success!",
@@ -654,7 +655,7 @@ const CreateTenderForm = ({ onClose }) => {
       }
     } catch (error) {
       console.error("Error during API call:", error);
-  
+
       Swal.fire({
         title: "Error!",
         text: error.response?.data?.message || "Something went wrong!",
@@ -663,8 +664,888 @@ const CreateTenderForm = ({ onClose }) => {
       });
     }
   };
-  
-  // -------------Source------------------
+
+
+
+
+
+  // -------------Source New Create Api------------------
+
+
+  // -------------Department New Create Api------------------
+  const [isDepartmentPopupVisible, setIsDepartmentPopupVisible] = useState(false);
+
+  // Toggle popup visibility
+  const toggleDepartmentPopup = () => {
+    setIsDepartmentPopupVisible(!isDepartmentPopupVisible);
+  };
+
+  const [DepartmentName, setDepartmentName] = useState('');
+
+  // Handle form submission
+  const handleSubmitDepartment = async () => {
+    if (!DepartmentName.trim()) {
+      console.error('Department name is required.');
+      return;
+    }
+
+    const payload = { name: DepartmentName };
+
+    try {
+      console.log('Sending payload:', payload);
+      const response = await ApiClient.post('/admin/tender-config/department', payload);
+      console.log('Response:', response.data);
+
+      if (response.status === 200 || response.status === 201) {
+        await Swal.fire({
+          title: "Success!",
+          text: "Department created successfully!",
+          icon: "success",
+          confirmButtonText: "OK",
+        });
+        setDepartmentName(""); // Reset the input field
+        toggleDepartmentPopup(); // Close the modal
+      } else {
+        Swal.fire({
+          title: "Error!",
+          text: response.data.message || "Something went wrong!",
+          icon: "error",
+          confirmButtonText: "Try Again",
+        });
+      }
+    } catch (error) {
+      console.error("Error during API call:", error);
+
+      Swal.fire({
+        title: "Error!",
+        text: error.response?.data?.message || "Something went wrong!",
+        icon: "error",
+        confirmButtonText: "Try Again",
+      });
+    }
+  };
+
+  // -------------Department New Create Api------------------
+
+  // -------------Sub-Department New Create Api------------------
+
+  const [isSubDepartmentPopupVisible, setIsSubDepartmentPopupVisible] = useState(false);
+  const [SubDepartmentName, setSubDepartmentName] = useState('');
+  // const [selectedDepartment, setSelectedDepartment] = useState(27); // Assuming 27 is the department id
+
+  // Toggle popup visibility
+  const toggleSubDepartmentPopup = () => {
+    setIsSubDepartmentPopupVisible(!isSubDepartmentPopupVisible);
+  };
+
+  // Handle form submission
+  const handleSubmitSubDepartment = async () => {
+    if (!SubDepartmentName.trim()) {
+      // console.error('Sub-Department name is required.');
+      return;
+    }
+
+    // Include department_id in the payload
+    const payload = {
+      name: SubDepartmentName,
+      department_id: selectedDepartment // Use the selected department id
+    };
+
+    try {
+      // console.log('Sending payload:', payload);
+
+      // Sending request with the payload using the ApiClient
+      const response = await ApiClient.post('/admin/tender-config/sub-department', payload);
+      // console.log('Response:', response.data);
+
+      if (response.status === 200 || response.status === 201) {
+        await Swal.fire({
+          title: "Success!",
+          text: "Sub-Department created successfully!",
+          icon: "success",
+          confirmButtonText: "OK",
+        });
+        setSubDepartmentName(''); // Reset the input field
+        toggleSubDepartmentPopup(); // Close the modal
+      } else {
+        Swal.fire({
+          title: "Error!",
+          text: response.data.message || "Something went wrong!",
+          icon: "error",
+          confirmButtonText: "Try Again",
+        });
+      }
+    } catch (error) {
+      console.error("Error during API call:", error);
+
+      Swal.fire({
+        title: "Error!",
+        text: error.response?.data?.message || "Something went wrong!",
+        icon: "error",
+        confirmButtonText: "Try Again",
+      });
+    }
+  };
+
+  // Fetch request example (using existing selectedDepartment value)
+  const myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+  myHeaders.append("Authorization", "Bearer <YOUR_BEARER_TOKEN>");
+
+  const raw = JSON.stringify({
+    "name": SubDepartmentName,  // Using the state for SubDepartmentName
+    "department_id": selectedDepartment // Using the selected department ID from state
+  });
+
+  const requestOptions = {
+    method: "POST",
+    headers: myHeaders,
+    body: raw,
+    redirect: "follow"
+  };
+
+  fetch("http://192.168.0.230:9009/api/v1/admin/tender-config/sub-department", requestOptions)
+    .then((response) => response.json())
+    .then((result) => console.log(result))
+    .catch((error) => console.error(error));
+
+
+
+  // -------------Sub-Department New Create Api------------------
+
+
+  //  --------------category New Create Api---------------
+  const [categoryName, setCategoryName] = useState("");
+  const [isCategoryPopupVisible, setIsCategoryPopupVisible] = useState(false);
+
+  // Toggle the popup visibility
+  const toggleCategoryPopup = () => {
+    setIsCategoryPopupVisible(!isCategoryPopupVisible);
+  };
+
+  // Handle category form submission
+  const handleSubmitCategory = async () => {
+    if (!categoryName.trim()) {
+      console.error("Category name is required.");
+      return;
+    }
+
+    const name = categoryName; // Prepare payload
+
+    try {
+      const response = await ApiClient.post(
+        "/admin/tender-config/category",
+        { name },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer YOUR_TOKEN_HERE`, // Replace with your actual token
+          },
+        }
+      );
+
+      if (response.status === 200 || response.status === 201) {
+        await Swal.fire({
+          title: "Success!",
+          text: "Category created successfully!",
+          icon: "success",
+          confirmButtonText: "OK",
+        });
+        setCategoryName(""); // Reset the input field
+        toggleCategoryPopup(); // Close the popup
+        // Optionally, refresh the category list or perform other actions here
+      } else {
+        Swal.fire({
+          title: "Error!",
+          text: response.data.message || "Something went wrong!",
+          icon: "error",
+          confirmButtonText: "Try Again",
+        });
+      }
+    } catch (error) {
+      console.error("Error adding category:", error);
+      Swal.fire({
+        title: "Error!",
+        text: error.response?.data?.message || "Something went wrong!",
+        icon: "error",
+        confirmButtonText: "Try Again",
+      });
+    }
+  };
+
+  //  --------------category New Create Api-----------------
+
+  //  --------------Sector New Create Api-----------------
+  const [isSectorPopupVisible, setIsSectorPopupVisible] = useState(false);
+  const [sectorName, setSectorName] = useState("");
+  // const [selectedCategory, setSelectedCategory] = useState(null); // Object with `id` and `name`
+
+  // Toggle Popup Visibility
+  const toggleSectorPopup = () => {
+    setIsSectorPopupVisible(!isSectorPopupVisible);
+  };
+
+  // Handle Sector Submission
+  const handleSubmitSector = async () => {
+    // console.log("Sector Name:", sectorName);
+    // console.log("Selected Category:", selectedCategory);
+
+    if (!sectorName.trim()) {
+      Swal.fire({
+        title: "Error",
+        text: "Sector name is required!",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
+      // console.error("Error: Sector name is required!");
+      return;
+    }
+
+    if (!selectedCategory || typeof selectedCategory.id !== "number") {
+      Swal.fire({
+        title: "Error",
+        text: "Please select a valid category!",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
+      // console.error("Error: Invalid category selection!");
+      return;
+    }
+
+    const payload = {
+      name: sectorName,
+      category_id: selectedCategory.id, // Use `id` from the object
+    };
+
+    // console.log("Payload to be sent:", payload);
+
+    try {
+      const response = await ApiClient.post("/admin/tender-config/sector", payload);
+      // console.log("API Response:", response);
+
+      if (response.status === 200 || response.status === 201) {
+        await Swal.fire({
+          title: "Success",
+          text: "Sector created successfully!",
+          icon: "success",
+          confirmButtonText: "OK",
+        });
+        setSectorName("");
+        toggleSectorPopup();
+      } else {
+        Swal.fire({
+          title: "Error",
+          text: response.data.message || "Something went wrong!",
+          icon: "error",
+          confirmButtonText: "Try Again",
+        });
+        // console.error("Error response from server:", response.data);
+      }
+    } catch (error) {
+      // console.error("Error while creating sector:", error);
+
+      const errorMessage =
+        error.response?.data?.message || "Something went wrong!";
+      Swal.fire({
+        title: "Error",
+        text: errorMessage,
+        icon: "error",
+        confirmButtonText: "Try Again",
+      });
+    }
+  };
+  //  --------------Sector New Create Api-----------------
+
+
+  //  --------------Sub-Sector New Create Api-----------------
+
+  const [isSubSectorPopupVisible, setIsSubSectorPopupVisible] = useState(false);
+  const [subSectorName, setSubSectorName] = useState("");
+  // const [selectedSector, setSelectedSector] = useState(null);
+
+
+
+  // Toggle visibility of the sub-sector popup
+  const toggleSubSectorPopup = () => {
+    setIsSubSectorPopupVisible(!isSubSectorPopupVisible);
+  };
+
+  // Handle form submission for Sub-Sector
+  const handleSubmitSubSector = async () => {
+    if (!subSectorName.trim()) {
+      Swal.fire({
+        title: "Error",
+        text: "Sub-sector name is required!",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
+      return;
+    }
+
+    if (!selectedSector || !selectedSector.id) {
+      Swal.fire({
+        title: "Error",
+        text: "Please select a valid sector!",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
+      return;
+    }
+
+    const payload = {
+      name: subSectorName,
+      sector_id: selectedSector.id, // Use `id` from the selected sector object
+    };
+
+    try {
+      // Making the API call using axios (ApiClient)
+      const response = await ApiClient.post("/admin/tender-config/sub-sector", payload);
+
+      if (response.status === 200 || response.status === 201) {
+        Swal.fire({
+          title: "Success",
+          text: "Sub-sector created successfully!",
+          icon: "success",
+          confirmButtonText: "OK",
+        });
+        setSubSectorName(""); // Clear input field
+        toggleSubSectorPopup(); // Close the popup
+      } else {
+        Swal.fire({
+          title: "Error",
+          text: response.data.message || "Something went wrong!",
+          icon: "error",
+          confirmButtonText: "Try Again",
+        });
+      }
+    } catch (error) {
+      Swal.fire({
+        title: "Error",
+        text: error.response?.data?.message || "Something went wrong!",
+        icon: "error",
+        confirmButtonText: "Try Again",
+      });
+    }
+  };
+  //  --------------Sub-Sector New Create Api-----------------
+
+  //  --------------Division New Create Api-----------------
+  const [isDivisionPopupVisible, setIsDivisionPopupVisible] = useState(false);
+  const [divisionName, setDivisionName] = useState("");
+
+
+
+  // Toggle visibility of the division popup
+  const toggleDivisionPopup = () => {
+    setIsDivisionPopupVisible(!isDivisionPopupVisible);
+  };
+
+  // Handle form submission for Division
+  const handleSubmitDivision = async () => {
+    if (!divisionName.trim()) {
+      Swal.fire({
+        title: "Error",
+        text: "Division name is required!",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
+      return;
+    }
+
+    const payload = {
+      name: divisionName,
+    };
+
+    try {
+      // Use ApiClient to send the POST request
+      const response = await ApiClient.post('/admin/tender-config/division', payload);
+
+      // Check if the response is successful
+      Swal.fire({
+        title: "Success",
+        text: "Division created successfully!",
+        icon: "success",
+        confirmButtonText: "OK",
+      });
+
+      setDivisionName(""); // Clear input field
+      toggleDivisionPopup(); // Close the popup
+
+    } catch (error) {
+      Swal.fire({
+        title: "Error",
+        text: "Something went wrong!",
+        icon: "error",
+        confirmButtonText: "Try Again",
+      });
+    }
+  };
+  //  --------------Division New Create Api-----------------
+
+  //  --------------District New Create Api-----------------
+  // const [isDistrictPopupVisible, setIsDistrictPopupVisible] = useState(false);
+  // const [districtName, setDistrictName] = useState("");
+  // // const [selectedDivision, setSelectedDivision] = useState(null); // Store selected division
+
+
+
+
+  // // Toggle visibility of the district popup
+  // const toggleDistrictPopup = () => {
+  //   setIsDistrictPopupVisible(!isDistrictPopupVisible);
+  // };
+
+  // // Handle form submission for District
+  // const handleSubmitDistrict = async () => {
+  //   // Log the districtName and selectedDivision for debugging
+  //   console.log("District Name:", districtName);
+  //   console.log("Selected Division:", selectedDivision);
+
+  //   // Check if district name is empty
+  //   if (!districtName.trim()) {
+  //     Swal.fire({
+  //       title: "Error",
+  //       text: "District name is required!",
+  //       icon: "error",
+  //       confirmButtonText: "OK",
+  //     });
+  //     return;
+  //   }
+
+  //   // Check if selected division is valid
+  //   if (!selectedDivision || !selectedDivision.id) {
+  //     Swal.fire({
+  //       title: "Error",
+  //       text: "Please select a valid division!",
+  //       icon: "error",
+  //       confirmButtonText: "OK",
+  //     });
+  //     return;
+  //   }
+
+  //   const payload = {
+  //     name: districtName,
+  //     division_id: selectedDivision.id, // Use `id` from the selected division object
+  //   };
+
+  //   try {
+  //     console.log("Payload:", payload); // Log the payload to verify the data being sent
+
+  //     const response = await ApiClient.post('/admin/tender-config/district', payload);
+  //     console.log("Response:", response); // Log the response to inspect it
+
+  //     if (response.status === 200 || response.status === 201) {
+  //       Swal.fire({
+  //         title: "Success",
+  //         text: "District created successfully!",
+  //         icon: "success",
+  //         confirmButtonText: "OK",
+  //       });
+  //       setDistrictName(""); // Clear input field
+  //       setSelectedDivision(null); // Clear division selection
+  //       toggleDistrictPopup(); // Close the popup
+  //     } else {
+  //       Swal.fire({
+  //         title: "Error",
+  //         text: response.data.message || "Something went wrong!",
+  //         icon: "error",
+  //         confirmButtonText: "Try Again",
+  //       });
+  //     }
+  //   } catch (error) {
+  //     console.error("Error occurred:", error); // Log any errors
+
+  //     if (error.response && error.response.status === 401) {
+  //       Swal.fire({
+  //         title: "Unauthorized",
+  //         text: "Your session has expired. Please log in again.",
+  //         icon: "error",
+  //         confirmButtonText: "OK",
+  //       });
+  //       // Redirect to login page (if needed)
+  //       // window.location.href = '/login';
+  //     } else {
+  //       Swal.fire({
+  //         title: "Error",
+  //         text: error.response?.data?.message || "Something went wrong!",
+  //         icon: "error",
+  //         confirmButtonText: "Try Again",
+  //       });
+  //     }
+  //   }
+  // };
+
+  // const [isDistrictPopupVisible, setIsDistrictPopupVisible] = useState(false);
+  // const [districtName, setDistrictName] = useState("");
+  // // const [selectedDivision, setSelectedDivision] = useState(null);
+  // // const [divisions] = useState([
+  // //   { id: 1, name: "Division 1" },
+  // //   { id: 2, name: "Division 2" },
+  // //   { id: 3, name: "Division 3" },
+  // // ]);
+
+  // const toggleDistrictPopup = () => {
+  //   setIsDistrictPopupVisible(!isDistrictPopupVisible);
+  // };
+
+  // // const handleDivisionChange = (event) => {
+  // //   const selectedId = parseInt(event.target.value);
+  // //   const division = divisions.find((div) => div.id === selectedId);
+  // //   setSelectedDivision(division);
+  // // };
+
+  // const handleSubmitDistrict = async () => {
+  //   if (!districtName.trim()) {
+  //     Swal.fire({
+  //       title: "Error",
+  //       text: "District name is required!",
+  //       icon: "error",
+  //       confirmButtonText: "OK",
+  //     });
+  //     return;
+  //   }
+
+  //   if (!selectedDivision || !selectedDivision.id) {
+  //     Swal.fire({
+  //       title: "Error",
+  //       text: "Please select a valid division!",
+  //       icon: "error",
+  //       confirmButtonText: "OK",
+  //     });
+  //     return;
+  //   }
+
+  //   const payload = {
+  //     name: districtName,
+  //     division_id: selectedDivision.id,
+  //   };
+
+  //   try {
+  //     const token = localStorage.getItem("authToken");
+  //     const response = await ApiClient.post("/admin/tender-config/district", payload, {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //         "Content-Type": "application/json",
+  //       },
+  //     });
+
+  //     if (response.status === 200 || response.status === 201) {
+  //       await Swal.fire({
+  //         title: "Success!",
+  //         text: "District created successfully!",
+  //         icon: "success",
+  //         confirmButtonText: "OK",
+  //       });
+  //       setDistrictName("");
+  //       setSelectedDivision(null);
+  //       toggleDistrictPopup();
+  //     } else {
+  //       Swal.fire({
+  //         title: "Error!",
+  //         text: response.data.message || "Something went wrong!",
+  //         icon: "error",
+  //         confirmButtonText: "Try Again",
+  //       });
+  //     }
+  //   } catch (error) {
+  //     console.error("Error occurred:", error);
+  //     Swal.fire({
+  //       title: "Error!",
+  //       text: error.response?.data?.message || "Something went wrong!",
+  //       icon: "error",
+  //       confirmButtonText: "Try Again",
+  //     });
+  //   }
+  // };
+
+  const [isDistrictPopupVisible, setIsDistrictPopupVisible] = useState(false);
+  const [districtName, setDistrictName] = useState("");
+  // const [selectedDivision, setSelectedDivision] = useState(null);
+
+
+  const handleDivisionChange = (event) => {
+    const selectedId = parseInt(event.target.value);
+    const division = divisions.find((div) => div.id === selectedId);
+    setSelectedDivision(division);
+  };
+
+  // Toggle visibility of the district popup
+  const toggleDistrictPopup = () => {
+    setIsDistrictPopupVisible(!isDistrictPopupVisible);
+  };
+
+  // Handle form submission for District
+  const handleSubmitDistrict = async () => {
+    if (!districtName.trim()) {
+      Swal.fire({
+        title: "Error",
+        text: "District name is required!",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
+      return;
+    }
+
+    if (!selectedDivision || !selectedDivision.id) {
+      Swal.fire({
+        title: "Error",
+        text: "Please select a valid division!",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
+      return;
+    }
+
+    const payload = {
+      name: districtName,
+      division_id: selectedDivision.id,
+    };
+
+    try {
+      const token = localStorage.getItem("authToken");
+      const response = await ApiClient.post(
+        "/admin/tender-config/district",
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.status === 200 || response.status === 201) {
+        await Swal.fire({
+          title: "Success!",
+          text: "District created successfully!",
+          icon: "success",
+          confirmButtonText: "OK",
+        });
+        setDistrictName("");
+        setSelectedDivision(null); // Clear selected division
+        toggleDistrictPopup();
+      } else {
+        Swal.fire({
+          title: "Error!",
+          text: response.data.message || "Something went wrong!",
+          icon: "error",
+          confirmButtonText: "Try Again",
+        });
+      }
+    } catch (error) {
+      console.error("Error occurred:", error);
+      Swal.fire({
+        title: "Error!",
+        text: error.response?.data?.message || "Something went wrong!",
+        icon: "error",
+        confirmButtonText: "Try Again",
+      });
+    }
+  };
+
+
+  //  --------------District New Create Api-----------------
+
+  {/* ----------------Upazilla New Create Api----------------- */ }
+
+  // const [isUpazilaPopupVisible, setIsUpazilaPopupVisible] = useState(false);
+  // const [upazilaName, setUpazilaName] = useState("");
+  // // const [selectedDistrict, setSelectedDistrict] = useState(null);
+
+  // // Toggle visibility of the upazila popup
+  // const toggleUpazilaPopup = () => {
+  //   setIsUpazilaPopupVisible(!isUpazilaPopupVisible);
+  //   console.log("Upazila popup visibility toggled:", isUpazilaPopupVisible);
+  // };
+
+  // // Handle form submission for Upazila
+  // const handleSubmitUpazila = async () => {
+  //   console.log("Submitting Upazila with name:", upazilaName);
+    
+  //   // Check if Upazila name is entered
+  //   if (!upazilaName.trim()) {
+  //     Swal.fire({
+  //       title: "Error",
+  //       text: "Upazila name is required!",
+  //       icon: "error",
+  //       confirmButtonText: "OK",
+  //     });
+  //     return;
+  //   }
+
+  //   // Check if district is selected
+  //   if (!selectedDistrict || !selectedDistrict.id) {
+  //     Swal.fire({
+  //       title: "Error",
+  //       text: "Please select a valid district!",
+  //       icon: "error",
+  //       confirmButtonText: "OK",
+  //     });
+  //     return;
+  //   }
+
+  //   const payload = {
+  //     name: upazilaName,
+  //     district_id: selectedDistrict.id, // Use selected district ID
+  //   };
+    
+
+  //   console.log("Payload for Upazila:", payload); // Log the payload to check before sending the request
+
+  //   try {
+  //     const response = await ApiClient.post("/admin/tender-config/upazila", payload, {
+  //       headers: {
+  //         Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiSXFiYWwgSG9zc2FpbiIsImVtYWlsIjoiaXFiYWxAZ21haWwuY29tIiwicGhvbmUiOiI4ODAxOTk2MTA1MDIwIiwib3RwIjozMzQyLCJzdGF0dXMiOjEsIm90cF9jcmVhdGVkX2F0IjoiMjAyNC0xMi0xNCAxMDoxMDoxMiIsInVwZGF0ZWRfYnkiOjYsImlkIjo2LCJhZG1pbl90eXBlIjoic3VwZXItYWRtaW4iLCJpYXQiOjE3MzQ5MjUzNTYsImV4cCI6MTczNTg0Njk1Nn0.NtnOrwiC74FtvANLus4J5tewRuHL27_MpUkhgfi9bDM",
+
+  //       },
+  //     });
+    
+  //     console.log("API response:", response);
+    
+  //     if (response.status === 200 || response.status === 201) {
+  //       Swal.fire({
+  //         title: "Success",
+  //         text: "Upazila created successfully!",
+  //         icon: "success",
+  //         confirmButtonText: "OK",
+  //       });
+  //       setUpazilaName(""); // Clear input field
+  //       toggleUpazilaPopup(); // Close the popup
+  //     } else {
+  //       Swal.fire({
+  //         title: "Error",
+  //         text: response.data?.message || "Something went wrong!",
+  //         icon: "error",
+  //         confirmButtonText: "Try Again",
+  //       });
+  //     }
+  //   } catch (error) {
+  //     console.error("API call failed:", error); // Log the error for debugging
+  //     if (error.response) {
+  //       // Handle API error response
+  //       Swal.fire({
+  //         title: "Error",
+  //         text: error.response.data?.message || "API request failed!",
+  //         icon: "error",
+  //         confirmButtonText: "Try Again",
+  //       });
+  //     } else if (error.request) {
+  //       // The request was made but no response was received
+  //       Swal.fire({
+  //         title: "Error",
+  //         text: "No response from the server. Please try again later.",
+  //         icon: "error",
+  //         confirmButtonText: "Try Again",
+  //       });
+  //     } else {
+  //       // Something happened while setting up the request
+  //       Swal.fire({
+  //         title: "Error",
+  //         text: error.message || "An unknown error occurred.",
+  //         icon: "error",
+  //         confirmButtonText: "Try Again",
+  //       });
+  //     }
+  //   }
+    
+  // };
+
+
+  const [isUpazilaPopupVisible, setIsUpazilaPopupVisible] = useState(false);
+  const [upazilaName, setUpazilaName] = useState("");
+  // const [selectedDistrict, setSelectedDistrict] = useState(null);
+  // const [districts, setDistricts] = useState([]);
+
+  useEffect(() => {
+    const fetchDistricts = async () => {
+      try {
+        const response = await ApiClient.get('/admin/tender-config/district');
+        if (response.data.success) {
+          setDistricts(response.data.data);
+        }
+      } catch (error) {
+        console.error('Failed to fetch districts:', error);
+      }
+    };
+
+    fetchDistricts();
+  }, []);
+
+  const toggleUpazilaPopup = () => {
+    setIsUpazilaPopupVisible(!isUpazilaPopupVisible);
+  };
+
+  const handleSubmitUpazila = async () => {
+    console.log("Submitting Upazila with name:", upazilaName);
+
+    if (!upazilaName.trim()) {
+      Swal.fire({
+        title: "Error",
+        text: "Upazila name is required!",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
+      return;
+    }
+
+    if (!selectedDistrict || !selectedDistrict.id) {
+      Swal.fire({
+        title: "Error",
+        text: "Please select a valid district!",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
+      return;
+    }
+
+    const payload = {
+      name: upazilaName,
+      district_id: selectedDistrict.id,
+    };
+
+    console.log("Payload for Upazila:", payload);
+
+    try {
+      const response = await ApiClient.post("/admin/tender-config/upazila", payload, {
+        headers: {
+          Authorization: "Bearer your-token-here",
+        },
+      });
+
+      console.log("API response:", response);
+
+      if (response.status === 200 || response.status === 201) {
+        Swal.fire({
+          title: "Success",
+          text: "Upazila created successfully!",
+          icon: "success",
+          confirmButtonText: "OK",
+        });
+        setUpazilaName("");
+        toggleUpazilaPopup();
+      } else {
+        Swal.fire({
+          title: "Error",
+          text: response.data?.message || "Something went wrong!",
+          icon: "error",
+          confirmButtonText: "Try Again",
+        });
+      }
+    } catch (error) {
+      console.error("API call failed:", error);
+      Swal.fire({
+        title: "Error",
+        text: error.response?.data?.message || "Something went wrong!",
+        icon: "error",
+        confirmButtonText: "Try Again",
+      });
+    }
+  };
+ 
+
+ 
+
+  {/* ----------------Upazilla New Create Api----------------- */ }
 
 
   return (
@@ -795,11 +1676,8 @@ const CreateTenderForm = ({ onClose }) => {
             </div>
             {/* Source Dropdown */}
             <div>
-
-            
-
               <div>
-                {/* + Icon and Source Label */}
+
                 <div className="flex items-center space-x-2">
                   <label className="block text-black font-medium">
                     Source Name <span className="text-red-500">*</span>
@@ -812,11 +1690,11 @@ const CreateTenderForm = ({ onClose }) => {
                   </button>
                 </div>
 
-                {/* Popup Modal */}
+
                 {isPopupVisible && (
                   <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
                     <div className="bg-white rounded-lg shadow-lg p-6 w-[90%] max-w-sm relative">
-                      {/* Cross Icon */}
+
                       <button
                         onClick={togglePopup}
                         className="absolute top-3 right-3 text-gray-600 hover:text-gray-900 focus:outline-none"
@@ -824,7 +1702,7 @@ const CreateTenderForm = ({ onClose }) => {
                         ✕
                       </button>
 
-                      {/* Source Name Input */}
+
                       <div>
                         <label className="block text-gray-700 font-medium mb-2">
                           <span className="text-red-500">*</span> Source Name:
@@ -839,7 +1717,7 @@ const CreateTenderForm = ({ onClose }) => {
                         />
                       </div>
 
-                      {/* Submit Button */}
+
                       <button
                         onClick={handleSubmitSource}
                         className="w-full mt-4 bg-teal-500 text-white py-2 rounded-lg flex items-center justify-center hover:bg-teal-600"
@@ -850,6 +1728,8 @@ const CreateTenderForm = ({ onClose }) => {
                   </div>
                 )}
               </div>
+
+
 
 
 
@@ -895,7 +1775,58 @@ const CreateTenderForm = ({ onClose }) => {
 
             {/* ----------------New department search by name----------- */}
             <div>
-              <label className="block text-gray-700 font-medium mb-1">Department</label>
+              {/* --------------DepartMent New Create Api----------------- */}
+              <div>
+                <div className="flex items-center space-x-2">
+                  <label className="block text-gray-700 font-medium mb-1">Department</label>
+                  <button
+                    onClick={toggleDepartmentPopup}
+                    className="bg-gray-200 text-black p-1 rounded-full shadow-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                  >
+                    +
+                  </button>
+                </div>
+
+                {isDepartmentPopupVisible && (
+                  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                    <div className="bg-white rounded-lg shadow-lg p-6 w-[90%] max-w-sm relative">
+                      {/* Close Button */}
+                      <button
+                        onClick={toggleDepartmentPopup}
+                        className="absolute top-3 right-3 text-gray-600 hover:text-gray-900 focus:outline-none"
+                      >
+                        ✕
+                      </button>
+
+                      {/* Department Name Input */}
+                      <div>
+                        <label className="block text-gray-700 font-medium mb-2">
+                          <span className="text-red-500">*</span> Department Name:
+                        </label>
+                        <input
+                          type="text"
+                          value={DepartmentName}
+                          onChange={(e) => setDepartmentName(e.target.value)}
+                          placeholder="Enter Department name"
+                          className="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                          required
+                        />
+                      </div>
+
+                      {/* Submit Button */}
+                      <button
+                        onClick={handleSubmitDepartment}
+                        className="w-full mt-4 bg-teal-500 text-white py-2 rounded-lg flex items-center justify-center hover:bg-teal-600"
+                      >
+                        <span className="mr-2">➤</span> Submit
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* --------------DepartMent New Create Api----------------- */}
+              {/* <label className="block text-gray-700 font-medium mb-1">Department</label> */}
 
               <input
                 type="text"
@@ -953,7 +1884,63 @@ const CreateTenderForm = ({ onClose }) => {
 
 
             <div>
-              <label className="block text-gray-700 font-medium mb-1">Sub-Department</label>
+
+              {/* --------------Sub-DepartMent New Create Api----------------- */}
+              <div>
+                <div className="flex items-center space-x-2">
+                  <label className="block text-gray-700 font-medium mb-1">Sub-Department</label>
+                  <button
+                    onClick={toggleSubDepartmentPopup}
+                    className="bg-gray-200 text-black p-1 rounded-full shadow-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                  >
+                    +
+                  </button>
+                </div>
+
+                {isSubDepartmentPopupVisible && (
+                  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                    <div className="bg-white rounded-lg shadow-lg p-6 w-[90%] max-w-sm relative">
+
+                      <button
+                        onClick={toggleSubDepartmentPopup}
+                        className="absolute top-3 right-3 text-gray-600 hover:text-gray-900 focus:outline-none"
+                      >
+                        ✕
+                      </button>
+
+
+                      <div>
+                        <label className="block text-gray-700 font-medium mb-2">
+                          <span className="text-red-500">*</span> Sub-Department Name:
+                        </label>
+                        <input
+                          type="text"
+                          value={SubDepartmentName}
+                          onChange={(e) => setSubDepartmentName(e.target.value)}
+                          placeholder="Enter Sub-Department name"
+                          className="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                          required
+                        />
+                      </div>
+
+
+                      <button
+                        onClick={handleSubmitSubDepartment}
+                        className="w-full mt-4 bg-teal-500 text-white py-2 rounded-lg flex items-center justify-center hover:bg-teal-600"
+                      >
+                        <span className="mr-2">➤</span> Submit
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+
+
+              {/* --------------Sub-DepartMent New Create Api----------------- */}
+
+
+              {/* <label className="block text-gray-700 font-medium mb-1">Sub-Department</label> */}
 
               <input
                 type="text"
@@ -1021,7 +2008,62 @@ const CreateTenderForm = ({ onClose }) => {
             {/* ------------New Category search by name------------------------- */}
 
             <div>
-              <label className="block text-gray-700 font-medium mb-1">Category</label>
+
+              {/* ----------------Category New Create Api---------- */}
+              <div>
+                {/* Category Section */}
+                <div className="flex items-center space-x-2">
+                  <label className="block text-gray-700 font-medium mb-1">Category</label>
+                  <button
+                    onClick={toggleCategoryPopup}
+                    className="bg-gray-200 text-black p-1 rounded-full shadow-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                  >
+                    +
+                  </button>
+                </div>
+
+                {/* Category Popup */}
+                {isCategoryPopupVisible && (
+                  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                    <div className="bg-white rounded-lg shadow-lg p-6 w-[90%] max-w-sm relative">
+                      {/* Close Button */}
+                      <button
+                        onClick={toggleCategoryPopup}
+                        className="absolute top-3 right-3 text-gray-600 hover:text-gray-900 focus:outline-none"
+                      >
+                        ✕
+                      </button>
+
+                      {/* Category Name Input */}
+                      <div>
+                        <label className="block text-gray-700 font-medium mb-2">
+                          <span className="text-red-500">*</span> Category Name:
+                        </label>
+                        <input
+                          type="text"
+                          value={categoryName}
+                          onChange={(e) => setCategoryName(e.target.value)}
+                          placeholder="Enter Category name"
+                          className="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                          required
+                        />
+                      </div>
+
+                      {/* Submit Button */}
+                      <button
+                        onClick={handleSubmitCategory}
+                        className="w-full mt-4 bg-teal-500 text-white py-2 rounded-lg flex items-center justify-center hover:bg-teal-600"
+                      >
+                        <span className="mr-2">➤</span> Submit
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+              {/* ----------------Category New Create Api---------- */}
+
+
+              {/* <label className="block text-gray-700 font-medium mb-1">Category</label> */}
 
               <input
                 type="text"
@@ -1089,7 +2131,61 @@ const CreateTenderForm = ({ onClose }) => {
             {/* ------------New Sector search by name------------------------- */}
 
             <div>
-              <label className="block text-gray-700 font-medium mb-1">Sector</label>
+
+              {/* //  --------------Sector New Create Api----------------- */}
+              <div>
+                {/* Sector Section */}
+                <div className="flex items-center space-x-2">
+                  <label className="block text-gray-700 font-medium mb-1">Sector</label>
+                  <button
+                    onClick={toggleSectorPopup}
+                    className="bg-gray-200 text-black p-1 rounded-full shadow-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                  >
+                    +
+                  </button>
+                </div>
+
+                {/* Sector Popup */}
+                {isSectorPopupVisible && (
+                  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                    <div className="bg-white rounded-lg shadow-lg p-6 w-[90%] max-w-sm relative">
+                      <button
+                        onClick={toggleSectorPopup}
+                        className="absolute top-3 right-3 text-gray-600 hover:text-gray-900 focus:outline-none"
+                      >
+                        ✕
+                      </button>
+
+                      <div>
+                        <label className="block text-gray-700 font-medium mb-2">
+                          <span className="text-red-500">*</span> Sector Name:
+                        </label>
+                        <input
+                          type="text"
+                          value={sectorName}
+                          onChange={(e) => setSectorName(e.target.value)}
+                          placeholder="Enter Sector name"
+                          className="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                          required
+                        />
+                      </div>
+
+                      <button
+                        onClick={handleSubmitSector}
+                        className="w-full mt-4 bg-teal-500 text-white py-2 rounded-lg flex items-center justify-center hover:bg-teal-600"
+                      >
+                        <span className="mr-2">➤</span> Submit
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+
+              {/* //  --------------Sector New Create Api----------------- */}
+
+
+              {/* <label className="block text-gray-700 font-medium mb-1">Sector</label> */}
 
               <input
                 type="text"
@@ -1147,7 +2243,60 @@ const CreateTenderForm = ({ onClose }) => {
 
             {/* ------------New Sub-Sector search by name------------------------- */}
             <div>
-              <label className="block text-gray-700 font-medium mb-1">Sub-Sector</label>
+              {/* ----------------Sub-Sector New Create Api----------------- */}
+              <div>
+                {/* Sub-Sector Section */}
+                <div className="flex items-center space-x-2">
+                  <label className="block text-gray-700 font-medium mb-1">Sub-Sector</label>
+                  <button
+                    onClick={toggleSubSectorPopup}
+                    className="bg-gray-200 text-black p-1 rounded-full shadow-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                  >
+                    +
+                  </button>
+                </div>
+
+                {/* Sub-Sector Popup */}
+                {isSubSectorPopupVisible && (
+                  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                    <div className="bg-white rounded-lg shadow-lg p-6 w-[90%] max-w-sm relative">
+                      <button
+                        onClick={toggleSubSectorPopup}
+                        className="absolute top-3 right-3 text-gray-600 hover:text-gray-900 focus:outline-none"
+                      >
+                        ✕
+                      </button>
+
+                      <div>
+                        <label className="block text-gray-700 font-medium mb-2">
+                          <span className="text-red-500">*</span> Sub-Sector Name:
+                        </label>
+                        <input
+                          type="text"
+                          value={subSectorName}
+                          onChange={(e) => setSubSectorName(e.target.value)}
+                          placeholder="Enter Sub-Sector name"
+                          className="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                          required
+                        />
+                      </div>
+
+
+
+                      {/* Submit Button */}
+                      <button
+                        onClick={handleSubmitSubSector}
+                        className="w-full mt-4 bg-teal-500 text-white py-2 rounded-lg flex items-center justify-center hover:bg-teal-600"
+                      >
+                        <span className="mr-2">➤</span> Submit Sub-Sector
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* ----------------Sub-Sector New Create Api----------------- */}
+              {/* <label className="block text-gray-700 font-medium mb-1">Sub-Sector</label> */}
 
               {/* Input field for searching Sub-Sector */}
               <input
@@ -1189,9 +2338,69 @@ const CreateTenderForm = ({ onClose }) => {
 
             {/* Division Dropdown */}
             <div>
-              <label className="block text-gray-700 font-medium mb-1">
+
+              {/* ----------------Division New Create Api----------------- */}
+              <div>
+
+                <div className="flex items-center space-x-2">
+                  <label className="block text-gray-700 font-medium mb-1">Division</label>
+                  <button
+                    onClick={toggleDivisionPopup}
+                    className="bg-gray-200 text-black p-1 rounded-full shadow-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                  >
+                    +
+                  </button>
+                </div>
+
+
+                {isDivisionPopupVisible && (
+                  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                    <div className="bg-white rounded-lg shadow-lg p-6 w-[90%] max-w-sm relative">
+
+                      <button
+                        onClick={toggleDivisionPopup}
+                        className="absolute top-3 right-3 text-gray-600 hover:text-gray-900 focus:outline-none"
+                      >
+                        ✕
+                      </button>
+
+
+                      <div>
+                        <label className="block text-gray-700 font-medium mb-2">
+                          <span className="text-red-500">*</span> Division Name:
+                        </label>
+                        <input
+                          type="text"
+                          value={divisionName}
+                          onChange={(e) => setDivisionName(e.target.value)}
+                          placeholder="Enter Division name"
+                          className="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                          required
+                        />
+                      </div>
+
+
+                      <button
+                        onClick={handleSubmitDivision}
+                        className="w-full mt-4 bg-teal-500 text-white py-2 rounded-lg flex items-center justify-center hover:bg-teal-600"
+                      >
+                        <span className="mr-2">➤</span> Submit Division
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+
+
+
+
+
+
+              {/* ----------------Division New Create Api----------------- */}
+              {/* <label className="block text-gray-700 font-medium mb-1">
                 Division <span className="text-red-500">*</span>
-              </label>
+              </label> */}
               <select
                 value={selectedDivision}
                 onChange={e => setSelectedDivision(e.target.value)}
@@ -1207,15 +2416,134 @@ const CreateTenderForm = ({ onClose }) => {
                   </option>
                 ))}
               </select>
+
+
             </div>
 
 
 
             {/* District Dropdown */}
             <div>
-              <label className="block text-gray-700 font-medium mb-1">
-                District <span className="text-red-500">*</span>
+
+              {/* ----------------Dristict New Create Api----------------- */}
+              {/* <div>
+      <div className="flex items-center space-x-2">
+        <label className="block text-gray-700 font-medium mb-1">District</label>
+        <button
+          onClick={toggleDistrictPopup}
+          className="bg-gray-200 text-black p-1 rounded-full shadow-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
+        >
+          +
+        </button>
+      </div>
+
+      {isDistrictPopupVisible && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white rounded-lg shadow-lg p-6 w-[90%] max-w-sm relative">
+            <button
+              onClick={toggleDistrictPopup}
+              className="absolute top-3 right-3 text-gray-600 hover:text-gray-900 focus:outline-none"
+            >
+              ✕
+            </button>
+
+            <div>
+              <label className="block text-gray-700 font-medium mb-2">
+                <span className="text-red-500">*</span> District Name:
               </label>
+              <input
+                type="text"
+                value={districtName}
+                onChange={(e) => setDistrictName(e.target.value)}
+                placeholder="Enter District name"
+                className="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                required
+              />
+            </div>
+
+           
+
+            <button
+              onClick={handleSubmitDistrict}
+              className="w-full mt-4 bg-teal-500 text-white py-2 rounded-lg flex items-center justify-center hover:bg-teal-600"
+            >
+              <span className="mr-2">➤</span> Submit District
+            </button>
+          </div>
+        </div>
+      )}
+              </div> */}
+
+              <div>
+                <div className="flex items-center space-x-2">
+                  <label className="block text-gray-700 font-medium mb-1">District</label>
+                  <button
+                    onClick={toggleDistrictPopup}
+                    className="bg-gray-200 text-black p-1 rounded-full shadow-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                  >
+                    +
+                  </button>
+                </div>
+
+                {isDistrictPopupVisible && (
+                  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                    <div className="bg-white rounded-lg shadow-lg p-6 w-[90%] max-w-sm relative">
+                      <button
+                        onClick={toggleDistrictPopup}
+                        className="absolute top-3 right-3 text-gray-600 hover:text-gray-900 focus:outline-none"
+                      >
+                        ✕
+                      </button>
+
+                      <div>
+                        <label className="block text-gray-700 font-medium mb-2">
+                          <span className="text-red-500">*</span> District Name:
+                        </label>
+                        <input
+                          type="text"
+                          value={districtName}
+                          onChange={(e) => setDistrictName(e.target.value)}
+                          placeholder="Enter District name"
+                          className="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                          required
+                        />
+                      </div>
+
+                      <div className="mt-4">
+                        <label className="block text-gray-700 font-medium mb-2">
+                          <span className="text-red-500">*</span> Select Division:
+                        </label>
+                        <select
+                          value={selectedDivision?.id || ""}
+                          onChange={handleDivisionChange}
+                          className="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                          required
+                        >
+                          <option value="" disabled>
+                            Select a division
+                          </option>
+                          {divisions.map((division) => (
+                            <option key={division.id} value={division.id}>
+                              {division.name}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+
+                      <button
+                        onClick={handleSubmitDistrict}
+                        className="w-full mt-4 bg-teal-500 text-white py-2 rounded-lg flex items-center justify-center hover:bg-teal-600"
+                      >
+                        Submit District
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+              {/* ----------------Dristict New Create Api----------------- */}
+              {/* <label className="block text-gray-700 font-medium mb-1">
+                District <span className="text-red-500">*</span>
+              </label> */}
               <select
                 value={selectedDistrict}
                 onChange={e => setSelectedDistrict(e.target.value)}
@@ -1237,9 +2565,130 @@ const CreateTenderForm = ({ onClose }) => {
 
             {/* Upazila Dropdown */}
             <div>
-              <label className="block text-gray-700 font-medium mb-1">
-                Upazila <span className="text-red-500">*</span>
+
+              {/* ----------------Upazilla New Create Api----------------- */}
+             
+
+{/* <div>
+      
+      <div className="flex items-center space-x-2">
+        <label className="block text-gray-700 font-medium mb-1">District</label>
+        <button
+          onClick={toggleUpazilaPopup} 
+          className="bg-gray-200 text-black p-1 rounded-full shadow-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
+        >
+          +
+        </button>
+      </div>
+
+      {isUpazilaPopupVisible && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white rounded-lg shadow-lg p-6 w-[90%] max-w-sm relative">
+            <button
+              onClick={toggleUpazilaPopup}
+              className="absolute top-3 right-3 text-gray-600 hover:text-gray-900 focus:outline-none"
+            >
+              ✕
+            </button>
+
+            <div>
+              <label className="block text-gray-700 font-medium mb-2">
+                <span className="text-red-500">*</span> Upazila Name:
               </label>
+              <input
+                type="text"
+                value={upazilaName}
+                onChange={(e) => setUpazilaName(e.target.value)}
+                placeholder="Enter Upazila name"
+                className="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                required
+              />
+            </div>
+
+            <button
+              onClick={handleSubmitUpazila}
+              className="w-full mt-4 bg-teal-500 text-white py-2 rounded-lg flex items-center justify-center hover:bg-teal-600"
+            >
+              <span className="mr-2">➤</span> Submit Upazila
+            </button>
+          </div>
+        </div>
+      )}
+    </div> */}
+
+
+<div>
+      <div className="flex items-center space-x-2">
+        <label className="block text-gray-700 font-medium mb-1">Upazila</label>
+        <button
+          onClick={toggleUpazilaPopup}
+          className="bg-gray-200 text-black p-1 rounded-full shadow-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
+        >
+          +
+        </button>
+      </div>
+
+      {isUpazilaPopupVisible && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white rounded-lg shadow-lg p-6 w-[90%] max-w-sm relative">
+            <button
+              onClick={toggleUpazilaPopup}
+              className="absolute top-3 right-3 text-gray-600 hover:text-gray-900 focus:outline-none"
+            >
+              ✕
+            </button>
+
+            <div>
+              <label className="block text-gray-700 font-medium mb-2">
+                <span className="text-red-500">*</span> Upazila Name:
+              </label>
+              <input
+                type="text"
+                value={upazilaName}
+                onChange={(e) => setUpazilaName(e.target.value)}
+                placeholder="Enter Upazila name"
+                className="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                required
+              />
+            </div>
+
+            {/* District Selection */}
+            <div className=" mt-4">
+              <label className="block text-gray-700 font-medium mb-1">*Select District</label>
+              <select
+                value={selectedDistrict ? selectedDistrict.id : ""}
+                onChange={(e) => {
+                  const district = districts.find(d => d.id === parseInt(e.target.value));
+                  setSelectedDistrict(district);  // Set the selected district
+                }}
+                className="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              >
+                <option value="">Select a district</option>
+                {districts.map((district) => (
+                  <option key={district.id} value={district.id}>
+                    {district.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Submit Button */}
+            <button
+              onClick={handleSubmitUpazila}
+              className="w-full mt-4 bg-teal-500 text-white py-2 rounded-lg flex items-center justify-center hover:bg-teal-600"
+            >
+              <span className="mr-2">➤</span> Submit Upazila
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+
+
+              {/* ----------------Upazilla New Create Api----------------- */}
+              {/* <label className="block text-gray-700 font-medium mb-1">
+                Upazila <span className="text-red-500">*</span>
+              </label> */}
               <select
                 value={formDataSubmit.upazila_id}
                 onChange={handleInputChange}

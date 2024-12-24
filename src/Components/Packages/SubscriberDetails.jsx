@@ -144,6 +144,8 @@ const SubscriberDetails = () => {
 
 export default SubscriberDetails;
 
+
+
 // import React, { useState, useEffect } from "react";
 // import { useParams } from "react-router-dom"; // Import useParams for dynamic route handling
 // import Profile from "./Profile/Profile";
@@ -296,99 +298,99 @@ export default SubscriberDetails;
 
 
 
-// ------------1St Design Not Api-----------
-// const SubscriberDetails = () => {
+// // ------------1St Design Not Api-----------
+// // const SubscriberDetails = () => {
  
-//   const subscriberInfo = {
-//     name: "Iqbal",
-//     phone: "8801777044834",
-//     email: "iqbal@gmail.com",
-//     designation: "Staff",
-//     organizationName: "Fleek",
-//     address: "Majkhane",
-//     city: "Dhaka",
-//   };
+// //   const subscriberInfo = {
+// //     name: "Iqbal",
+// //     phone: "8801777044834",
+// //     email: "iqbal@gmail.com",
+// //     designation: "Staff",
+// //     organizationName: "Fleek",
+// //     address: "Majkhane",
+// //     city: "Dhaka",
+// //   };
 
-//   const packageInfo = {
-//     packageId: "PKG-12345",
-//     packageName: "Premium Plan",
-//     packageDuration: "6 Months",
-//     packageAmount: "$120",
-//     packageStartTime: "2024-01-01",
-//     packageEndTime: "2024-06-30",
-//   };
+// //   const packageInfo = {
+// //     packageId: "PKG-12345",
+// //     packageName: "Premium Plan",
+// //     packageDuration: "6 Months",
+// //     packageAmount: "$120",
+// //     packageStartTime: "2024-01-01",
+// //     packageEndTime: "2024-06-30",
+// //   };
 
-//   const paymentDetails = {
-//     orderId: "ORD-98765",
-//     transactionId: "TXN-123456789",
-//     account: "9876543210",
-//     customerPhoneNumber: "8801777044834",
-//     initiateAt: "2024-01-15 10:30 AM",
-//     paymentStatus: "Successful",
-//     spOrderId: "SP-2024-001",
-//     storeId: "STR-56789",
-//     invoiceNo: "INV-2024-9999",
-//     paymentMethod: "Credit Card",
-//     paymentTimeStatus: "Completed",
-//     Status: "Active",
-//   };
+// //   const paymentDetails = {
+// //     orderId: "ORD-98765",
+// //     transactionId: "TXN-123456789",
+// //     account: "9876543210",
+// //     customerPhoneNumber: "8801777044834",
+// //     initiateAt: "2024-01-15 10:30 AM",
+// //     paymentStatus: "Successful",
+// //     spOrderId: "SP-2024-001",
+// //     storeId: "STR-56789",
+// //     invoiceNo: "INV-2024-9999",
+// //     paymentMethod: "Credit Card",
+// //     paymentTimeStatus: "Completed",
+// //     Status: "Active",
+// //   };
 
-//   return (
-//     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-6 space-y-6">
-//       {/* First Card */}
-//       <div className="bg-white rounded-lg shadow-lg w-full max-w-4xl p-6 flex">
-//         {/* Subscriber Information */}
-//         <div className="w-1/2 pr-4 border-r border-gray-300">
-//           <h2 className="text-xl font-bold mb-4">Subscriber Information</h2>
-//           <div className="space-y-4">
-//             {Object.entries(subscriberInfo).map(([key, value]) => (
-//               <div className="flex items-center space-x-2" key={key}>
-//                 <p className="font-medium capitalize">{key.replace(/([A-Z])/g, " $1")}:</p>
-//                 <p>{value}</p>
-//               </div>
-//             ))}
-//           </div>
-//         </div>
+// //   return (
+// //     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-6 space-y-6">
+// //       {/* First Card */}
+// //       <div className="bg-white rounded-lg shadow-lg w-full max-w-4xl p-6 flex">
+// //         {/* Subscriber Information */}
+// //         <div className="w-1/2 pr-4 border-r border-gray-300">
+// //           <h2 className="text-xl font-bold mb-4">Subscriber Information</h2>
+// //           <div className="space-y-4">
+// //             {Object.entries(subscriberInfo).map(([key, value]) => (
+// //               <div className="flex items-center space-x-2" key={key}>
+// //                 <p className="font-medium capitalize">{key.replace(/([A-Z])/g, " $1")}:</p>
+// //                 <p>{value}</p>
+// //               </div>
+// //             ))}
+// //           </div>
+// //         </div>
 
-//         {/* Package Information */}
-//         <div className="w-1/2 pl-4">
-//           <h2 className="text-xl font-bold mb-4">Package Information</h2>
-//           <div className="space-y-4">
-//             {Object.entries(packageInfo).map(([key, value]) => (
-//               <div className="flex items-center space-x-2" key={key}>
-//                 <p className="font-medium capitalize">{key.replace(/([A-Z])/g, " $1")}:</p>
-//                 <p>{value}</p>
-//               </div>
-//             ))}
-//           </div>
-//         </div>
-//       </div>
+// //         {/* Package Information */}
+// //         <div className="w-1/2 pl-4">
+// //           <h2 className="text-xl font-bold mb-4">Package Information</h2>
+// //           <div className="space-y-4">
+// //             {Object.entries(packageInfo).map(([key, value]) => (
+// //               <div className="flex items-center space-x-2" key={key}>
+// //                 <p className="font-medium capitalize">{key.replace(/([A-Z])/g, " $1")}:</p>
+// //                 <p>{value}</p>
+// //               </div>
+// //             ))}
+// //           </div>
+// //         </div>
+// //       </div>
 
-//       {/* Second Card */}
-//       <div className="bg-white rounded-lg shadow-lg w-full max-w-4xl p-6">
-//         {/* Heading */}
-//         <h2 className="text-xl font-bold mb-4 text-center">Payment Transaction Details</h2>
+// //       {/* Second Card */}
+// //       <div className="bg-white rounded-lg shadow-lg w-full max-w-4xl p-6">
+// //         {/* Heading */}
+// //         <h2 className="text-xl font-bold mb-4 text-center">Payment Transaction Details</h2>
 
-//         {/* Content in rows */}
-//         <div className="flex">
-//           {/* Payment Details */}
-//           <div className="w-full">
-//             <div className="space-y-4">
-//               {Object.entries(paymentDetails).map(([key, value]) => (
-//                 <div className="flex items-center space-x-2" key={key}>
-//                   <p className="font-medium capitalize">{key.replace(/([A-Z])/g, " $1").replace(/-/g, " ")}:</p>
-//                   <p>{value}</p>
-//                 </div>
-//               ))}
-//             </div>
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
+// //         {/* Content in rows */}
+// //         <div className="flex">
+// //           {/* Payment Details */}
+// //           <div className="w-full">
+// //             <div className="space-y-4">
+// //               {Object.entries(paymentDetails).map(([key, value]) => (
+// //                 <div className="flex items-center space-x-2" key={key}>
+// //                   <p className="font-medium capitalize">{key.replace(/([A-Z])/g, " $1").replace(/-/g, " ")}:</p>
+// //                   <p>{value}</p>
+// //                 </div>
+// //               ))}
+// //             </div>
+// //           </div>
+// //         </div>
+// //       </div>
+// //     </div>
+// //   );
+// // };
 
-// export default SubscriberDetails;
-// ------------1St Design Not Api-----------
+// // export default SubscriberDetails;
+// // ------------1St Design Not Api-----------
 
 
