@@ -150,13 +150,13 @@ const CreateUsers = () => {
                     onChange={e => setter(e.target.value)}
                     required
                   />
-                  <button
+                  {/* <button
                     type="button"
                     onClick={() => toggle(!show)}
                     className="absolute inset-y-0 right-3 flex items-center text-gray-600"
                   >
                     {show ? 'Hide' : 'Show'}
-                  </button>
+                  </button> */}
                 </div>
               </div>
             ))}

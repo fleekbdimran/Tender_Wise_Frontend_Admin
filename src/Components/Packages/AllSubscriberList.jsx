@@ -11,6 +11,8 @@ const AllSubscriberList = () => {
   const [fromDate, setFromDate] = useState('');
   const [toDate, setToDate] = useState('');
   const [keyword, setKeyword] = useState('');
+  const [paymentMethod, setPaymentMethod] = useState('');
+  const [paymentStatus, setPaymentStatus] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
@@ -26,6 +28,8 @@ const AllSubscriberList = () => {
     if (fromDate) queryParams.append('from_date', fromDate);
     if (toDate) queryParams.append('to_date', toDate);
     if (keyword) queryParams.append('key', keyword);
+    if (paymentMethod) queryParams.append('payment_method', paymentMethod);
+    if (paymentStatus) queryParams.append('payment_status', paymentStatus);
 
     try {
       setLoading(true);
@@ -42,7 +46,7 @@ const AllSubscriberList = () => {
 
   useEffect(() => {
     fetchSubscribers();
-  }, [fromDate, toDate, keyword]);
+  }, [fromDate, toDate, keyword,paymentMethod, paymentStatus]);
 
   const totalPages = Math.ceil(subscribers.length / itemsPerPage);
   const currentItems = subscribers.slice(
@@ -67,7 +71,7 @@ const AllSubscriberList = () => {
         </button>
       </div>
 
-      <div className="flex gap-2 items-center mb-4 bg-white shadow-md p-4 rounded-md">
+      {/* <div className="flex gap-1 items-center mb-4 bg-white shadow-md p-4 rounded-md">
         <div className="flex items-center space-x-1">
           <label className="text-gray-700 text-sm font-semibold">From Date</label>
           <input
@@ -102,11 +106,80 @@ const AllSubscriberList = () => {
             type="text"
             placeholder="Enter your Payment"
             className="border rounded px-2 py-1 text-sm shadow-sm focus:ring focus:ring-blue-300"
-            
-            
+            value={paymentMethod}
+            onChange={(e) => setPaymentMethod(e.target.value)}  // Update the paymentMethod state
           />
         </div>
-      </div>
+
+        <div className="flex items-center space-x-1">
+            <label className="text-gray-700 text-sm font-semibold">Status</label>
+            <select
+              className="border rounded px-2 py-1 text-sm shadow-sm focus:ring focus:ring-blue-300"
+              onChange={(e) => setPaymentStatus(e.target.value)} // Handle status change
+              value={paymentStatus}
+            >
+              <option value="">Status</option>
+              <option value="Success">Success</option>
+              <option value="Failed">Failed</option>
+            </select>
+          </div>
+      </div> */}
+
+<div className="flex gap-2 items-center mb-4 bg-white shadow-md p-4 rounded-md">
+  <div className="flex items-center space-x-1">
+    <label className="text-gray-700 text-sm font-semibold">From Date</label>
+    <input
+      type="date"
+      className="border rounded px-2 py-1 text-sm shadow-sm focus:ring focus:ring-blue-300"
+      value={fromDate}
+      onChange={(e) => setFromDate(e.target.value)}
+    />
+    <span className="text-gray-500 text-sm">To Date</span>
+    <input
+      type="date"
+      className="border rounded px-2 py-1 text-sm shadow-sm focus:ring focus:ring-blue-300"
+      value={toDate}
+      onChange={(e) => setToDate(e.target.value)}
+    />
+  </div>
+  
+  <div className="flex items-center space-x-1">
+    <label className="text-gray-700 text-sm font-semibold">Keyword</label>
+    <input
+      type="text"
+      placeholder="Enter keyword"
+      className="border rounded px-2 py-1 text-sm shadow-sm focus:ring focus:ring-blue-300"
+      value={keyword}
+      onChange={(e) => setKeyword(e.target.value)}
+    />
+  </div>
+
+  <div className="flex items-center space-x-1">
+    <label className="text-gray-700 text-sm font-semibold">Payment</label>
+    <input
+      type="text"
+      placeholder="Enter your Payment"
+      className="border rounded px-2 py-1 text-sm shadow-sm focus:ring focus:ring-blue-300"
+      value={paymentMethod}
+      onChange={(e) => setPaymentMethod(e.target.value)}  // Update the paymentMethod state
+    />
+  </div>
+
+  {/* Moved Status field below the others */}
+  <div className="flex items-center space-x-1 mt-2">
+    <label className="text-gray-700 text-sm font-semibold">Status</label>
+    <select
+      className="border rounded px-2 py-1 text-sm shadow-sm focus:ring focus:ring-blue-300"
+      onChange={(e) => setPaymentStatus(e.target.value)} // Handle status change
+      value={paymentStatus}
+    >
+      <option value="">Select Status</option>
+      <option value="Success">Success</option>
+      <option value="Failed">Failed</option>
+    </select>
+  </div>
+</div>
+
 
       <div className="overflow-x-auto bg-white shadow-md rounded-md">
         {loading ? (
@@ -343,16 +416,16 @@ export default AllSubscriberList;
 //               className="border rounded px-2 py-1 text-sm shadow-sm focus:ring focus:ring-blue-300"
 //             />
 //           </div>
-//           <div className="flex items-center space-x-1">
-//             <label className="text-gray-700 text-sm font-semibold">Payment Method</label>
-//             <select className="border rounded px-2 py-1 text-sm shadow-sm focus:ring focus:ring-blue-300">
-//               <option>All</option>
-//               <option>Credit Card</option>
-//               <option>Bank Transfer</option>
-//               <option>Mobile Payment</option>
-//               <option>Cash</option>
-//             </select>
-//           </div>
+          // <div className="flex items-center space-x-1">
+          //   <label className="text-gray-700 text-sm font-semibold">Payment Method</label>
+          //   <select className="border rounded px-2 py-1 text-sm shadow-sm focus:ring focus:ring-blue-300">
+          //     <option>All</option>
+          //     <option>Credit Card</option>
+          //     <option>Bank Transfer</option>
+          //     <option>Mobile Payment</option>
+          //     <option>Cash</option>
+          //   </select>
+          // </div>
 //         </div>
 //       </div>
 

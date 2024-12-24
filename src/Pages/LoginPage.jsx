@@ -141,13 +141,13 @@ function LoginPage({ onLogin }) {
                 placeholder="Password at least 8 characters long"
                 className="block w-full px-3 py-2 mt-1 text-gray-900 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
               />
-              <button
+              {/* <button
                 type="button"
                 onClick={togglePasswordVisibility}
                 className="absolute inset-y-0 right-3 flex items-center text-sm text-gray-500"
               >
                 {showPassword ? 'Hide' : 'Show'}
-              </button>
+              </button> */}
             </div>
           </div>
 
