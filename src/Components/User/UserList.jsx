@@ -1,5 +1,5 @@
 
-import  { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { EditOutlined, SearchOutlined } from "@ant-design/icons";
 import { Pagination } from "antd";
 import ApiClient from "../../Api/ApiClient";
@@ -90,11 +90,21 @@ const UserList = () => {
   const [pageSize] = useState(10);
   const [selectedAdmin, setSelectedAdmin] = useState(null);
   const [isModalOpen, setModalOpen] = useState(false);
+  const [keyword, setKeyword] = useState("");
+  const [type, setType] = useState("");
+  const [activity, setActivity] = useState("");
+
 
   useEffect(() => {
     const fetchAdminProfiles = async () => {
+      const queryParams = new URLSearchParams();
+      if (keyword) queryParams.append('key', keyword);
+      if (type) queryParams.append('admin_type', type);
+      if (activity) queryParams.append('status', activity);
+
       try {
-        const response = await ApiClient.get("/admin/profile");
+        const response = await ApiClient.get(`/admin/profile?${queryParams.toString()}`);
+        console.log(response)
         if (response.data?.data) {
           setAdminUserList(response.data.data);
         }
@@ -109,21 +119,21 @@ const UserList = () => {
     };
 
     fetchAdminProfiles();
-    // Reload after 1 seconds
-    const interval = setInterval(() => {
-      fetchAdminProfiles();
-    }, 1000);
 
-    return () => clearInterval(interval);
-  }, []);
+
+  }, [keyword, type, activity]);
 
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
   };
 
-  const filteredAdminList = adminUserList.filter((admin) =>
-    admin.name?.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredAdminList = adminUserList.filter((admin) => {
+    const matchesKeyword = admin.name?.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesType = type ? admin.admin_type === type : true;
+    const matchesActivity = activity ? admin.status.toString() === activity : true;
+    return matchesKeyword && matchesType && matchesActivity;
+  });
+
 
   const paginatedAdminList = filteredAdminList.slice(
     (currentPage - 1) * pageSize,
@@ -147,6 +157,7 @@ const UserList = () => {
         admin_type: categoryName,
         status: sectorName === "Available" ? 1 : 0,
       });
+
 
       if (response.status === 200) {
         setAdminUserList((prevAdminList) =>
@@ -177,16 +188,55 @@ const UserList = () => {
   return (
     <div className="p-6 bg-gray-100">
       <h2 className="text-2xl font-bold mb-4">User List</h2>
-      <div className="mb-4 flex items-center border border-gray-300 rounded p-2 w-3/6">
-        <SearchOutlined className="text-gray-500 mr-2" />
-        <input
-          type="text"
-          placeholder="Search by User List"
-          value={searchTerm}
-          onChange={handleSearch}
-          className="w-full text-sm outline-none"
-        />
+
+      <div className="flex items-center justify-between gap-3">
+        <div className="mb-4 flex items-center border border-gray-300 rounded p-2 w-3/6">
+          <SearchOutlined className="text-gray-500 mr-2" />
+          <input
+            type="text"
+            placeholder="search by Name, Email and Phone Number"
+            className="w-full text-sm outline-none"
+            value={keyword}
+            onChange={(e) => setKeyword(e.target.value)}
+          />
+        </div>
+
+
+        {/* Dropdown Menu */}
+        <div className="flex justify-center gap-2 items-center">
+          <p className="mb-4">User Type:</p>
+          <select
+            id="type"
+            className="bg-gray-50 border mb-4 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-auto p-3"
+            value={type}
+            onChange={(e) => setType(e.target.value)}
+          >
+            <option value="">All</option>
+            <option value="admin">Admin</option>
+            <option value="super-admin">Super Admin</option>
+          </select>
+        </div>
+
+  
+        {/* Available or not */}
+        <div className="flex justify-center gap-2 items-center">
+          <p className="mb-4">Status:</p>
+          <select
+            id="status"
+            className="bg-gray-50 border mb-4 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-auto p-3"
+            value={activity} 
+            onChange={(e) => setActivity(e.target.value)}
+          >
+            <option value="">All</option>
+            <option value="1">Available</option>
+            <option value="0">Unavailable</option>
+          </select>
+        </div>
+
       </div>
+
+
+
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white border border-gray-200">
           <thead>
@@ -212,11 +262,10 @@ const UserList = () => {
                 <td className="py-3 px-6 text-left">{admin.admin_type || "N/A"}</td>
                 <td className="py-3 px-6 text-left">
                   <span
-                    className={`px-2 py-1 rounded-full text-xs ${
-                      admin.status === 1
-                        ? "bg-green-100 text-green-700"
-                        : "bg-red-100 text-red-700"
-                    }`}
+                    className={`px-2 py-1 rounded-full text-xs ${admin.status === 1
+                      ? "bg-green-100 text-green-700"
+                      : "bg-red-100 text-red-700"
+                      }`}
                   >
                     {admin.status === 1 ? "Available" : "Unavailable"}
                   </span>

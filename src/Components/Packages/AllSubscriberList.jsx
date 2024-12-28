@@ -3,6 +3,11 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ApiClient from "../../Api/ApiClient";
+import { BsFillCalendarDateFill } from "react-icons/bs";
+import { DateRangePicker } from "react-date-range";
+import "react-date-range/dist/styles.css"; // Main CSS
+import "react-date-range/dist/theme/default.css"; // Theme CSS
+
 
 const AllSubscriberList = () => {
   const [subscribers, setSubscribers] = useState([]);
@@ -15,6 +20,17 @@ const AllSubscriberList = () => {
   const [paymentStatus, setPaymentStatus] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [dateRange, setDateRange] = useState([
+    {
+      startDate: new Date(),
+      endDate: new Date(),
+      key: 'selection',
+    },
+  ]);
+
+
+
 
   const navigate = useNavigate();
 
@@ -24,13 +40,13 @@ const AllSubscriberList = () => {
 
   const fetchSubscribers = async () => {
     const queryParams = new URLSearchParams();
-
+  
     if (fromDate) queryParams.append('from_date', fromDate);
     if (toDate) queryParams.append('to_date', toDate);
     if (keyword) queryParams.append('key', keyword);
     if (paymentMethod) queryParams.append('payment_method', paymentMethod);
     if (paymentStatus) queryParams.append('payment_status', paymentStatus);
-
+  
     try {
       setLoading(true);
       const response = await ApiClient.get(
@@ -43,6 +59,7 @@ const AllSubscriberList = () => {
       setLoading(false);
     }
   };
+  
 
   useEffect(() => {
     fetchSubscribers();
@@ -53,6 +70,22 @@ const AllSubscriberList = () => {
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
+
+
+  const handleDateFilter = () => {
+    const startDate = new Date(dateRange[0].startDate).toISOString().split("T")[0]; // Start Date
+    const endDate = new Date(dateRange[0].endDate).toISOString().split("T")[0]; // End Date
+  
+    // Set the fromDate and toDate states
+    setFromDate(startDate);
+    setToDate(endDate);
+  
+    // Apply the filter by calling fetchSubscribers again
+    fetchSubscribers();
+  
+    setShowDatePicker(false); // Close the date picker after selecting dates
+  };
+  
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -71,78 +104,37 @@ const AllSubscriberList = () => {
         </button>
       </div>
 
-      {/* <div className="flex gap-1 items-center mb-4 bg-white shadow-md p-4 rounded-md">
-        <div className="flex items-center space-x-1">
-          <label className="text-gray-700 text-sm font-semibold">From Date</label>
-          <input
-            type="date"
-            className="border rounded px-2 py-1 text-sm shadow-sm focus:ring focus:ring-blue-300"
-            value={fromDate}
-            onChange={(e) => setFromDate(e.target.value)}
+   
+      <div className="flex gap-2 items-center mb-4 bg-white shadow-md p-4 rounded-md relative">
+      <div className="flex gap-2 items-center  rounded-md relative">
+        <div className="relative flex items-center justify-start gap-1">
+          <BsFillCalendarDateFill
+            size={39}
+            color="#f0523a"
+            onClick={() => setShowDatePicker(!showDatePicker)}
+            className="transition ease-in-out delay-250 hover:-translate-y-1 hover:scale-110 cursor-pointer pb-1"
           />
-          <span className="text-gray-500 text-sm">To Date</span>
-          <input
-            type="date"
-            className="border rounded px-2 py-1 text-sm shadow-sm focus:ring focus:ring-blue-300"
-            value={toDate}
-            onChange={(e) => setToDate(e.target.value)}
-          />
+          {showDatePicker && (
+            <div style={{ position: "absolute", zIndex: 100, top: "50px" }}>
+              <DateRangePicker
+                onChange={(item) => setDateRange([item.selection])}
+                showSelectionPreview={true}
+                moveRangeOnFirstSelection={false}
+                ranges={dateRange}
+                direction="horizontal"
+              />
+              <button
+                onClick={handleDateFilter}
+                className="bg-green-500 text-white p-2 mt-2 rounded"
+              >
+                Apply Filter
+              </button>
+            </div>
+          )}
         </div>
-        
-        <div className="flex items-center space-x-1">
-          <label className="text-gray-700 text-sm font-semibold">Keyword</label>
-          <input
-            type="text"
-            placeholder="Enter keyword"
-            className="border rounded px-2 py-1 text-sm shadow-sm focus:ring focus:ring-blue-300"
-            value={keyword}
-            onChange={(e) => setKeyword(e.target.value)}
-          />
-        </div>
+      </div>
 
-        <div className="flex items-center space-x-1">
-          <label className="text-gray-700 text-sm font-semibold">Payment</label>
-          <input
-            type="text"
-            placeholder="Enter your Payment"
-            className="border rounded px-2 py-1 text-sm shadow-sm focus:ring focus:ring-blue-300"
-            value={paymentMethod}
-            onChange={(e) => setPaymentMethod(e.target.value)}  // Update the paymentMethod state
-          />
-        </div>
 
-        <div className="flex items-center space-x-1">
-            <label className="text-gray-700 text-sm font-semibold">Status</label>
-            <select
-              className="border rounded px-2 py-1 text-sm shadow-sm focus:ring focus:ring-blue-300"
-              onChange={(e) => setPaymentStatus(e.target.value)} // Handle status change
-              value={paymentStatus}
-            >
-              <option value="">Status</option>
-              <option value="Success">Success</option>
-              <option value="Failed">Failed</option>
-            </select>
-          </div>
-      </div> */}
-
-<div className="flex gap-2 items-center mb-4 bg-white shadow-md p-4 rounded-md">
-  <div className="flex items-center space-x-1">
-    <label className="text-gray-700 text-sm font-semibold">From Date</label>
-    <input
-      type="date"
-      className="border rounded px-2 py-1 text-sm shadow-sm focus:ring focus:ring-blue-300"
-      value={fromDate}
-      onChange={(e) => setFromDate(e.target.value)}
-    />
-    <span className="text-gray-500 text-sm">To Date</span>
-    <input
-      type="date"
-      className="border rounded px-2 py-1 text-sm shadow-sm focus:ring focus:ring-blue-300"
-      value={toDate}
-      onChange={(e) => setToDate(e.target.value)}
-    />
-  </div>
-  
   <div className="flex items-center space-x-1">
     <label className="text-gray-700 text-sm font-semibold">Keyword</label>
     <input
@@ -153,7 +145,6 @@ const AllSubscriberList = () => {
       onChange={(e) => setKeyword(e.target.value)}
     />
   </div>
-
   <div className="flex items-center space-x-1">
     <label className="text-gray-700 text-sm font-semibold">Payment</label>
     <input
@@ -161,16 +152,14 @@ const AllSubscriberList = () => {
       placeholder="Enter your Payment"
       className="border rounded px-2 py-1 text-sm shadow-sm focus:ring focus:ring-blue-300"
       value={paymentMethod}
-      onChange={(e) => setPaymentMethod(e.target.value)}  // Update the paymentMethod state
+      onChange={(e) => setPaymentMethod(e.target.value)}
     />
   </div>
-
-  {/* Moved Status field below the others */}
-  <div className="flex items-center space-x-1 mt-2">
+  <div className="flex items-center space-x-1">
     <label className="text-gray-700 text-sm font-semibold">Status</label>
     <select
       className="border rounded px-2 py-1 text-sm shadow-sm focus:ring focus:ring-blue-300"
-      onChange={(e) => setPaymentStatus(e.target.value)} // Handle status change
+      onChange={(e) => setPaymentStatus(e.target.value)}
       value={paymentStatus}
     >
       <option value="">Select Status</option>
@@ -179,6 +168,7 @@ const AllSubscriberList = () => {
     </select>
   </div>
 </div>
+
 
 
       <div className="overflow-x-auto bg-white shadow-md rounded-md">

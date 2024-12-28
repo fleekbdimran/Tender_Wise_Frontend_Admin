@@ -50,6 +50,7 @@ import UpdateUser from './Components/User/UpdateUser';
 import ResetPassword from './Components/Profile/ResetPassword';
 import AllSubscriberList from './Components/Packages/AllSubscriberList';
 import SubscriberDetails from './Components/Packages/SubscriberDetails';
+import Dashboard from './Dashboard/Dashboard';
 
 
 
@@ -107,11 +108,7 @@ function App() {
                     path="/dashboard"
                     element={
                       <ProtectedRoute>
-                        <div className="flex justify-center items-center h-full">
-                          <h1 className="text-4xl font-bold text-center text-gray-800">
-                            Welcome to the Dashboard
-                          </h1>
-                        </div>
+                        <Dashboard></Dashboard>
                       </ProtectedRoute>
                     }
                   />

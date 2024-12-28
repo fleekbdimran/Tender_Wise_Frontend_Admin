@@ -879,21 +879,7 @@ const SingleTenderDetails = ({ onClose }) => {
                 required
               />
             </div>
-            {/*  End Date*/}
-            <div>
-              <label className="block text-gray-700 font-medium mb-1">
-                End Date <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="date"
-                name="end_date"
-                value={formDataSubmit.end_date}
-                onChange={handleInputChange}
-                placeholder="Enter Date"
-                className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
-              />
-            </div>
+           
             {/*  Pharchase Last Date*/}
             <div>
               <label className="block text-gray-700 font-medium mb-1">

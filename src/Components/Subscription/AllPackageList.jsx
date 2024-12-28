@@ -276,7 +276,7 @@ const AllPackageList = () => {
                     <td className="px-4 py-2 text-sm text-gray-800">{startIndex + index + 1}</td>
                     <td className="px-4 py-2 text-sm text-gray-800">{pkg.name}</td>
                     <td className="px-4 py-2 text-sm text-gray-800">{pkg.amount}</td>
-                    <td className="px-4 py-2 text-sm text-gray-800">{pkg.duration}</td>
+                    <td className="px-4 py-2 text-sm text-gray-800">{pkg.duration} month</td>
                     <td className="px-4 py-2 text-sm text-gray-800">
                       <span className={pkg.status === 1 ? "text-blue-500" : "text-red-500"}>
                         {pkg.status === 1 ? "Available" : "Unavailable"}
