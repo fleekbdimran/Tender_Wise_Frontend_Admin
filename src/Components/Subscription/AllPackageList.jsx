@@ -50,6 +50,12 @@ const AllPackageList = () => {
     setFormData({ ...formData, [name]: value });
   };
 
+
+
+
+
+
+
   const handleCreateSubmit = (e) => {
     e.preventDefault();
     console.log("Creating new package...");
@@ -61,65 +67,56 @@ const AllPackageList = () => {
       duration: formData.duration,
     };
 
-    const requestOptions = {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
-    };
 
     // Using fetch to create a package
-    fetch('/admin/package', requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        console.log("Package created successfully:", result);
-
-        if (result) {
-          // Fetch updated packages
-          fetch('http://192.168.0.230:9009/api/v1/admin/packages')
-            .then((response) => response.json())
-            .then((updatedPackages) => {
-              setPackages(updatedPackages);
-
-              Swal.fire({
-                title: 'Success!',
-                text: result.message || 'Package created successfully!',
-                icon: 'success',
-                confirmButtonText: 'OK',
-              });
-            })
-            .catch((error) => {
-              console.error("Error fetching packages:", error);
-              Swal.fire({
-                title: 'Error!',
-                text: 'Failed to fetch updated packages.',
-                icon: 'error',
-                confirmButtonText: 'Try Again',
-              });
-            });
+    fetch(`http://192.168.0.230:9009/api/v1/admin/package`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Response Data:", data); // রেসপন্স ডেটা দেখো
+        if (data.success === true) {
+          Swal.fire({
+            title: 'Success!',
+            text: data.message || 'Package updated successfully!',
+            icon: 'success',
+            confirmButtonText: 'OK',
+          });
         } else {
-          throw new Error('Failed to create package.');
+          Swal.fire({
+            title: 'Error!',
+            text: data.message || 'Failed to update package. Please try again.',
+            icon: 'error',
+            confirmButtonText: 'Try Again',
+          });
         }
       })
       .catch((error) => {
-        console.error("Error creating package:", error);
         Swal.fire({
           title: 'Error!',
-          text: error.message || 'Something went wrong while creating the package.',
+          text: error.message || 'Something went wrong. Please try again.',
           icon: 'error',
           confirmButtonText: 'Try Again',
         });
       });
 
-    // Hide the create form and reset editing state
-    setShowCreateForm(false);
-    setEditingPackageId(null);
   };
+
 
 
   const handleEditSubmit = (e) => {
     e.preventDefault();
     console.log(`Editing package ID ${editingPackageId}`);
-  
+
     // Updated package data
     const data = {
       name: formData.name,
@@ -127,10 +124,10 @@ const AllPackageList = () => {
       duration: formData.duration,
       status: formData.status,
     };
-  
+
     console.log(data);
-  
-    ApiClient.patch(`/admin/package/${editingPackageId}`, data) 
+
+    ApiClient.patch(`/admin/package/${editingPackageId}`, data)
       .then((response) => {
         console.log(response.data);
         if (response.data.success) {
@@ -158,8 +155,8 @@ const AllPackageList = () => {
         });
       });
   };
-  
-  
+
+
 
 
 
