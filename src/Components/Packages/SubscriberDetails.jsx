@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom"; // Import useParams f
 import Profile from "./Profile/Profile";
 import ApiClient from "../../Api/ApiClient"; // Adjust the path based on your setup
 import { PHOTO_BASE_URL } from "../../Api/config"; // Ensure correct import path for the config file
+import { IoClose } from 'react-icons/io5';
 
 const SubscriberDetails = () => {
   const { id } = useParams(); // Get dynamic ID from route parameters
@@ -67,21 +68,34 @@ const SubscriberDetails = () => {
     }
   }, [id]); // Add ID as a dependency to re-fetch when it changes
 
+  const handleGoBack = () => {
+    navigate(-1); // Navigate back to the previous page
+  };
+
   return (
     <>
 
-          {/* Cross Icon for Navigation */}
-          <button
-        onClick={() => navigate(-1)} // Go back to the previous page
-        className="absolute top-10 right-10 bg-red-200 text-red-600 p-2 rounded-full shadow-md hover:bg-gray-300 focus:outline-none"
-      >
-        ✕
-      </button>
 
-     {/* Profile Component */}
-     <Profile user_name={subscriberInfo.user_name} photo={subscriberInfo.photo} />
+      <div className="relative">
+        {/* Cross Icon Button */}
+        <button
+          onClick={handleGoBack}
+          className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+          aria-label="Close"
+        >
+          <IoClose size={24} />
+        </button>
+      </div>
+
+
+      {/* Profile Component */}
+
+      <Profile user_name={subscriberInfo.user_name} photo={subscriberInfo.photo} />
+
+
+
       <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-6 space-y-6">
-        
+
 
         {/* Subscriber Information */}
         <div className="flex w-full gap-5">
@@ -148,7 +162,7 @@ const SubscriberDetails = () => {
         </div>
       </div>
     </>
- 
+
   );
 };
 
