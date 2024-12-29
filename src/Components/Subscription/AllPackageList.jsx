@@ -15,44 +15,6 @@ const fetchPackages = async () => {
   }
 };
 
-// API Utility for Creating a New Package
-const createPackage = async (formData) => {
-  const data = {
-    name: formData.name,
-    amount: formData.amount,
-    duration: formData.duration,
-  };
-
-  try {
-    console.log("Creating package with data:", data);
-    const response = await ApiClient.post("/admin/package", data);
-    console.log("Package created successfully:", response.data);
-    return response.data;
-  } catch (error) {
-    console.error("Error creating package:", error);
-    return null;
-  }
-};
-
-// API Utility for Updating a Package
-const updatePackage = async (id, formData) => {
-  const data = {
-    name: formData.name,
-    amount: formData.amount,
-    duration: formData.duration,
-    status: formData.status,
-  };
-
-  try {
-    console.log(`Updating package ID ${id} with data:`, data);
-    const response = await ApiClient.patch(`/admin/package/${id}`, data);
-    console.log("Package updated successfully:", response.data);
-    return response.data;
-  } catch (error) {
-    console.error("Error updating package:", error);
-    return null;
-  }
-};
 
 const AllPackageList = () => {
   const [packages, setPackages] = useState([]);
@@ -79,7 +41,8 @@ const AllPackageList = () => {
   }, []);
 
   const filteredPackages = packages.filter((pkg) =>
-    pkg.name.toLowerCase().includes(searchTerm.toLowerCase())
+    pkg.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    pkg.amount.toString().includes(searchTerm)
   );
 
   const handleChange = (e) => {
@@ -87,61 +50,166 @@ const AllPackageList = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = async (e) => {
+  const handleCreateSubmit = (e) => {
     e.preventDefault();
-    if (editingPackageId) {
-      console.log(`Editing package ID ${editingPackageId}`);
-      const updatedPackage = await updatePackage(editingPackageId, formData);
-      if (updatedPackage) {
-        const updatedPackages = await fetchPackages();
-        setPackages(updatedPackages);
+    console.log("Creating new package...");
 
-        // Success message after package update
-        await Swal.fire({
-          title: 'Success!',
-          text: 'Package updated successfully!',
-          icon: 'success',
-          confirmButtonText: 'OK',
-        });
-      } else {
-        // Error handling
-        await Swal.fire({
+    // Create package data
+    const data = {
+      name: formData.name,
+      amount: formData.amount,
+      duration: formData.duration,
+    };
+
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    };
+
+    // Using fetch to create a package
+    fetch('/admin/package', requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log("Package created successfully:", result);
+
+        if (result) {
+          // Fetch updated packages
+          fetch('http://192.168.0.230:9009/api/v1/admin/packages')
+            .then((response) => response.json())
+            .then((updatedPackages) => {
+              setPackages(updatedPackages);
+
+              Swal.fire({
+                title: 'Success!',
+                text: result.message || 'Package created successfully!',
+                icon: 'success',
+                confirmButtonText: 'OK',
+              });
+            })
+            .catch((error) => {
+              console.error("Error fetching packages:", error);
+              Swal.fire({
+                title: 'Error!',
+                text: 'Failed to fetch updated packages.',
+                icon: 'error',
+                confirmButtonText: 'Try Again',
+              });
+            });
+        } else {
+          throw new Error('Failed to create package.');
+        }
+      })
+      .catch((error) => {
+        console.error("Error creating package:", error);
+        Swal.fire({
           title: 'Error!',
-          text: 'Failed to update package.',
+          text: error.message || 'Something went wrong while creating the package.',
           icon: 'error',
           confirmButtonText: 'Try Again',
         });
-      }
-    } else {
-      console.log("Creating new package...");
-      const result = await createPackage(formData);
-      if (result) {
-        const updatedPackages = await fetchPackages();
-        setPackages(updatedPackages);
+      });
 
-        // Success message after package creation
-        await Swal.fire({
-          title: 'Success!',
-          text: 'Package created successfully!',
-          icon: 'success',
-          confirmButtonText: 'OK',
-        });
-      } else {
-        // Error handling
-        await Swal.fire({
-          title: 'Error!',
-          text: 'Failed to create package.',
-          icon: 'error',
-          confirmButtonText: 'Try Again',
-        });
-      }
-    }
+    // Hide the create form and reset editing state
     setShowCreateForm(false);
     setEditingPackageId(null);
   };
 
+
+  const handleEditSubmit = (e) => {
+    e.preventDefault();
+    console.log(`Editing package ID ${editingPackageId}`);
+  
+    // Updated package data
+    const data = {
+      name: formData.name,
+      amount: formData.amount,
+      duration: formData.duration,
+      status: formData.status,
+    };
+  
+    console.log(data);
+  
+    ApiClient.patch(`/admin/package/${editingPackageId}`, data) 
+      .then((response) => {
+        console.log(response.data);
+        if (response.data.success) {
+          Swal.fire({
+            title: 'Success!',
+            text: response.data.message || 'Package updated successfully!',
+            icon: 'success',
+            confirmButtonText: 'OK',
+          });
+        } else {
+          Swal.fire({
+            title: 'Error!',
+            text: response.data.message || 'Failed to update package. Please try again.',
+            icon: 'error',
+            confirmButtonText: 'Try Again',
+          });
+        }
+      })
+      .catch((error) => {
+        Swal.fire({
+          title: 'Error!',
+          text: error.response?.data?.message || 'Something went wrong. Please try again.',
+          icon: 'error',
+          confirmButtonText: 'Try Again',
+        });
+      });
+  };
+  
+  
+
+
+
+
+  // Using fetch to update the package
+  // fetch(`http://192.168.0.230:9009/api/v1/admin/package/${editingPackageId}`, requestOptions)
+  //   .then((response) => response.json())
+  //   .then((updatedPackage) => {
+  //     if (updatedPackage && updatedPackage.message) {
+
+  //       fetch('/admin/packages')
+  //         .then((response) => response.json())
+  //         .then((updatedPackages) => {
+  //           setPackages(updatedPackages);
+
+  //           Swal.fire({
+  //             title: 'Success!',
+  //             text: updatedPackage.message,
+  //             icon: 'success',
+  //             confirmButtonText: 'OK',
+  //           });
+  //         })
+  //         .catch((error) => {
+  //           console.error("Error fetching packages:", error);
+  //           Swal.fire({
+  //             title: 'Error!',
+  //             text: updatedPackage.message,
+  //             icon: 'error',
+  //             confirmButtonText: 'Try Again',
+  //           });
+  //         });
+  //     } else {
+  //       throw new Error(updatedPackage?.message || 'Failed to update package.');
+  //     }
+  //   })
+  //   .catch((error) => {
+  //     console.error("Error updating package:", error);
+  //     Swal.fire({
+  //       title: 'Error!',
+  //       text: error.message || 'Something went wrong while updating the package.',
+  //       icon: 'error',
+  //       confirmButtonText: 'Try Again',
+  //     });
+  //   });
+
+
+
+
+
   const handleEdit = (pkg) => {
-    console.log(`Editing package: ${pkg.id}`);
     setEditingPackageId(pkg.id);
     setFormData({
       name: pkg.name,
@@ -153,7 +221,6 @@ const AllPackageList = () => {
   };
 
   const handlePageChange = (page) => {
-    console.log(`Changing to page ${page}`);
     setCurrentPage(page);
   };
 
@@ -171,8 +238,8 @@ const AllPackageList = () => {
             <h2 className="text-3xl font-bold text-center mb-6">
               {editingPackageId ? "Update Package" : "Create Package"}
             </h2>
-            <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Name Input */}
+            <form onSubmit={editingPackageId ? handleEditSubmit : handleCreateSubmit} className="space-y-6">
+              {/* Form Fields */}
               <div className="flex flex-col">
                 <label className="block text-lg font-medium text-gray-700 mb-2" htmlFor="name">
                   Name
@@ -189,7 +256,6 @@ const AllPackageList = () => {
                 />
               </div>
 
-              {/* Amount Input */}
               <div className="flex flex-col">
                 <label className="block text-lg font-medium text-gray-700 mb-2" htmlFor="amount">
                   Amount
@@ -206,7 +272,6 @@ const AllPackageList = () => {
                 />
               </div>
 
-              {/* Duration Input */}
               <div className="flex flex-col">
                 <label className="block text-lg font-medium text-gray-700 mb-2" htmlFor="duration">
                   Duration (Month)
@@ -223,7 +288,6 @@ const AllPackageList = () => {
                 />
               </div>
 
-              {/* Submit Button */}
               <div className="flex justify-end gap-3">
                 <button
                   type="submit"
@@ -248,48 +312,47 @@ const AllPackageList = () => {
               onClick={() => setShowCreateForm(true)}
               className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
             >
-              + Create
+              + Create Package
             </button>
             <input
               type="text"
-              placeholder="Search by Package Name"
-              className="border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 w-64 px-4 py-2"
+              placeholder="Search by Name or Amount"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
+              className="p-2 rounded-md border-2 border-gray-300"
             />
           </div>
-          <div className="overflow-x-auto">
-            <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
-              <thead className="bg-gray-200">
-                <tr>
-                  <th className="px-4 py-2 text-left text-sm font-medium text-gray-600">ID</th>
-                  <th className="px-4 py-2 text-left text-sm font-medium text-gray-600">Name</th>
-                  <th className="px-4 py-2 text-left text-sm font-medium text-gray-600">Amount</th>
-                  <th className="px-4 py-2 text-left text-sm font-medium text-gray-600">Duration</th>
-                  <th className="px-4 py-2 text-left text-sm font-medium text-gray-600">Status</th>
-                  <th className="px-4 py-2 text-left text-sm font-medium text-gray-600">Update</th>
+
+          <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
+            <thead className="bg-gray-200">
+              <tr>
+                <th className="px-4 py-2 text-left text-sm font-medium text-gray-600">ID</th>
+                <th className="px-4 py-2 text-left text-sm font-medium text-gray-600">Name</th>
+                <th className="px-4 py-2 text-left text-sm font-medium text-gray-600">Amount</th>
+                <th className="px-4 py-2 text-left text-sm font-medium text-gray-600">Duration</th>
+                <th className="px-4 py-2 text-left text-sm font-medium text-gray-600">Status</th>
+                <th className="px-4 py-2 text-left text-sm font-medium text-gray-600">Update</th>
+              </tr>
+            </thead>
+            <tbody>
+              {paginatedPackages.map((pkg, index) => (
+                <tr key={pkg.id} className="border-t">
+                  <td className="px-4 py-2 text-sm text-gray-800">{startIndex + index + 1}</td>
+                  <td className="px-4 py-2 text-sm text-gray-800">{pkg.name}</td>
+                  <td className="px-4 py-2 text-sm text-gray-800">{pkg.amount}</td>
+                  <td className="px-4 py-2 text-sm text-gray-800">{pkg.duration} month</td>
+                  <td className="px-4 py-2 text-sm text-gray-800">
+                    <span className={pkg.status === 1 ? "text-blue-500" : "text-red-500"}>
+                      {pkg.status === 1 ? "Available" : "Unavailable"}
+                    </span>
+                  </td>
+                  <td className="px-4 py-2 text-blue-600 hover:underline cursor-pointer" onClick={() => handleEdit(pkg)}>
+                    Edit
+                  </td>
                 </tr>
-              </thead>
-              <tbody>
-                {paginatedPackages.map((pkg, index) => (
-                  <tr key={pkg.id} className="border-t">
-                    <td className="px-4 py-2 text-sm text-gray-800">{startIndex + index + 1}</td>
-                    <td className="px-4 py-2 text-sm text-gray-800">{pkg.name}</td>
-                    <td className="px-4 py-2 text-sm text-gray-800">{pkg.amount}</td>
-                    <td className="px-4 py-2 text-sm text-gray-800">{pkg.duration} month</td>
-                    <td className="px-4 py-2 text-sm text-gray-800">
-                      <span className={pkg.status === 1 ? "text-blue-500" : "text-red-500"}>
-                        {pkg.status === 1 ? "Available" : "Unavailable"}
-                      </span>
-                    </td>
-                    <td className="px-4 py-2 text-blue-600 hover:underline cursor-pointer" onClick={() => handleEdit(pkg)}>
-                      Edit
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+              ))}
+            </tbody>
+          </table>
 
           {/* Pagination */}
           <div className="flex justify-center mt-4">
@@ -299,9 +362,8 @@ const AllPackageList = () => {
                 <button
                   key={i}
                   onClick={() => handlePageChange(i + 1)}
-                  className={`px-4 py-2 mx-1 rounded ${
-                    currentPage === i + 1 ? "bg-blue-500 text-white" : "bg-gray-200"
-                  }`}
+                  className={`px-4 py-2 mx-1 rounded ${currentPage === i + 1 ? "bg-blue-500 text-white" : "bg-gray-200"
+                    }`}
                 >
                   {i + 1}
                 </button>
@@ -315,3 +377,5 @@ const AllPackageList = () => {
 };
 
 export default AllPackageList;
+
+

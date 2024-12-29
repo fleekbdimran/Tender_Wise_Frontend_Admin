@@ -36,7 +36,8 @@ const ActivePackage = () => {
 
   // Filter packages based on search term
   const filteredPackages = packages.filter((pkg) =>
-    pkg.name.toLowerCase().includes(searchTerm.toLowerCase())
+    pkg.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    pkg.amount.toString().includes(searchTerm)
   );
 
   // Pagination logic
@@ -57,13 +58,16 @@ const ActivePackage = () => {
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
-        <input
-          type="text"
-          placeholder="Search by Active Package"
-          className="border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 w-64 px-4 py-2"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
+        <div className="flex items-center gap-3">
+          <label htmlFor="searchbar">search here:</label>
+          <input
+            type="text"
+            placeholder="Search by Name and Amount"
+            className="border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 w-64 px-4 py-2"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
       </div>
 
       <div className="overflow-x-auto">
@@ -97,11 +101,10 @@ const ActivePackage = () => {
           <button
             key={i}
             onClick={() => handlePageChange(i + 1)}
-            className={`px-4 py-2 mx-1 rounded ${
-              currentPage === i + 1
+            className={`px-4 py-2 mx-1 rounded ${currentPage === i + 1
                 ? "bg-blue-500 text-white"
                 : "bg-gray-200 text-gray-700"
-            }`}
+              }`}
           >
             {i + 1}
           </button>
