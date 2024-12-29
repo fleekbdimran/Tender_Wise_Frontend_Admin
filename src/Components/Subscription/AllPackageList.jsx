@@ -107,7 +107,8 @@ const AllPackageList = () => {
         // Error handling
         await Swal.fire({
           title: 'Error!',
-          text: 'Failed to update package.',
+          // text: 'Failed to update package.',
+          // text: response.data.message || 'Something went wrong!',
           icon: 'error',
           confirmButtonText: 'Try Again',
         });

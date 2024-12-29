@@ -56,8 +56,7 @@ const CreateTenderForm = ({ onClose, sourceData }) => {
 
   const [searchQuerySector, setSearchQuerySector] = useState(''); // Holds the current search query for sectors
   const [filteredSubdepartmentSector, setFilteredSubdepartmentSector] = useState([]); // Holds the filtered list of sectors based on the search query
-  // const [selectedSector, setSelectedSector] = useState(null); // Holds the selected sector object
-  // const [sectors, setSectors] = useState([]); // Holds the full list of sectors (this should be populated with your data)
+
 
   {/* ------------New Sector search by name------------------------- */ }
 
@@ -546,6 +545,85 @@ const CreateTenderForm = ({ onClose, sourceData }) => {
     fetchDivisions();
   }, []);
 
+  // ----------------------new search by division------------------
+
+  const [searchQueryDivision, setSearchQueryDivision] = useState("");
+  const [filteredDivision, setFilteredDivision] = useState([]);
+
+  // Handle Division Search Change
+  const handleSearchChangeDivision = (e) => {
+    const query = e.target.value.toLowerCase();
+    setSearchQueryDivision(query);
+    const filtered = divisions.filter((division) =>
+      division.name.toLowerCase().includes(query)
+    );
+    setFilteredDivision(filtered);
+  };
+
+  // Handle Division Select
+  const handleSelectDivision = (id, name) => {
+    setSelectedDivision({ id, name });
+    setSearchQueryDivision(name);
+    setFilteredDivision([]);
+  };
+  // ----------------------new search by division------------------
+
+  // ----------------------new search by districts------------------
+  const [searchQueryDistrict, setSearchQueryDistrict] = useState("");
+  const [filteredDistrict, setFilteredDistrict] = useState([]);
+
+  // Handle District Search Change
+  const handleSearchChangeDistrict = (e) => {
+    const query = e.target.value.toLowerCase();
+    setSearchQueryDistrict(query);
+    const filtered = districts.filter((district) =>
+      district.name.toLowerCase().includes(query)
+    );
+    setFilteredDistrict(filtered);
+  };
+
+  // Handle District Select
+  const handleSelectDistrict = (id, name) => {
+    setSelectedDistrict({ id, name });
+    setSearchQueryDistrict(name);
+    setFilteredDistrict([]);
+  };
+
+
+  // ----------------------new search by districts------------------
+
+  // ----------------------new search by Upazila------------------
+
+  const [selectedUpazila, setSelectedUpazila] = useState(null); // State for selected Upazila
+  const [searchQueryUpazila, setSearchQueryUpazila] = useState(""); // State for search query of Upazila
+  const [filteredUpazila, setFilteredUpazila] = useState([]); // State for filtered Upazilas
+
+  const [upazilas, setUpazilas] = useState([]); // State for list of Upazilas
+
+
+  // Handle search query change for filtering Upazilas
+  const handleSearchChangeUpazila = (e) => {
+    const query = e.target.value.toLowerCase();
+    setSearchQueryUpazila(query);
+    const filtered = upazilas.filter((upazila) =>
+      upazila.name.toLowerCase().includes(query)
+    );
+    setFilteredUpazila(filtered);
+  };
+
+  // Handle selecting an Upazila from the filtered list
+  const handleSelectUpazila = (id, name) => {
+    setSelectedUpazila({ id, name });
+    setSearchQueryUpazila(name); // Set the search query to the selected Upazila
+    setFilteredUpazila([]); // Clear the filtered list after selection
+  };
+
+
+
+
+
+  // ----------------------new search by Upazila------------------
+
   // Fetch districts with upazilas
   useEffect(() => {
     const fetchDistricts = async () => {
@@ -573,14 +651,19 @@ const CreateTenderForm = ({ onClose, sourceData }) => {
     }
   }, [selectedDivision, divisions]);
 
+
+
   // Filter upazilas based on selected district
   useEffect(() => {
-    if (selectedDistrict) {
+    if (selectedDistrict && selectedDistrict.id) {
+      // Find the district using the id
       const selectedDistrictData = districts.find(
-        district => district.id === parseInt(selectedDistrict)
+        (district) => district.id === selectedDistrict.id
       );
+      // Set filtered upazilas based on the selected district
       setFilteredUpazilas(selectedDistrictData?.upazilas || []);
     } else {
+      // If no district is selected, clear the filtered upazilas
       setFilteredUpazilas([]);
     }
   }, [selectedDistrict, districts]);
@@ -611,6 +694,9 @@ const CreateTenderForm = ({ onClose, sourceData }) => {
 
 
   // -------------Source New Create Api------------------
+
+
+
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const [sourceName, setSourceName] = useState("");
 
@@ -623,11 +709,12 @@ const CreateTenderForm = ({ onClose, sourceData }) => {
   const handleSubmitSource = async (e) => {
     e.preventDefault();
     console.log("Form submitted with sourceName:", sourceName);
+    console.log("Selected Source Type:", selectedSourceType);
 
     const payload = {
       name: sourceName,
-      type: "Website,",
-      details: `Collected from Website on ${new Date().toLocaleDateString()}`,
+      type: selectedSourceType,
+      details: `Collected from ${selectedSourceType} on ${new Date().toLocaleDateString()}`,
     };
 
     console.log("Payload to be sent:", payload);
@@ -644,6 +731,7 @@ const CreateTenderForm = ({ onClose, sourceData }) => {
           confirmButtonText: "OK",
         });
         setSourceName(""); // Reset the input field
+        setSelectedSourceType(""); // Reset the dropdown
         togglePopup(); // Close the modal
       } else {
         Swal.fire({
@@ -664,6 +752,7 @@ const CreateTenderForm = ({ onClose, sourceData }) => {
       });
     }
   };
+
 
 
 
@@ -731,7 +820,7 @@ const CreateTenderForm = ({ onClose, sourceData }) => {
 
   const [isSubDepartmentPopupVisible, setIsSubDepartmentPopupVisible] = useState(false);
   const [SubDepartmentName, setSubDepartmentName] = useState('');
-  // const [selectedDepartment, setSelectedDepartment] = useState(27); // Assuming 27 is the department id
+
 
   // Toggle popup visibility
   const toggleSubDepartmentPopup = () => {
@@ -878,7 +967,7 @@ const CreateTenderForm = ({ onClose, sourceData }) => {
   //  --------------Sector New Create Api-----------------
   const [isSectorPopupVisible, setIsSectorPopupVisible] = useState(false);
   const [sectorName, setSectorName] = useState("");
-  // const [selectedCategory, setSelectedCategory] = useState(null); // Object with `id` and `name`
+
 
   // Toggle Popup Visibility
   const toggleSectorPopup = () => {
@@ -961,7 +1050,7 @@ const CreateTenderForm = ({ onClose, sourceData }) => {
 
   const [isSubSectorPopupVisible, setIsSubSectorPopupVisible] = useState(false);
   const [subSectorName, setSubSectorName] = useState("");
-  // const [selectedSector, setSelectedSector] = useState(null);
+
 
 
 
@@ -1083,184 +1172,9 @@ const CreateTenderForm = ({ onClose, sourceData }) => {
   //  --------------Division New Create Api-----------------
 
   //  --------------District New Create Api-----------------
-  // const [isDistrictPopupVisible, setIsDistrictPopupVisible] = useState(false);
-  // const [districtName, setDistrictName] = useState("");
-  // // const [selectedDivision, setSelectedDivision] = useState(null); // Store selected division
-
-
-
-
-  // // Toggle visibility of the district popup
-  // const toggleDistrictPopup = () => {
-  //   setIsDistrictPopupVisible(!isDistrictPopupVisible);
-  // };
-
-  // // Handle form submission for District
-  // const handleSubmitDistrict = async () => {
-  //   // Log the districtName and selectedDivision for debugging
-  //   console.log("District Name:", districtName);
-  //   console.log("Selected Division:", selectedDivision);
-
-  //   // Check if district name is empty
-  //   if (!districtName.trim()) {
-  //     Swal.fire({
-  //       title: "Error",
-  //       text: "District name is required!",
-  //       icon: "error",
-  //       confirmButtonText: "OK",
-  //     });
-  //     return;
-  //   }
-
-  //   // Check if selected division is valid
-  //   if (!selectedDivision || !selectedDivision.id) {
-  //     Swal.fire({
-  //       title: "Error",
-  //       text: "Please select a valid division!",
-  //       icon: "error",
-  //       confirmButtonText: "OK",
-  //     });
-  //     return;
-  //   }
-
-  //   const payload = {
-  //     name: districtName,
-  //     division_id: selectedDivision.id, // Use `id` from the selected division object
-  //   };
-
-  //   try {
-  //     console.log("Payload:", payload); // Log the payload to verify the data being sent
-
-  //     const response = await ApiClient.post('/admin/tender-config/district', payload);
-  //     console.log("Response:", response); // Log the response to inspect it
-
-  //     if (response.status === 200 || response.status === 201) {
-  //       Swal.fire({
-  //         title: "Success",
-  //         text: "District created successfully!",
-  //         icon: "success",
-  //         confirmButtonText: "OK",
-  //       });
-  //       setDistrictName(""); // Clear input field
-  //       setSelectedDivision(null); // Clear division selection
-  //       toggleDistrictPopup(); // Close the popup
-  //     } else {
-  //       Swal.fire({
-  //         title: "Error",
-  //         text: response.data.message || "Something went wrong!",
-  //         icon: "error",
-  //         confirmButtonText: "Try Again",
-  //       });
-  //     }
-  //   } catch (error) {
-  //     console.error("Error occurred:", error); // Log any errors
-
-  //     if (error.response && error.response.status === 401) {
-  //       Swal.fire({
-  //         title: "Unauthorized",
-  //         text: "Your session has expired. Please log in again.",
-  //         icon: "error",
-  //         confirmButtonText: "OK",
-  //       });
-  //       // Redirect to login page (if needed)
-  //       // window.location.href = '/login';
-  //     } else {
-  //       Swal.fire({
-  //         title: "Error",
-  //         text: error.response?.data?.message || "Something went wrong!",
-  //         icon: "error",
-  //         confirmButtonText: "Try Again",
-  //       });
-  //     }
-  //   }
-  // };
-
-  // const [isDistrictPopupVisible, setIsDistrictPopupVisible] = useState(false);
-  // const [districtName, setDistrictName] = useState("");
-  // // const [selectedDivision, setSelectedDivision] = useState(null);
-  // // const [divisions] = useState([
-  // //   { id: 1, name: "Division 1" },
-  // //   { id: 2, name: "Division 2" },
-  // //   { id: 3, name: "Division 3" },
-  // // ]);
-
-  // const toggleDistrictPopup = () => {
-  //   setIsDistrictPopupVisible(!isDistrictPopupVisible);
-  // };
-
-  // // const handleDivisionChange = (event) => {
-  // //   const selectedId = parseInt(event.target.value);
-  // //   const division = divisions.find((div) => div.id === selectedId);
-  // //   setSelectedDivision(division);
-  // // };
-
-  // const handleSubmitDistrict = async () => {
-  //   if (!districtName.trim()) {
-  //     Swal.fire({
-  //       title: "Error",
-  //       text: "District name is required!",
-  //       icon: "error",
-  //       confirmButtonText: "OK",
-  //     });
-  //     return;
-  //   }
-
-  //   if (!selectedDivision || !selectedDivision.id) {
-  //     Swal.fire({
-  //       title: "Error",
-  //       text: "Please select a valid division!",
-  //       icon: "error",
-  //       confirmButtonText: "OK",
-  //     });
-  //     return;
-  //   }
-
-  //   const payload = {
-  //     name: districtName,
-  //     division_id: selectedDivision.id,
-  //   };
-
-  //   try {
-  //     const token = localStorage.getItem("authToken");
-  //     const response = await ApiClient.post("/admin/tender-config/district", payload, {
-  //       headers: {
-  //         Authorization: `Bearer ${token}`,
-  //         "Content-Type": "application/json",
-  //       },
-  //     });
-
-  //     if (response.status === 200 || response.status === 201) {
-  //       await Swal.fire({
-  //         title: "Success!",
-  //         text: "District created successfully!",
-  //         icon: "success",
-  //         confirmButtonText: "OK",
-  //       });
-  //       setDistrictName("");
-  //       setSelectedDivision(null);
-  //       toggleDistrictPopup();
-  //     } else {
-  //       Swal.fire({
-  //         title: "Error!",
-  //         text: response.data.message || "Something went wrong!",
-  //         icon: "error",
-  //         confirmButtonText: "Try Again",
-  //       });
-  //     }
-  //   } catch (error) {
-  //     console.error("Error occurred:", error);
-  //     Swal.fire({
-  //       title: "Error!",
-  //       text: error.response?.data?.message || "Something went wrong!",
-  //       icon: "error",
-  //       confirmButtonText: "Try Again",
-  //     });
-  //   }
-  // };
-
   const [isDistrictPopupVisible, setIsDistrictPopupVisible] = useState(false);
   const [districtName, setDistrictName] = useState("");
-  // const [selectedDivision, setSelectedDivision] = useState(null);
+
 
 
   const handleDivisionChange = (event) => {
@@ -1348,113 +1262,9 @@ const CreateTenderForm = ({ onClose, sourceData }) => {
 
   {/* ----------------Upazilla New Create Api----------------- */ }
 
-  // const [isUpazilaPopupVisible, setIsUpazilaPopupVisible] = useState(false);
-  // const [upazilaName, setUpazilaName] = useState("");
-  // // const [selectedDistrict, setSelectedDistrict] = useState(null);
-
-  // // Toggle visibility of the upazila popup
-  // const toggleUpazilaPopup = () => {
-  //   setIsUpazilaPopupVisible(!isUpazilaPopupVisible);
-  //   console.log("Upazila popup visibility toggled:", isUpazilaPopupVisible);
-  // };
-
-  // // Handle form submission for Upazila
-  // const handleSubmitUpazila = async () => {
-  //   console.log("Submitting Upazila with name:", upazilaName);
-    
-  //   // Check if Upazila name is entered
-  //   if (!upazilaName.trim()) {
-  //     Swal.fire({
-  //       title: "Error",
-  //       text: "Upazila name is required!",
-  //       icon: "error",
-  //       confirmButtonText: "OK",
-  //     });
-  //     return;
-  //   }
-
-  //   // Check if district is selected
-  //   if (!selectedDistrict || !selectedDistrict.id) {
-  //     Swal.fire({
-  //       title: "Error",
-  //       text: "Please select a valid district!",
-  //       icon: "error",
-  //       confirmButtonText: "OK",
-  //     });
-  //     return;
-  //   }
-
-  //   const payload = {
-  //     name: upazilaName,
-  //     district_id: selectedDistrict.id, // Use selected district ID
-  //   };
-    
-
-  //   console.log("Payload for Upazila:", payload); // Log the payload to check before sending the request
-
-  //   try {
-  //     const response = await ApiClient.post("/admin/tender-config/upazila", payload, {
-  //       headers: {
-  //         Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiSXFiYWwgSG9zc2FpbiIsImVtYWlsIjoiaXFiYWxAZ21haWwuY29tIiwicGhvbmUiOiI4ODAxOTk2MTA1MDIwIiwib3RwIjozMzQyLCJzdGF0dXMiOjEsIm90cF9jcmVhdGVkX2F0IjoiMjAyNC0xMi0xNCAxMDoxMDoxMiIsInVwZGF0ZWRfYnkiOjYsImlkIjo2LCJhZG1pbl90eXBlIjoic3VwZXItYWRtaW4iLCJpYXQiOjE3MzQ5MjUzNTYsImV4cCI6MTczNTg0Njk1Nn0.NtnOrwiC74FtvANLus4J5tewRuHL27_MpUkhgfi9bDM",
-
-  //       },
-  //     });
-    
-  //     console.log("API response:", response);
-    
-  //     if (response.status === 200 || response.status === 201) {
-  //       Swal.fire({
-  //         title: "Success",
-  //         text: "Upazila created successfully!",
-  //         icon: "success",
-  //         confirmButtonText: "OK",
-  //       });
-  //       setUpazilaName(""); // Clear input field
-  //       toggleUpazilaPopup(); // Close the popup
-  //     } else {
-  //       Swal.fire({
-  //         title: "Error",
-  //         text: response.data?.message || "Something went wrong!",
-  //         icon: "error",
-  //         confirmButtonText: "Try Again",
-  //       });
-  //     }
-  //   } catch (error) {
-  //     console.error("API call failed:", error); // Log the error for debugging
-  //     if (error.response) {
-  //       // Handle API error response
-  //       Swal.fire({
-  //         title: "Error",
-  //         text: error.response.data?.message || "API request failed!",
-  //         icon: "error",
-  //         confirmButtonText: "Try Again",
-  //       });
-  //     } else if (error.request) {
-  //       // The request was made but no response was received
-  //       Swal.fire({
-  //         title: "Error",
-  //         text: "No response from the server. Please try again later.",
-  //         icon: "error",
-  //         confirmButtonText: "Try Again",
-  //       });
-  //     } else {
-  //       // Something happened while setting up the request
-  //       Swal.fire({
-  //         title: "Error",
-  //         text: error.message || "An unknown error occurred.",
-  //         icon: "error",
-  //         confirmButtonText: "Try Again",
-  //       });
-  //     }
-  //   }
-    
-  // };
-
-
   const [isUpazilaPopupVisible, setIsUpazilaPopupVisible] = useState(false);
   const [upazilaName, setUpazilaName] = useState("");
-  // const [selectedDistrict, setSelectedDistrict] = useState(null);
-  // const [districts, setDistricts] = useState([]);
+
 
   useEffect(() => {
     const fetchDistricts = async () => {
@@ -1476,6 +1286,7 @@ const CreateTenderForm = ({ onClose, sourceData }) => {
   };
 
   const handleSubmitUpazila = async () => {
+
     console.log("Submitting Upazila with name:", upazilaName);
 
     if (!upazilaName.trim()) {
@@ -1540,10 +1351,11 @@ const CreateTenderForm = ({ onClose, sourceData }) => {
         confirmButtonText: "Try Again",
       });
     }
-  };
- 
 
- 
+  };
+
+
+
 
   {/* ----------------Upazilla New Create Api----------------- */ }
 
@@ -1669,7 +1481,7 @@ const CreateTenderForm = ({ onClose, sourceData }) => {
                 <option value="e-GP">e-GP</option>
                 <option value="Newspaper">Newspaper</option>
                 <option value="Online">Online</option>
-                <option value="Advertisement">Third Party</option>
+                {/* <option value="Advertisement">Third Party</option> */}
                 <option value="Website">Website</option>
                 <option value="Manual">Manual</option>
               </select>
@@ -1753,25 +1565,7 @@ const CreateTenderForm = ({ onClose, sourceData }) => {
             </div>
 
             {/* Department Dropdown */}
-            {/* <div>
-              <label className="block text-gray-700 font-medium mb-1">
-                Department
-              </label>
-              <select
-                value={selectedDepartment}
-                onChange={e => setSelectedDepartment(e.target.value)}
-                className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="">
-                  Select a Department
-                </option>
-                {departments.map(department => (
-                  <option key={department.id} value={department.id}>
-                    {department.name}
-                  </option>
-                ))}
-              </select>
-            </div> */}
+
 
             {/* ----------------New department search by name----------- */}
             <div>
@@ -1859,26 +1653,7 @@ const CreateTenderForm = ({ onClose, sourceData }) => {
 
 
             {/* Subdepartment Dropdown */}
-            {/* <div>
-              <label className="block text-gray-700 font-medium mb-1">
-                Sub-Department
-              </label>
-              <select
-                name="sub_department_id"
-                value={formDataSubmit.sub_department_id}
-                onChange={handleInputChange}
-                className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="">
-                  Select a Sub-department
-                </option>
-                {filteredSubdepartments.map(subdepartment => (
-                  <option key={subdepartment.id} value={subdepartment.id}>
-                    {subdepartment.name}
-                  </option>
-                ))}
-              </select>
-            </div> */}
+
 
             {/* ------------New Sub-department search by name------------------------- */}
 
@@ -1983,27 +1758,6 @@ const CreateTenderForm = ({ onClose, sourceData }) => {
 
 
             {/* Category Dropdown */}
-            {/* 1st er ta */}
-            {/* <div>
-              <label className="block text-gray-700 font-medium mb-1">
-                Category
-              </label>
-              <select
-                value={selectedCategory}
-                onChange={e => setSelectedCategory(e.target.value)}
-                className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="">
-                  Select a Category
-                </option>
-                {categories.map(category => (
-                  <option key={category.id} value={category.id}>
-                    {category.name}
-                  </option>
-                ))}
-              </select>
-            </div> */}
-
 
             {/* ------------New Category search by name------------------------- */}
 
@@ -2063,7 +1817,7 @@ const CreateTenderForm = ({ onClose, sourceData }) => {
               {/* ----------------Category New Create Api---------- */}
 
 
-              {/* <label className="block text-gray-700 font-medium mb-1">Category</label> */}
+
 
               <input
                 type="text"
@@ -2104,25 +1858,6 @@ const CreateTenderForm = ({ onClose, sourceData }) => {
 
 
             {/* Sector Dropdown */}
-            {/* <div>
-              <label className="block text-gray-700 font-medium mb-1">
-                Sector
-              </label>
-              <select
-                value={selectedSector}
-                onChange={e => setSelectedSector(e.target.value)}
-                className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="">
-                  Select a Sector
-                </option>
-                {filteredSectors.map(sector => (
-                  <option key={sector.id} value={sector.id}>
-                    {sector.name}
-                  </option>
-                ))}
-              </select>
-            </div> */}
 
 
 
@@ -2185,7 +1920,7 @@ const CreateTenderForm = ({ onClose, sourceData }) => {
               {/* //  --------------Sector New Create Api----------------- */}
 
 
-              {/* <label className="block text-gray-700 font-medium mb-1">Sector</label> */}
+
 
               <input
                 type="text"
@@ -2218,27 +1953,7 @@ const CreateTenderForm = ({ onClose, sourceData }) => {
 
 
             {/* Subsector Dropdown */}
-            {/* <div>
-              <label className="block text-gray-700 font-medium mb-1">
-                Sub-Sector
-              </label>
-              <select
-                name="sub_sector_id"
-                value={formDataSubmit.sub_sector_id}
-                onChange={handleInputChange}
-                // onChange={handleSectorChange}
-                className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="">
-                  Select a Sub-sector
-                </option>
-                {filteredSubsectors.map(subsector => (
-                  <option key={subsector.id} value={subsector.id}>
-                    {subsector.name}
-                  </option>
-                ))}
-              </select>
-            </div> */}
+
 
 
             {/* ------------New Sub-Sector search by name------------------------- */}
@@ -2296,7 +2011,7 @@ const CreateTenderForm = ({ onClose, sourceData }) => {
               </div>
 
               {/* ----------------Sub-Sector New Create Api----------------- */}
-              {/* <label className="block text-gray-700 font-medium mb-1">Sub-Sector</label> */}
+
 
               {/* Input field for searching Sub-Sector */}
               <input
@@ -2322,14 +2037,7 @@ const CreateTenderForm = ({ onClose, sourceData }) => {
                 </ul>
               )}
 
-              {/* Display selected sub-sector */}
-              {/* {selectedSubSector && (
-        <div className="mt-4 p-2 bg-green-100 border border-green-300 rounded-lg">
-          <p className="text-green-700">
-            Selected Sub-Sector: <strong>{selectedSubSector.name}</strong>
-          </p>
-        </div>
-      )} */}
+
             </div>
 
             {/* ------------New Sub-Sector search by name------------------------- */}
@@ -2337,381 +2045,247 @@ const CreateTenderForm = ({ onClose, sourceData }) => {
 
 
             {/* Division Dropdown */}
+
+
             <div>
-
-              {/* ----------------Division New Create Api----------------- */}
-              <div>
-
-                <div className="flex items-center space-x-2">
-                  <label className="block text-gray-700 font-medium mb-1">Division</label>
-                  <button
-                    onClick={toggleDivisionPopup}
-                    className="bg-gray-200 text-black p-1 rounded-full shadow-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
-                  >
-                    +
-                  </button>
-                </div>
-
-
-                {isDivisionPopupVisible && (
-                  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-                    <div className="bg-white rounded-lg shadow-lg p-6 w-[90%] max-w-sm relative">
-
-                      <button
-                        onClick={toggleDivisionPopup}
-                        className="absolute top-3 right-3 text-gray-600 hover:text-gray-900 focus:outline-none"
-                      >
-                        ✕
-                      </button>
-
-
-                      <div>
-                        <label className="block text-gray-700 font-medium mb-2">
-                          <span className="text-red-500">*</span> Division Name:
-                        </label>
-                        <input
-                          type="text"
-                          value={divisionName}
-                          onChange={(e) => setDivisionName(e.target.value)}
-                          placeholder="Enter Division name"
-                          className="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-                          required
-                        />
-                      </div>
-
-
-                      <button
-                        onClick={handleSubmitDivision}
-                        className="w-full mt-4 bg-teal-500 text-white py-2 rounded-lg flex items-center justify-center hover:bg-teal-600"
-                      >
-                        <span className="mr-2">➤</span> Submit Division
-                      </button>
-                    </div>
-                  </div>
-                )}
+              {/* Division Section */}
+              <div className="flex items-center space-x-2">
+                <label className="block text-gray-700 font-medium mb-1">Division</label>
+                <button
+                  onClick={toggleDivisionPopup}
+                  className="bg-gray-200 text-black p-1 rounded-full shadow-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                >
+                  +
+                </button>
               </div>
 
+              {/* Division Popup */}
+              {isDivisionPopupVisible && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                  <div className="bg-white rounded-lg shadow-lg p-6 w-[90%] max-w-sm relative">
+                    <button
+                      onClick={toggleDivisionPopup}
+                      className="absolute top-3 right-3 text-gray-600 hover:text-gray-900 focus:outline-none"
+                    >
+                      ✕
+                    </button>
 
+                    {/* Division Name Input */}
+                    <div>
+                      <label className="block text-gray-700 font-medium mb-2">
+                        <span className="text-red-500">*</span> Division Name:
+                      </label>
+                      <input
+                        type="text"
+                        value={divisionName}
+                        onChange={(e) => setDivisionName(e.target.value)}
+                        placeholder="Enter Division name"
+                        className="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                        required
+                      />
+                    </div>
 
+                    {/* Submit Button */}
+                    <button
+                      onClick={handleSubmitDivision}
+                      className="w-full mt-4 bg-teal-500 text-white py-2 rounded-lg flex items-center justify-center hover:bg-teal-600"
+                    >
+                      Submit Division
+                    </button>
+                  </div>
+                </div>
+              )}
 
+              {/* Search for a Division */}
+              <input
+                type="text"
+                value={searchQueryDivision}
+                onChange={handleSearchChangeDivision}
+                placeholder="Search for a Division"
+                className="w-full p-2 border border-gray-300 rounded-lg"
+              />
 
-
-
-              {/* ----------------Division New Create Api----------------- */}
-              {/* <label className="block text-gray-700 font-medium mb-1">
-                Division <span className="text-red-500">*</span>
-              </label> */}
-              <select
-                value={selectedDivision}
-                onChange={e => setSelectedDivision(e.target.value)}
-                className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
-              >
-                <option value="">
-                  Select a Division
-                </option>
-                {divisions.map(division => (
-                  <option key={division.id} value={division.id}>
-                    {division.name}
-                  </option>
-                ))}
-              </select>
-
-
+              {/* Show filtered divisions */}
+              {!selectedDivision && searchQueryDivision && filteredDivision.length > 0 && (
+                <ul className="border border-gray-300 rounded-lg mt-2 max-h-48 overflow-y-auto">
+                  {filteredDivision.map((division) => (
+                    <li
+                      key={division.id}
+                      className="p-2 cursor-pointer hover:bg-gray-200"
+                      onClick={() => handleSelectDivision(division.id, division.name)}
+                    >
+                      {division.name}
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
+
 
 
 
             {/* District Dropdown */}
-            <div>
 
-              {/* ----------------Dristict New Create Api----------------- */}
-              {/* <div>
-      <div className="flex items-center space-x-2">
-        <label className="block text-gray-700 font-medium mb-1">District</label>
-        <button
-          onClick={toggleDistrictPopup}
-          className="bg-gray-200 text-black p-1 rounded-full shadow-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
-        >
-          +
-        </button>
-      </div>
-
-      {isDistrictPopupVisible && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white rounded-lg shadow-lg p-6 w-[90%] max-w-sm relative">
-            <button
-              onClick={toggleDistrictPopup}
-              className="absolute top-3 right-3 text-gray-600 hover:text-gray-900 focus:outline-none"
-            >
-              ✕
-            </button>
 
             <div>
-              <label className="block text-gray-700 font-medium mb-2">
-                <span className="text-red-500">*</span> District Name:
-              </label>
+              {/* District Section */}
+              <div className="flex items-center space-x-2">
+                <label className="block text-gray-700 font-medium mb-1">District</label>
+                <button
+                  onClick={toggleDistrictPopup}
+                  className="bg-gray-200 text-black p-1 rounded-full shadow-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                >
+                  +
+                </button>
+              </div>
+
+              {/* District Popup */}
+              {isDistrictPopupVisible && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                  <div className="bg-white rounded-lg shadow-lg p-6 w-[90%] max-w-sm relative">
+                    <button
+                      onClick={toggleDistrictPopup}
+                      className="absolute top-3 right-3 text-gray-600 hover:text-gray-900 focus:outline-none"
+                    >
+                      ✕
+                    </button>
+
+                    {/* District Name Input */}
+                    <div>
+                      <label className="block text-gray-700 font-medium mb-2">
+                        <span className="text-red-500">*</span> District Name:
+                      </label>
+                      <input
+                        type="text"
+                        value={districtName}
+                        onChange={(e) => setDistrictName(e.target.value)}
+                        placeholder="Enter District name"
+                        className="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                        required
+                      />
+                    </div>
+
+                    {/* Submit Button */}
+                    <button
+                      onClick={handleSubmitDistrict}
+                      className="w-full mt-4 bg-teal-500 text-white py-2 rounded-lg flex items-center justify-center hover:bg-teal-600"
+                    >
+                      Submit District
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* Search for a District */}
               <input
                 type="text"
-                value={districtName}
-                onChange={(e) => setDistrictName(e.target.value)}
-                placeholder="Enter District name"
-                className="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-                required
+                value={searchQueryDistrict}
+                onChange={handleSearchChangeDistrict}
+                placeholder="Search for a District"
+                className="w-full p-2 border border-gray-300 rounded-lg"
               />
-            </div>
 
-           
-
-            <button
-              onClick={handleSubmitDistrict}
-              className="w-full mt-4 bg-teal-500 text-white py-2 rounded-lg flex items-center justify-center hover:bg-teal-600"
-            >
-              <span className="mr-2">➤</span> Submit District
-            </button>
-          </div>
-        </div>
-      )}
-              </div> */}
-
-              <div>
-                <div className="flex items-center space-x-2">
-                  <label className="block text-gray-700 font-medium mb-1">District</label>
-                  <button
-                    onClick={toggleDistrictPopup}
-                    className="bg-gray-200 text-black p-1 rounded-full shadow-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
-                  >
-                    +
-                  </button>
-                </div>
-
-                {isDistrictPopupVisible && (
-                  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-                    <div className="bg-white rounded-lg shadow-lg p-6 w-[90%] max-w-sm relative">
-                      <button
-                        onClick={toggleDistrictPopup}
-                        className="absolute top-3 right-3 text-gray-600 hover:text-gray-900 focus:outline-none"
-                      >
-                        ✕
-                      </button>
-
-                      <div>
-                        <label className="block text-gray-700 font-medium mb-2">
-                          <span className="text-red-500">*</span> District Name:
-                        </label>
-                        <input
-                          type="text"
-                          value={districtName}
-                          onChange={(e) => setDistrictName(e.target.value)}
-                          placeholder="Enter District name"
-                          className="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-                          required
-                        />
-                      </div>
-
-                      <div className="mt-4">
-                        <label className="block text-gray-700 font-medium mb-2">
-                          <span className="text-red-500">*</span> Select Division:
-                        </label>
-                        <select
-                          value={selectedDivision?.id || ""}
-                          onChange={handleDivisionChange}
-                          className="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-                          required
-                        >
-                          <option value="" disabled>
-                            Select a division
-                          </option>
-                          {divisions.map((division) => (
-                            <option key={division.id} value={division.id}>
-                              {division.name}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-
-                      <button
-                        onClick={handleSubmitDistrict}
-                        className="w-full mt-4 bg-teal-500 text-white py-2 rounded-lg flex items-center justify-center hover:bg-teal-600"
-                      >
-                        Submit District
-                      </button>
-                    </div>
-                  </div>
-                )}
-              </div>
-              {/* ----------------Dristict New Create Api----------------- */}
-              {/* <label className="block text-gray-700 font-medium mb-1">
-                District <span className="text-red-500">*</span>
-              </label> */}
-              <select
-                value={selectedDistrict}
-                onChange={e => setSelectedDistrict(e.target.value)}
-                className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
-              >
-                <option value="">
-                  Select a District
-                </option>
-                {filteredDistricts.map(district => (
-                  <option key={district.id} value={district.id}>
-                    {district.name}
-                  </option>
-                ))}
-              </select>
+              {/* Show filtered districts */}
+              {!selectedDistrict && searchQueryDistrict && filteredDistrict.length > 0 && (
+                <ul className="border border-gray-300 rounded-lg mt-2 max-h-48 overflow-y-auto">
+                  {filteredDistrict.map((district) => (
+                    <li
+                      key={district.id}
+                      className="p-2 cursor-pointer hover:bg-gray-200"
+                      onClick={() => handleSelectDistrict(district.id, district.name)}
+                    >
+                      {district.name}
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
 
 
 
             {/* Upazila Dropdown */}
-            <div>
 
-              {/* ----------------Upazilla New Create Api----------------- */}
-             
 
-{/* <div>
-      
-      <div className="flex items-center space-x-2">
-        <label className="block text-gray-700 font-medium mb-1">District</label>
-        <button
-          onClick={toggleUpazilaPopup} 
-          className="bg-gray-200 text-black p-1 rounded-full shadow-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
-        >
-          +
-        </button>
-      </div>
-
-      {isUpazilaPopupVisible && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white rounded-lg shadow-lg p-6 w-[90%] max-w-sm relative">
-            <button
-              onClick={toggleUpazilaPopup}
-              className="absolute top-3 right-3 text-gray-600 hover:text-gray-900 focus:outline-none"
-            >
-              ✕
-            </button>
 
             <div>
-              <label className="block text-gray-700 font-medium mb-2">
-                <span className="text-red-500">*</span> Upazila Name:
-              </label>
+
+              <div>
+                <div className="flex items-center space-x-2">
+                  <label className="block text-gray-700 font-medium mb-1">Upazila</label>
+                  <button
+                    onClick={toggleUpazilaPopup}
+                    className="bg-gray-200 text-black p-1 rounded-full shadow-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                  >
+                    +
+                  </button>
+                </div>
+
+
+                {isUpazilaPopupVisible && (
+                  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                    <div className="bg-white rounded-lg shadow-lg p-6 w-[90%] max-w-sm relative">
+                      {/* Close Button */}
+                      <button
+                        onClick={toggleUpazilaPopup}
+                        className="absolute top-3 right-3 text-gray-600 hover:text-gray-900 focus:outline-none"
+                      >
+                        ✕
+                      </button>
+
+
+                      <div>
+                        <label className="block text-gray-700 font-medium mb-2">
+                          <span className="text-red-500">*</span> Upazila Name:
+                        </label>
+                        <input
+                          type="text"
+                          value={upazilaName}
+                          onChange={(e) => setUpazilaName(e.target.value)}
+                          placeholder="Enter Upazila name"
+                          className="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                          required
+                        />
+                      </div>
+
+
+
+
+
+                      <button
+                        onClick={handleSubmitUpazila}
+                        className="w-full mt-4 bg-teal-500 text-white py-2 rounded-lg flex items-center justify-center hover:bg-teal-600"
+                      >
+                        Submit Upazila
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+
               <input
                 type="text"
-                value={upazilaName}
-                onChange={(e) => setUpazilaName(e.target.value)}
-                placeholder="Enter Upazila name"
-                className="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-                required
+                value={searchQueryUpazila}
+                onChange={handleSearchChangeUpazila}
+                placeholder="Search for an Upazila"
+                className="w-full p-2 border border-gray-300 rounded-lg "
               />
+
+
+              {!selectedUpazila && searchQueryUpazila && filteredUpazilas.length > 0 && (
+                <ul className="border border-gray-300 rounded-lg mt-2 max-h-48 overflow-y-auto">
+                  {[...new Map(filteredUpazilas.map(upazila => [upazila.name, upazila])).values()].map((upazila) => (
+                    <li
+                      key={upazila.id}
+                      className="p-2 cursor-pointer hover:bg-gray-200"
+                      onClick={() => handleSelectUpazila(upazila.id, upazila.name)}
+                    >
+                      {upazila.name}
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
-
-            <button
-              onClick={handleSubmitUpazila}
-              className="w-full mt-4 bg-teal-500 text-white py-2 rounded-lg flex items-center justify-center hover:bg-teal-600"
-            >
-              <span className="mr-2">➤</span> Submit Upazila
-            </button>
-          </div>
-        </div>
-      )}
-    </div> */}
-
-
-<div>
-      <div className="flex items-center space-x-2">
-        <label className="block text-gray-700 font-medium mb-1">Upazila</label>
-        <button
-          onClick={toggleUpazilaPopup}
-          className="bg-gray-200 text-black p-1 rounded-full shadow-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
-        >
-          +
-        </button>
-      </div>
-
-      {isUpazilaPopupVisible && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white rounded-lg shadow-lg p-6 w-[90%] max-w-sm relative">
-            <button
-              onClick={toggleUpazilaPopup}
-              className="absolute top-3 right-3 text-gray-600 hover:text-gray-900 focus:outline-none"
-            >
-              ✕
-            </button>
-
-            <div>
-              <label className="block text-gray-700 font-medium mb-2">
-                <span className="text-red-500">*</span> Upazila Name:
-              </label>
-              <input
-                type="text"
-                value={upazilaName}
-                onChange={(e) => setUpazilaName(e.target.value)}
-                placeholder="Enter Upazila name"
-                className="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-                required
-              />
-            </div>
-
-            {/* District Selection */}
-            <div className=" mt-4">
-              <label className="block text-gray-700 font-medium mb-1">*Select District</label>
-              <select
-                value={selectedDistrict ? selectedDistrict.id : ""}
-                onChange={(e) => {
-                  const district = districts.find(d => d.id === parseInt(e.target.value));
-                  setSelectedDistrict(district);  // Set the selected district
-                }}
-                className="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-              >
-                <option value="">Select a district</option>
-                {districts.map((district) => (
-                  <option key={district.id} value={district.id}>
-                    {district.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {/* Submit Button */}
-            <button
-              onClick={handleSubmitUpazila}
-              className="w-full mt-4 bg-teal-500 text-white py-2 rounded-lg flex items-center justify-center hover:bg-teal-600"
-            >
-              <span className="mr-2">➤</span> Submit Upazila
-            </button>
-          </div>
-        </div>
-      )}
-    </div>
-
-
-              {/* ----------------Upazilla New Create Api----------------- */}
-              {/* <label className="block text-gray-700 font-medium mb-1">
-                Upazila <span className="text-red-500">*</span>
-              </label> */}
-              <select
-                value={formDataSubmit.upazila_id}
-                onChange={handleInputChange}
-                name="upazila_id"
-                required
-                className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="">
-                  Select an Upazila
-                </option>
-                {filteredUpazilas.map(upazila => (
-                  <option key={upazila.id} value={upazila.id}>
-                    {upazila.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-
-
-
-
-
 
             {/*  Publish on*/}
             <div>
@@ -2860,16 +2434,7 @@ const CreateTenderForm = ({ onClose, sourceData }) => {
             </div>
 
             {/* Logo Upload */}
-            {/* <div>
-              <label className="block text-gray-700 font-medium mb-1">
-                Organization Logo
-              </label>
-              <input
-                type="file"
-                onChange={e => handleLogoUpload(e, setLogoInput)}
-                className="w-full p-2 border border-gray-300 rounded-lg"
-              />
-            </div> */}
+
 
             <div>
               <label className="block text-gray-700 font-medium mb-1">

@@ -71,61 +71,9 @@ const AllSubscriberList = () => {
         </button>
       </div>
 
-      {/* <div className="flex gap-1 items-center mb-4 bg-white shadow-md p-4 rounded-md">
-        <div className="flex items-center space-x-1">
-          <label className="text-gray-700 text-sm font-semibold">From Date</label>
-          <input
-            type="date"
-            className="border rounded px-2 py-1 text-sm shadow-sm focus:ring focus:ring-blue-300"
-            value={fromDate}
-            onChange={(e) => setFromDate(e.target.value)}
-          />
-          <span className="text-gray-500 text-sm">To Date</span>
-          <input
-            type="date"
-            className="border rounded px-2 py-1 text-sm shadow-sm focus:ring focus:ring-blue-300"
-            value={toDate}
-            onChange={(e) => setToDate(e.target.value)}
-          />
-        </div>
-        
-        <div className="flex items-center space-x-1">
-          <label className="text-gray-700 text-sm font-semibold">Keyword</label>
-          <input
-            type="text"
-            placeholder="Enter keyword"
-            className="border rounded px-2 py-1 text-sm shadow-sm focus:ring focus:ring-blue-300"
-            value={keyword}
-            onChange={(e) => setKeyword(e.target.value)}
-          />
-        </div>
 
-        <div className="flex items-center space-x-1">
-          <label className="text-gray-700 text-sm font-semibold">Payment</label>
-          <input
-            type="text"
-            placeholder="Enter your Payment"
-            className="border rounded px-2 py-1 text-sm shadow-sm focus:ring focus:ring-blue-300"
-            value={paymentMethod}
-            onChange={(e) => setPaymentMethod(e.target.value)}  // Update the paymentMethod state
-          />
-        </div>
 
-        <div className="flex items-center space-x-1">
-            <label className="text-gray-700 text-sm font-semibold">Status</label>
-            <select
-              className="border rounded px-2 py-1 text-sm shadow-sm focus:ring focus:ring-blue-300"
-              onChange={(e) => setPaymentStatus(e.target.value)} // Handle status change
-              value={paymentStatus}
-            >
-              <option value="">Status</option>
-              <option value="Success">Success</option>
-              <option value="Failed">Failed</option>
-            </select>
-          </div>
-      </div> */}
-
-<div className="flex gap-2 items-center mb-4 bg-white shadow-md p-4 rounded-md">
+{/* <div className="flex gap-2 items-center mb-4 bg-white shadow-md p-4 rounded-md">
   <div className="flex items-center space-x-1">
     <label className="text-gray-700 text-sm font-semibold">From Date</label>
     <input
@@ -143,7 +91,7 @@ const AllSubscriberList = () => {
     />
   </div>
   
-  <div className="flex items-center space-x-1">
+  <div className="flex items-center ">
     <label className="text-gray-700 text-sm font-semibold">Keyword</label>
     <input
       type="text"
@@ -154,7 +102,7 @@ const AllSubscriberList = () => {
     />
   </div>
 
-  <div className="flex items-center space-x-1">
+  <div className="flex items-center ">
     <label className="text-gray-700 text-sm font-semibold">Payment</label>
     <input
       type="text"
@@ -165,12 +113,12 @@ const AllSubscriberList = () => {
     />
   </div>
 
-  {/* Moved Status field below the others */}
+  
   <div className="flex items-center space-x-1 mt-2">
     <label className="text-gray-700 text-sm font-semibold">Status</label>
     <select
       className="border rounded px-2 py-1 text-sm shadow-sm focus:ring focus:ring-blue-300"
-      onChange={(e) => setPaymentStatus(e.target.value)} // Handle status change
+      onChange={(e) => setPaymentStatus(e.target.value)}
       value={paymentStatus}
     >
       <option value="">Select Status</option>
@@ -178,7 +126,70 @@ const AllSubscriberList = () => {
       <option value="Failed">Failed</option>
     </select>
   </div>
+</div> */}
+
+<div className="container mx-auto bg-white shadow-md p-6 rounded-md">
+  <div className="flex items-center justify-between space-x-4">
+    <div className="flex items-center space-x-2">
+      <label className="text-gray-700 text-sm font-semibold">From Date</label>
+      <input
+        type="date"
+        className="border rounded px-2 py-1 text-sm shadow-sm focus:ring focus:ring-blue-300"
+        value={fromDate}
+        onChange={(e) => setFromDate(e.target.value)}
+      />
+    </div>
+
+    <div className="flex items-center space-x-2">
+      <span className="text-gray-500 text-sm">To Date</span>
+      <input
+        type="date"
+        className="border rounded px-2 py-1 text-sm shadow-sm focus:ring focus:ring-blue-300"
+        value={toDate}
+        onChange={(e) => setToDate(e.target.value)}
+      />
+    </div>
+
+    <div className="flex items-center space-x-2">
+      <label className="text-gray-700 text-sm font-semibold">Keyword</label>
+      <input
+        type="text"
+        placeholder="Enter keyword"
+        className="border rounded px-2 py-1 text-sm shadow-sm focus:ring focus:ring-blue-300"
+        value={keyword}
+        onChange={(e) => setKeyword(e.target.value)}
+      />
+    </div>
+
+    <div className="flex items-center space-x-2">
+      <label className="text-gray-700 text-sm font-semibold">Payment</label>
+      <input
+        type="text"
+        placeholder="Enter your Payment"
+        className="border rounded px-2 py-1 text-sm shadow-sm focus:ring focus:ring-blue-300"
+        value={paymentMethod}
+        onChange={(e) => setPaymentMethod(e.target.value)}
+      />
+    </div>
+  </div>
+
+  <div className="flex items-center space-x-4 mt-4">
+    <label className="text-gray-700 text-sm font-semibold">Status</label>
+    <select
+      className="border rounded px-2 py-1 text-sm shadow-sm focus:ring focus:ring-blue-300"
+      value={paymentStatus}
+      onChange={(e) => setPaymentStatus(e.target.value)}
+    >
+      <option value="">Select Status</option>
+      <option value="Success">Success</option>
+      <option value="Failed">Failed</option>
+    </select>
+  </div>
 </div>
+
+
+
+
 
 
       <div className="overflow-x-auto bg-white shadow-md rounded-md">
