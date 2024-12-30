@@ -818,9 +818,90 @@ const CreateTenderForm = ({ onClose, sourceData }) => {
 
   // -------------Sub-Department New Create Api------------------
 
+  // const [isSubDepartmentPopupVisible, setIsSubDepartmentPopupVisible] = useState(false);
+  // const [SubDepartmentName, setSubDepartmentName] = useState('');
+
+
+  // // Toggle popup visibility
+  // const toggleSubDepartmentPopup = () => {
+  //   setIsSubDepartmentPopupVisible(!isSubDepartmentPopupVisible);
+  // };
+
+  // // Handle form submission
+  // const handleSubmitSubDepartment = async () => {
+  //   if (!SubDepartmentName.trim()) {
+  //     // console.error('Sub-Department name is required.');
+  //     return;
+  //   }
+
+  //   // Include department_id in the payload
+  //   const payload = {
+  //     name: SubDepartmentName,
+  //     department_id: selectedDepartment // Use the selected department id
+  //   };
+
+  //   try {
+  //     // console.log('Sending payload:', payload);
+
+  //     // Sending request with the payload using the ApiClient
+  //     const response = await ApiClient.post('/admin/tender-config/sub-department', payload);
+  //     // console.log('Response:', response.data);
+
+  //     if (response.status === 200 || response.status === 201) {
+  //       await Swal.fire({
+  //         title: "Success!",
+  //         text: "Sub-Department created successfully!",
+  //         icon: "success",
+  //         confirmButtonText: "OK",
+  //       });
+  //       setSubDepartmentName(''); // Reset the input field
+  //       toggleSubDepartmentPopup(); // Close the modal
+  //     } else {
+  //       Swal.fire({
+  //         title: "Error!",
+  //         text: response.data.message || "Something went wrong!",
+  //         icon: "error",
+  //         confirmButtonText: "Try Again",
+  //       });
+  //     }
+  //   } catch (error) {
+  //     console.error("Error during API call:", error);
+
+  //     Swal.fire({
+  //       title: "Error!",
+  //       text: error.response?.data?.message || "Something went wrong!",
+  //       icon: "error",
+  //       confirmButtonText: "Try Again",
+  //     });
+  //   }
+  // };
+
+  // // Fetch request example (using existing selectedDepartment value)
+  // const myHeaders = new Headers();
+  // myHeaders.append("Content-Type", "application/json");
+  // myHeaders.append("Authorization", "Bearer <YOUR_BEARER_TOKEN>");
+
+  // const raw = JSON.stringify({
+  //   "name": SubDepartmentName,  // Using the state for SubDepartmentName
+  //   "department_id": selectedDepartment // Using the selected department ID from state
+  // });
+
+  // const requestOptions = {
+  //   method: "POST",
+  //   headers: myHeaders,
+  //   body: raw,
+  //   redirect: "follow"
+  // };
+
+  // fetch("http://192.168.0.230:9009/api/v1/admin/tender-config/sub-department", requestOptions)
+  //   .then((response) => response.json())
+  //   .then((result) => console.log(result))
+  //   .catch((error) => console.error(error));
+
+
+
   const [isSubDepartmentPopupVisible, setIsSubDepartmentPopupVisible] = useState(false);
   const [SubDepartmentName, setSubDepartmentName] = useState('');
-
 
   // Toggle popup visibility
   const toggleSubDepartmentPopup = () => {
@@ -830,33 +911,39 @@ const CreateTenderForm = ({ onClose, sourceData }) => {
   // Handle form submission
   const handleSubmitSubDepartment = async () => {
     if (!SubDepartmentName.trim()) {
-      // console.error('Sub-Department name is required.');
+      // If SubDepartment name is empty, show a warning
+      Swal.fire({
+        title: "Warning!",
+        text: "Sub-Department name is required!",
+        icon: "warning",
+        confirmButtonText: "OK",
+      });
       return;
     }
 
-    // Include department_id in the payload
     const payload = {
       name: SubDepartmentName,
       department_id: selectedDepartment // Use the selected department id
     };
 
     try {
-      // console.log('Sending payload:', payload);
-
       // Sending request with the payload using the ApiClient
       const response = await ApiClient.post('/admin/tender-config/sub-department', payload);
-      // console.log('Response:', response.data);
 
       if (response.status === 200 || response.status === 201) {
+        // Show success message
         await Swal.fire({
           title: "Success!",
           text: "Sub-Department created successfully!",
           icon: "success",
           confirmButtonText: "OK",
         });
+
+        // Reset form and close popup
         setSubDepartmentName(''); // Reset the input field
         toggleSubDepartmentPopup(); // Close the modal
       } else {
+        // Show error message
         Swal.fire({
           title: "Error!",
           text: response.data.message || "Something went wrong!",
@@ -867,6 +954,7 @@ const CreateTenderForm = ({ onClose, sourceData }) => {
     } catch (error) {
       console.error("Error during API call:", error);
 
+      // Handle error and show appropriate message
       Swal.fire({
         title: "Error!",
         text: error.response?.data?.message || "Something went wrong!",
@@ -875,30 +963,6 @@ const CreateTenderForm = ({ onClose, sourceData }) => {
       });
     }
   };
-
-  // Fetch request example (using existing selectedDepartment value)
-  const myHeaders = new Headers();
-  myHeaders.append("Content-Type", "application/json");
-  myHeaders.append("Authorization", "Bearer <YOUR_BEARER_TOKEN>");
-
-  const raw = JSON.stringify({
-    "name": SubDepartmentName,  // Using the state for SubDepartmentName
-    "department_id": selectedDepartment // Using the selected department ID from state
-  });
-
-  const requestOptions = {
-    method: "POST",
-    headers: myHeaders,
-    body: raw,
-    redirect: "follow"
-  };
-
-  fetch("http://192.168.0.230:9009/api/v1/admin/tender-config/sub-department", requestOptions)
-    .then((response) => response.json())
-    .then((result) => console.log(result))
-    .catch((error) => console.error(error));
-
-
 
   // -------------Sub-Department New Create Api------------------
 
