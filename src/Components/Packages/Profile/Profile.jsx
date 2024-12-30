@@ -7,7 +7,7 @@ const Profile = ({ user_name, photo }) => {
   // console.log("Photo:", photo);
 
   return (
-    <div className="flex items-center space-x-4 justify-start">
+    <div className="flex items-center space-x-4 justify-center">
       {/* Image section */}
       <img
         src={
