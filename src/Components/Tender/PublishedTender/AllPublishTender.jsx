@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ApiClient from "../../../Api/ApiClient";
@@ -12,12 +11,21 @@ const AllPublishTender = () => {
   const [editingIndex, setEditingIndex] = useState(null);
   const [currentPage, setCurrentPage] = useState(1); // Current page
   const [pageSize] = useState(10); // Number of items per page
+  const [keyword, setKeyword] = useState("");
+  const [statusFilter, setStatusFilter] = useState(""); // Status filter state
+  const [categoriesFilter, setCategoriesFilter] = useState(""); // Status filter state
   const navigate = useNavigate();
 
-  // Fetch Tender Data
+  // Fetch Tender Data with Filters
   const fetchTenders = async () => {
+    setLoading(true); // Start loading
     try {
-      const response = await ApiClient.get("/admin/tender/publish-tender");
+      const queryParams = new URLSearchParams();
+      if (keyword) queryParams.append('key', keyword);
+      if (statusFilter) queryParams.append("status", statusFilter);
+      if (categoriesFilter) queryParams.append("category", categoriesFilter);
+
+      const response = await ApiClient.get(`/admin/tender/publish-tender?${queryParams.toString()}`);
       if (response.data?.data) {
         setData(response.data.data); // Store all tenders data
       } else {
@@ -27,9 +35,13 @@ const AllPublishTender = () => {
       console.error("Error fetching tenders:", err);
       setError("Failed to load tenders. Please try again later.");
     } finally {
-      setLoading(false);
+      setLoading(false); // Stop loading
     }
   };
+
+  useEffect(() => {
+    fetchTenders(); // Fetch tenders on component mount or filters update
+  }, [keyword, statusFilter, categoriesFilter]);
 
   // Update Tender Status with Success/Failure Pop-up
   const handleStatusChange = async (index, status) => {
@@ -78,10 +90,6 @@ const AllPublishTender = () => {
     navigate(`/publishedtender/${id}`);
   };
 
-  useEffect(() => {
-    fetchTenders(); // Fetch tenders on component mount
-  }, []);
-
   // Function to get status color
   const getStatusColor = (status) => {
     switch (status) {
@@ -96,6 +104,13 @@ const AllPublishTender = () => {
       default:
         return "text-black";
     }
+  };
+
+  const formatStatus = (status) => {
+    if (status === "in_review") {
+      return "In Review";
+    }
+    return status.charAt(0).toUpperCase() + status.slice(1);
   };
 
   // Paginate Data
@@ -119,7 +134,52 @@ const AllPublishTender = () => {
       {loading && <p className="text-gray-600">Loading...</p>}
       {error && <p className="text-red-600">{error}</p>}
 
-      {!loading && !error && data.length > 0 ? (
+      {/* Search Bar */}
+      <div className="mb-4 flex gap-4">
+        <div className="flex items-center gap-4">
+          <p>Search by Keyword:</p>
+          <input
+            type="text"
+            placeholder=" Name,Phone "
+            className="px-4 py-2 border border-gray-300 rounded-lg w-1/2"
+            value={keyword}
+            onChange={(e) => setKeyword(e.target.value)}
+          />
+        </div>
+        {/* Status Filter */}
+        <div className="flex items-center gap-4">
+          <p>Status:</p>
+          <select
+            className="px-4 py-2 border border-gray-300 rounded-lg"
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+          >
+            <option value="">All Status</option>
+            <option value="in_review">In Review</option>
+            <option value="pending">Pending</option>
+            <option value="published">Published</option>
+            <option value="cancel">Cancelled</option>
+          </select>
+
+        </div>
+
+
+        <div className="flex items-center gap-4">
+          <p>categories:</p>
+          <select
+            className="px-4 py-2 border border-gray-300 rounded-lg"
+            value={categoriesFilter}
+            onChange={(e) => setCategoriesFilter(e.target.value)}
+          >
+            <option value="">All</option>
+            <option value="visitor">Visitor</option>
+            <option value="end_user">End User</option>
+
+          </select>
+        </div>
+      </div>
+
+      {!loading && !error && paginatedData.length > 0 ? (
         <>
           <table className="min-w-full border border-gray-200 text-left">
             <thead>
@@ -138,19 +198,17 @@ const AllPublishTender = () => {
               {paginatedData.map((item, index) => (
                 <tr key={item.id} className="hover:bg-gray-50">
                   <td className="px-4 py-2 border">{index + 1}</td>
-                  <td className="px-4 py-2 border">{item.name || 'N/A'}</td>
+                  <td className="px-4 py-2 border">{item.name || "N/A"}</td>
                   <td className="px-4 py-2 border">
-                    {item.organization_name || 'N/A'}
+                    {item.organization_name || "N/A"}
                   </td>
-                  <td className="px-4 py-2 border">{item.phone || 'N/A'}</td>
-                  <td className="px-4 py-2 border">
-                    {item.tender_name || 'N/A'}
-                  </td>
+                  <td className="px-4 py-2 border">{item.phone || "N/A"}</td>
+                  <td className="px-4 py-2 border">{item.tender_name || "N/A"}</td>
                   <td className="px-4 py-2 border">
                     {editingIndex === index ? (
                       <select
-                        value={item.status || ''}
-                        onChange={e =>
+                        value={item.status || ""}
+                        onChange={(e) =>
                           handleStatusChange(index, e.target.value)
                         }
                         className="border rounded px-2 py-1"
@@ -168,21 +226,17 @@ const AllPublishTender = () => {
                           item.status
                         )}`}
                       >
-                        {item.status || 'Edit'}
+                        {formatStatus(item.status) || "Edit"}
                       </span>
                     )}
                   </td>
-                  <td className="px-4 py-2 border">
-                    {item.tender_req_by || 'N/A'}
-                  </td>
+                  <td className="px-4 py-2 border">{item.tender_req_by || "N/A"}</td>
                   <td className="px-4 py-2 border">
                     <button
                       onClick={() => handleView(item.id)}
                       className="text-blue-600 hover:underline"
                     >
-                      <button className="text-gray-600 hover:text-gray-800">
-                        👁
-                      </button>
+                      👁
                     </button>
                   </td>
                 </tr>
@@ -197,7 +251,7 @@ const AllPublishTender = () => {
               pageSize={pageSize}
               total={data.length}
               onChange={handlePageChange}
-              showSizeChanger={false} // Optional: hides the page size changer
+              showSizeChanger={false}
             />
           </div>
         </>
@@ -209,9 +263,3 @@ const AllPublishTender = () => {
 };
 
 export default AllPublishTender;
-
-
-
-
-
-

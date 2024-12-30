@@ -37,7 +37,7 @@ const ActivePackage = () => {
   // Filter packages based on search term
   const filteredPackages = packages.filter((pkg) =>
     pkg.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    pkg.amount.toString().includes(searchTerm)
+    pkg.duration.toString().includes(searchTerm)
   );
 
   // Pagination logic
@@ -57,12 +57,13 @@ const ActivePackage = () => {
 
   return (
     <div className="p-6">
-      <div className="flex justify-between items-center mb-6">
+      <h1 className="text-center text-2xl">Active Packages</h1>
+      <div className="flex justify-end items-center mb-1">
         <div className="flex items-center gap-3">
           <label htmlFor="searchbar">search here:</label>
           <input
             type="text"
-            placeholder="Search by Name and Amount"
+            placeholder="Search by Name, Duration"
             className="border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 w-64 px-4 py-2"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -88,7 +89,9 @@ const ActivePackage = () => {
                 </td>
                 <td className="px-4 py-2 text-sm text-gray-800">{pkg.name}</td>
                 <td className="px-4 py-2 text-sm text-gray-800">{pkg.amount}</td>
-                <td className="px-4 py-2 text-sm text-gray-800">{pkg.duration}month</td>
+                <td className="px-4 py-2 text-sm text-gray-800">
+                  {pkg.duration === 1 ? "One Month" : `${pkg.duration} months`}
+                </td>
               </tr>
             ))}
           </tbody>
@@ -102,8 +105,8 @@ const ActivePackage = () => {
             key={i}
             onClick={() => handlePageChange(i + 1)}
             className={`px-4 py-2 mx-1 rounded ${currentPage === i + 1
-                ? "bg-blue-500 text-white"
-                : "bg-gray-200 text-gray-700"
+              ? "bg-blue-500 text-white"
+              : "bg-gray-200 text-gray-700"
               }`}
           >
             {i + 1}

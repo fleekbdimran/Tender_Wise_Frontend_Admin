@@ -815,253 +815,178 @@ const CreateTenderForm = ({ onClose }) => {
   );
 };
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // Tender Table
+
 import { useNavigate } from 'react-router-dom';
+
+
 const CreateTender = () => {
   const navigate = useNavigate();
+  const [adminUserList, setAdminUserList] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [viewTenderDetails, setViewTenderDetails] = useState(null);
-  const [editTender, setEditTender] = useState(null);
+  const [keyword, setKeyword] = useState("");
   const [tenderData, setTenderData] = useState([]);
 
-  // Fetch data using Axios
+  // Fetch data using Axios with filter
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchAdminProfiles = async () => {
+      const queryParams = new URLSearchParams();
+      if (keyword) queryParams.append('key', keyword);
+      
       try {
-        const response = await ApiClient.get('/admin/tender');
-        console.log('Response Tender:', response.data.data);
-        setTenderData(response.data.data); // Assuming the API returns an array of tender data
+        const response = await ApiClient.get(`/admin/tender?${queryParams.toString()}`);
+        if (response.data?.data) {
+          setAdminUserList(response.data.data);
+          setTenderData(response.data.data); // Set tender data initially as well
+        }
       } catch (error) {
-        console.error('Error fetching tender data:', error);
+        console.error("Error fetching admin profiles:", error);
       }
     };
 
-    fetchData();
-    // Reload after 1 seconds
-    const interval = setInterval(() => {
-          fetchData();
-    }, 1000);
+    fetchAdminProfiles();
+  }, [keyword]); // Only re-fetch when keyword changes
 
-    return () => clearInterval(interval);
-  }, []); // Empty dependency array means this effect runs once on component mount
+  useEffect(() => {
+    // Filter tenderData based on search term
+    const filteredData = adminUserList.filter((admin) => {
+      return admin.name?.toLowerCase().includes(searchTerm.toLowerCase());
+    });
+    setTenderData(filteredData); // Update tenderData with the filtered result
+  }, [searchTerm, adminUserList]); // Re-run when searchTerm or adminUserList changes
 
-  const handleSearch = e => {
-    setSearchTerm(e.target.value);
+  const handleSearch = (e) => {
+    setSearchTerm(e.target.value); // Trigger search
   };
 
-  const filteredAdminList = tenderData.filter(admin =>
-    admin.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  const paginatedAdminList = filteredAdminList.slice(
-    (currentPage - 1) * pageSize,
-    currentPage * pageSize
-  );
-
-  const handlePageChange = page => {
-    setCurrentPage(page);
+  const handlePageChange = (page) => {
+    setCurrentPage(page); // Update current page
   };
 
-  const handleViewTender = admin => {
-    setViewTenderDetails(admin);
-  };
-
-  // Function to navigate to edit page
-  const handleEdit = id => {
-    navigate(`/tenderDetails/${id}`);
-    console.log(id);
-  };
   const handleShowCreateForm = () => {
     navigate('/createtenderForm');
-  }
+  };
 
-  const data = [
-    { label: 'Name', value: 'Imran' },
-    { label: 'Earnest Money', value: '' },
-    { label: 'Document Price', value: '' },
-    { label: 'Published On', value: '' },
-    { label: 'Opening Date', value: '' },
-    { label: 'End Date', value: '' },
-    { label: 'Purchase Last Date', value: '' },
-    { label: 'Prebid Meeting Date', value: '' },
-    { label: 'Submission Date', value: '' },
-    { label: 'Tender Section', value: '' },
-    { label: 'Type', value: '' },
-    { label: 'Source Type', value: '' },
-    { label: 'Status', value: '' },
-    { label: 'Category Name', value: '' },
-    { label: 'Sector Name', value: '' },
-    { label: 'SubSector Name', value: '' },
-    { label: 'Department Name', value: '' },
-    { label: 'Sub Department Name', value: '' },
-    { label: 'Division Name', value: '' },
-    { label: 'District Name', value: '' },
-    { label: 'Upazila Name', value: '' },
-    { label: 'Source Name', value: '' },
-    { label: 'Created At', value: '' },
-  ];
+  const handleEdit = (id) => {
+    navigate(`/tenderDetails/${id}`);
+  };
 
   return (
     <div className="p-6 bg-gray-100">
-      {!showCreateForm && !viewTenderDetails && !editTender && (
+      {!showCreateForm && !viewTenderDetails && (
         <div className="mb-4 flex justify-between items-center">
           <button
-            // onClick={() => setShowCreateForm(true)}
             onClick={handleShowCreateForm}
             className="bg-teal-500 text-white px-7 py-2 rounded-lg flex items-center"
           >
-            <AiOutlinePlus className="mr-2" />
-            Create New Tender
+            Add Tender
           </button>
           <div className="flex items-center border border-gray-300 rounded p-2 w-1/4 bg-white">
-            <SearchOutlined className="text-gray-500 mr-2" />
             <input
               type="text"
-              placeholder="Search by Tender Name"
-              value={searchTerm}
-              onChange={handleSearch}
+              placeholder="search by Name, Email and Phone Number"
               className="w-full text-sm outline-none"
+              value={keyword}
+              onChange={(e) => setKeyword(e.target.value)}
             />
           </div>
         </div>
       )}
 
-      {showCreateForm ? (
-        <CreateTenderForm onClose={() => setShowCreateForm(false)} />
-      ) : viewTenderDetails ? (
-        <div className="p-6 bg-gray-100 min-h-screen">
-          <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
-            <div className="flex justify-between items-center p-6 border-b border-gray-200">
-              <h1 className="text-2xl font-bold text-teal-600">
-                Single Tender View
-              </h1>
-              <div className="flex space-x-4">
-                <button
-                  onClick={() => setViewTenderDetails(null)}
-                  className="px-6 py-2 bg-red-500 text-white font-medium rounded-lg shadow hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-300"
-                >
-                  Close
-                </button>
-                <button className="flex items-center px-6 py-2 bg-teal-500 text-white font-medium rounded-md shadow hover:bg-teal-600">
-                  <span className="mr-2">✏️</span> Update
-                </button>
-              </div>
-            </div>
+      {/* Table display logic here */}
+      <div className="overflow-x-auto md:text-xs 2xl:text-sm text-center">
+        <table className="min-w-full md:h-4/5 2xl:h-11/12 bg-white border border-gray-200">
+          <thead>
+            <tr className="bg-gray-100">
+              <th className="p-2 border-b text-center">S/N</th>
+              <th className="p-2 border-b text-center">Tender ID</th>
+              <th className="p-2 border-b text-center">Tender Name</th>
+              <th className="p-2 border-b text-center">Org/Company Name</th>
+              <th className="p-2 border-b text-center">Source Name</th>
+              <th className="p-3 border-b text-center">Section</th>
+              <th className="p-2 border-b text-center">Type</th>
+              <th className="p-2 border-b text-center">Publish Date</th>
+              <th className="p-2 border-b text-center">Submission Date</th>
+              <th className="p-2 border-b text-center">Permission</th>
+              <th className="p-2 border-b text-center">Status</th>
+              <th className="p-2 border-b text-center">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {tenderData.map((admin, index) => (
+              <tr key={admin.id}>
+                <td className="p-2 border-b">{index + 1}</td>
+                <td className="p-2 border-b">{admin.tender_id}</td>
+                <td className="p-2 border-b">{admin.name}</td>
+                <td className="p-2 border-b">{admin.invitation_for}</td>
+                <td className="p-2 border-b">{admin.source_name}</td>
+                <td className="p-2 border-b">{admin.tender_section}</td>
+                <td className="p-2 border-b">{admin.type}</td>
+                <td className="p-2 border-b">{admin.publish_on}</td>
+                <td className="p-2 border-b">{admin.submission_date}</td>
+                <td className="p-2 border-b">{admin.permission}</td>
+                <td className="p-2 border-b">{admin.status === 1 ? 'Live' : 'Expired'}</td>
+                <td className="p-2 border-b">
+                  <button
+                    onClick={() => handleEdit(admin.id)}
+                    className="text-gray-600 hover:text-green-600"
+                  >
+                    Edit
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
-            <div className="grid grid-cols-3 gap-6 p-6">
-              <div className="col-span-2">
-                <div className="p-4">
-                  <table className="table-auto w-full text-left text-sm border-separate border-spacing-y-2">
-                    <tbody>
-                      {data.map((item, index) => (
-                        <tr key={index}>
-                          <td className="font-medium text-gray-700 py-2">
-                            {item.label}
-                          </td>
-                          <td className="py-2 text-gray-600">
-                            {item.value || '---'}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-
-              <div className="col-span-1 flex flex-col items-center">
-                <div className="relative w-full h-48 mb-4">
-                  <img
-                    src="https://via.placeholder.com/300"
-                    alt="Room"
-                    className="w-full h-full object-cover rounded-md"
-                  />
-                  <span className="absolute top-2 left-2 bg-teal-500 text-white text-xs font-semibold px-2 py-1 rounded-full shadow">
-                    142
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      ) : (
-        <>
-          <div className="overflow-x-auto md:text-xs 2xl:text-sm text-center">
-            <table className="min-w-full md:h-4/5 2xl:h-11/12 bg-white border border-gray-200 ">
-              <thead>
-                <tr className="bg-gray-100 ">
-                  <th className="p-2 border-b text-center">S/N</th>
-                  <th className="p-2 border-b text-center">Tender ID</th>
-                  <th className="p-2 border-b text-center">Tender Name</th>
-                  <th className="p-2 border-b text-center">Org/Company Name</th>
-                  <th className="p-2 border-b text-center">Source Name</th>
-                  <th className="p-3 border-b text-center">Section</th>
-                  <th className="p-2 border-b text-center">Type</th>
-                  <th className="p-2 border-b text-center">Publish Date</th>
-                  <th className="p-2 border-b text-center">Submission Date</th>
-                  <th className="p-2 border-b text-center">Permission</th>
-                  <th className="p-2 border-b text-center">Status</th>
-                  <th className="p-2 border-b text-center">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {paginatedAdminList.map((admin, index) => (
-                  <tr key={admin.id} className="">
-                    <td className="p-2 border-b"> {index + 1}</td>
-                    <td className="p-2 border-b">{admin.tender_id}</td>
-                    <td className="p-2 border-b">{admin.name}</td>
-                    <td className="p-2 border-b">{admin.invitation_for}</td>
-                    <td className="p-2 border-b">{admin.source_name}</td>
-                    <td className="p-2 border-b">{admin.tender_section}</td>
-                    <td className="p-2 border-b">{admin.type}</td>
-                    <td className="p-2 border-b">{admin.publish_on}</td>
-                    <td className="p-2 border-b">{admin.submission_date}</td>
-                    <td className="p-2 border-b">{admin.permission}</td>
-                    {/* <td className="p-2 border-b">{admin.status}</td> */}
-                    <td className="p-2 border-b">
-                      {admin.status === 1 ? 'Live' : 'Expired'}
-                    </td>
-                    <td className="p-2 border-b pl-6">
-                      {/* <div className="flex items-center space-x-4">
-                        <button className="flex items-center space-x-2 text-gray-600 hover:text-blue-600">
-                          <AiOutlineEye size={24} />
-                        </button>
-
-                        <button className="flex items-center space-x-2 text-gray-600 hover:text-green-600">
-                          <AiOutlineEdit size={24} />
-                        </button>
-                      </div> */}
-                      <button
-                        onClick={e => {
-                          e.stopPropagation();
-                          handleEdit(admin.id);
-                        }}
-                        className="flex items-center justify-center space-x-2 text-gray-600 hover:text-green-600"
-                      >
-                        <AiOutlineEdit size={24} />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
-          <div className="mt-6 flex justify-center">
-            <Pagination
-              current={currentPage}
-              total={filteredAdminList.length}
-              pageSize={pageSize}
-              onChange={handlePageChange}
-            />
-          </div>
-        </>
-      )}
+      {/* Pagination component */}
+      <div className="mt-6 flex justify-center">
+        <Pagination
+          current={currentPage}
+          total={tenderData.length}
+          pageSize={pageSize}
+          onChange={handlePageChange}
+        />
+      </div>
     </div>
   );
 };
 
 export default CreateTender;
+
+
+
+
+
+
+
+
+
 

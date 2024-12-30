@@ -92,8 +92,8 @@ const AllSubscriberList = () => {
   };
 
   return (
-    <div className="p-6 bg-gradient-to-b from-white to-gray-100 min-h-screen">
-      <h1 className="text-3xl font-bold text-gray-900">All Subscribers</h1>
+    <div className="p-2 bg-gradient-to-b from-white to-gray-100 min-h-screen">
+   
       
       <div className="flex space-x-2 justify-end mb-4">
         <button
@@ -108,6 +108,7 @@ const AllSubscriberList = () => {
       <div className="flex gap-2 items-center mb-4 bg-white shadow-md p-4 rounded-md relative">
       <div className="flex gap-2 items-center  rounded-md relative">
         <div className="relative flex items-center justify-start gap-1">
+          <p className="text-nowrap">Search by Date:</p>
           <BsFillCalendarDateFill
             size={39}
             color="#f0523a"
@@ -169,64 +170,7 @@ const AllSubscriberList = () => {
   </div>
 </div> 
 
-<div className="container mx-auto bg-white shadow-md p-6 rounded-md">
-  <div className="flex items-center justify-between space-x-4">
-    <div className="flex items-center space-x-2">
-      <label className="text-gray-700 text-sm font-semibold">From Date</label>
-      <input
-        type="date"
-        className="border rounded px-2 py-1 text-sm shadow-sm focus:ring focus:ring-blue-300"
-        value={fromDate}
-        onChange={(e) => setFromDate(e.target.value)}
-      />
-    </div>
 
-    <div className="flex items-center space-x-2">
-      <span className="text-gray-500 text-sm">To Date</span>
-      <input
-        type="date"
-        className="border rounded px-2 py-1 text-sm shadow-sm focus:ring focus:ring-blue-300"
-        value={toDate}
-        onChange={(e) => setToDate(e.target.value)}
-      />
-    </div>
-
-    <div className="flex items-center space-x-2">
-      <label className="text-gray-700 text-sm font-semibold">Keyword</label>
-      <input
-        type="text"
-        placeholder="Enter keyword"
-        className="border rounded px-2 py-1 text-sm shadow-sm focus:ring focus:ring-blue-300"
-        value={keyword}
-        onChange={(e) => setKeyword(e.target.value)}
-      />
-    </div>
-
-    <div className="flex items-center space-x-2">
-      <label className="text-gray-700 text-sm font-semibold">Payment</label>
-      <input
-        type="text"
-        placeholder="Enter your Payment"
-        className="border rounded px-2 py-1 text-sm shadow-sm focus:ring focus:ring-blue-300"
-        value={paymentMethod}
-        onChange={(e) => setPaymentMethod(e.target.value)}
-      />
-    </div>
-  </div>
-
-  <div className="flex items-center space-x-4 mt-4">
-    <label className="text-gray-700 text-sm font-semibold">Status</label>
-    <select
-      className="border rounded px-2 py-1 text-sm shadow-sm focus:ring focus:ring-blue-300"
-      value={paymentStatus}
-      onChange={(e) => setPaymentStatus(e.target.value)}
-    >
-      <option value="">Select Status</option>
-      <option value="Success">Success</option>
-      <option value="Failed">Failed</option>
-    </select>
-  </div>
-</div>
 
 
 

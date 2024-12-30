@@ -1,30 +1,38 @@
 
-
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ApiClient from "../../../Api/ApiClient";
 import Swal from "sweetalert2";
 import { Pagination } from "antd"; // Importing Ant Design Pagination component
 
-const PublishTenderRequest = () => {
-  const [data, setData] = useState([]); // Store published tenders
+const PublishedTenderRequest = () => {
+  const [data, setData] = useState([]); // Store all tenders
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [editingIndex, setEditingIndex] = useState(null);
   const [currentPage, setCurrentPage] = useState(1); // Current page
   const [pageSize] = useState(10); // Number of items per page
-  const [editingIndex, setEditingIndex] = useState(null); // Track editing index
+  const [keyword, setKeyword] = useState("");
+  const [categoriesFilter, setCategoriesFilter] = useState(""); // Status filter state
   const navigate = useNavigate();
 
-  // Fetch Published Tenders
+  // Fetch Tender Data with Filters
   const fetchTenders = async () => {
+    setLoading(true); // Start loading
     try {
-      const response = await ApiClient.get("/admin/tender/publish-tender");
+      const queryParams = new URLSearchParams();
+      if (keyword) queryParams.append("key", keyword);
+  
+     
+      queryParams.append("status", "published");
+  
+      if (categoriesFilter) queryParams.append("category", categoriesFilter);
+  
+      const response = await ApiClient.get(
+        `/admin/tender/publish-tender?${queryParams.toString()}`
+      );
       if (response.data?.data) {
-        // Filter tenders to include only "published" status
-        const publishedTenders = response.data.data.filter(
-          (tender) => tender.status === "published"
-        );
-        setData(publishedTenders);
+        setData(response.data.data); // Filtered data store করা হচ্ছে
       } else {
         throw new Error("Unexpected API response format.");
       }
@@ -32,9 +40,14 @@ const PublishTenderRequest = () => {
       console.error("Error fetching tenders:", err);
       setError("Failed to load tenders. Please try again later.");
     } finally {
-      setLoading(false);
+      setLoading(false); // Stop loading
     }
   };
+  
+
+  useEffect(() => {
+    fetchTenders(); // Fetch tenders on component mount or filters update
+  }, [keyword, categoriesFilter]);
 
   // Update Tender Status with Success/Failure Pop-up
   const handleStatusChange = async (index, status) => {
@@ -51,12 +64,7 @@ const PublishTenderRequest = () => {
       if (response.status === 200 || response.status === 201) {
         const updatedData = [...data];
         updatedData[index].status = status;
-
-        // Update the list only if the status remains "published"
-        const updatedPublishedTenders = updatedData.filter(
-          (tender) => tender.status === "published"
-        );
-        setData(updatedPublishedTenders);
+        setData(updatedData);
 
         // Success Pop-up Message
         await Swal.fire({
@@ -88,9 +96,28 @@ const PublishTenderRequest = () => {
     navigate(`/publishedtender/${id}`);
   };
 
-  useEffect(() => {
-    fetchTenders(); // Fetch tenders on component mount
-  }, []);
+  // Function to get status color
+  const getStatusColor = (status) => {
+    switch (status) {
+      case "in_review":
+        return "text-yellow-600";
+      case "pending":
+        return "text-gray-600";
+      case "published":
+        return "text-green-600";
+      case "cancel":
+        return "text-red-600";
+      default:
+        return "text-black";
+    }
+  };
+
+  const formatStatus = (status) => {
+    if (status === "in_review") {
+      return "In Review";
+    }
+    return status.charAt(0).toUpperCase() + status.slice(1);
+  };
 
   // Paginate Data
   const paginateData = (page, pageSize) => {
@@ -108,12 +135,42 @@ const PublishTenderRequest = () => {
 
   return (
     <div className="p-6">
-      <h2 className="text-2xl font-bold mb-4">Published Tender Requests</h2>
+      <h2 className="text-2xl font-bold mb-4">All Tender Requests</h2>
 
       {loading && <p className="text-gray-600">Loading...</p>}
       {error && <p className="text-red-600">{error}</p>}
 
-      {!loading && !error && data.length > 0 ? (
+      {/* Search Bar */}
+      <div className="mb-4 flex gap-4">
+        <div className="flex items-center gap-4">
+          <p>Search by Keyword:</p>
+          <input
+            type="text"
+            placeholder="Search by Name,Phone "
+            className="px-4 py-2 border border-gray-300 rounded-lg w-1/2"
+            value={keyword}
+            onChange={(e) => setKeyword(e.target.value)}
+          />
+        </div>
+       
+
+
+        <div className="flex items-center gap-4">
+          <p>categories:</p>
+          <select
+            className="px-4 py-2 border border-gray-300 rounded-lg"
+            value={categoriesFilter}
+            onChange={(e) => setCategoriesFilter(e.target.value)}
+          >
+            <option value="">All</option>
+            <option value="visitor">Visitor</option>
+            <option value="end_user">End User</option>
+
+          </select>
+        </div>
+      </div>
+
+      {!loading && !error && paginatedData.length > 0 ? (
         <>
           <table className="min-w-full border border-gray-200 text-left">
             <thead>
@@ -132,19 +189,17 @@ const PublishTenderRequest = () => {
               {paginatedData.map((item, index) => (
                 <tr key={item.id} className="hover:bg-gray-50">
                   <td className="px-4 py-2 border">{index + 1}</td>
-                  <td className="px-4 py-2 border">{item.name || 'N/A'}</td>
+                  <td className="px-4 py-2 border">{item.name || "N/A"}</td>
                   <td className="px-4 py-2 border">
-                    {item.organization_name || 'N/A'}
+                    {item.organization_name || "N/A"}
                   </td>
-                  <td className="px-4 py-2 border">{item.phone || 'N/A'}</td>
-                  <td className="px-4 py-2 border">
-                    {item.tender_name || 'N/A'}
-                  </td>
+                  <td className="px-4 py-2 border">{item.phone || "N/A"}</td>
+                  <td className="px-4 py-2 border">{item.tender_name || "N/A"}</td>
                   <td className="px-4 py-2 border">
                     {editingIndex === index ? (
                       <select
-                        value={item.status || ''}
-                        onChange={e =>
+                        value={item.status || ""}
+                        onChange={(e) =>
                           handleStatusChange(index, e.target.value)
                         }
                         className="border rounded px-2 py-1"
@@ -158,19 +213,19 @@ const PublishTenderRequest = () => {
                     ) : (
                       <span
                         onClick={() => setEditingIndex(index)}
-                        className="text-green-600 font-semibold cursor-pointer"
+                        className={`cursor-pointer ${getStatusColor(
+                          item.status
+                        )}`}
                       >
-                        Published
+                        {formatStatus(item.status) || "Edit"}
                       </span>
                     )}
                   </td>
+                  <td className="px-4 py-2 border">{item.tender_req_by || "N/A"}</td>
                   <td className="px-4 py-2 border">
-                    {item.tender_req_by || 'N/A'}
-                  </td>
-                  <td className="px-4 py-2 border text-center">
                     <button
                       onClick={() => handleView(item.id)}
-                      className="text-gray-600 hover:text-gray-800"
+                      className="text-blue-600 hover:underline"
                     >
                       👁
                     </button>
@@ -187,17 +242,15 @@ const PublishTenderRequest = () => {
               pageSize={pageSize}
               total={data.length}
               onChange={handlePageChange}
-              showSizeChanger={false} // Optional: hides the page size changer
+              showSizeChanger={false}
             />
           </div>
         </>
       ) : (
-        !loading && <p className="text-gray-600">No published tenders found.</p>
+        !loading && <p className="text-gray-600">No tenders found.</p>
       )}
     </div>
   );
 };
 
-export default PublishTenderRequest;
-
-
+export default PublishedTenderRequest;
