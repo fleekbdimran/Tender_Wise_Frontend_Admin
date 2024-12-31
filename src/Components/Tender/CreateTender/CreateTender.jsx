@@ -324,7 +324,7 @@ const CreateTenderForm = ({ onClose }) => {
   }, [selectedSourceType]);
 
 
-  
+
 
   return (
     <div className="block mx-auto md:p-2 p-1 w-full">
@@ -852,13 +852,17 @@ const CreateTender = () => {
   const [viewTenderDetails, setViewTenderDetails] = useState(null);
   const [keyword, setKeyword] = useState("");
   const [tenderData, setTenderData] = useState([]);
+  const [activity, setActivity] = useState("");
+  const [permission, setPermission] = useState("");
 
   // Fetch data using Axios with filter
   useEffect(() => {
     const fetchAdminProfiles = async () => {
       const queryParams = new URLSearchParams();
       if (keyword) queryParams.append('key', keyword);
-      
+      if (activity) queryParams.append('status', activity);
+      if (permission) queryParams.append('permission', permission);
+
       try {
         const response = await ApiClient.get(`/admin/tender?${queryParams.toString()}`);
         if (response.data?.data) {
@@ -871,7 +875,7 @@ const CreateTender = () => {
     };
 
     fetchAdminProfiles();
-  }, [keyword]); // Only re-fetch when keyword changes
+  }, [keyword, activity, permission]); // Only re-fetch when keyword changes
 
   useEffect(() => {
     // Filter tenderData based on search term
@@ -901,20 +905,57 @@ const CreateTender = () => {
     <div className="p-6 bg-gray-100">
       {!showCreateForm && !viewTenderDetails && (
         <div className="mb-4 flex justify-between items-center">
-          <button
-            onClick={handleShowCreateForm}
-            className="bg-teal-500 text-white px-7 py-2 rounded-lg flex items-center"
-          >
-            Add Tender
-          </button>
-          <div className="flex items-center border border-gray-300 rounded p-2 w-1/4 bg-white">
-            <input
-              type="text"
-              placeholder="search by Name, Email and Phone Number"
-              className="w-full text-sm outline-none"
-              value={keyword}
-              onChange={(e) => setKeyword(e.target.value)}
-            />
+          <div className='flex items-center gap-4'>
+            <button
+              onClick={handleShowCreateForm}
+              className="bg-teal-500 text-white px-7 py-2 rounded-lg flex items-center"
+            >
+              Add
+            </button>
+
+            <div className="flex justify-center gap-2 items-center">
+              <p className="">Status:</p>
+              <select
+                id="status"
+                className="bg-gray-50 border  border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-auto p-2"
+                value={activity}
+                onChange={(e) => setActivity(e.target.value)}
+              >
+                <option value="">All</option>
+                <option value="1">Live</option>
+                <option value="0">Expired</option>
+              </select>
+            </div>
+
+            <div className="flex justify-center gap-2 items-center">
+              <p className="">permission:</p>
+              <select
+                id="permission"
+                className="bg-gray-50 border  border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-auto p-2"
+                value={permission}
+                onChange={(e) => setPermission(e.target.value)}
+              >
+                <option value="">All</option>
+                <option value="pending">pending</option>
+                <option value="publish">published</option>
+              </select>
+            </div>
+          </div>
+
+
+
+
+          <div className='flex items-center '>
+            <p className='text-nowrap'>Search by keyword:</p>
+            <div className="flex items-center border border-gray-300 rounded p-2 w-full bg-white">
+              <input
+                type="text"
+                placeholder=" Name, Email and Phone Number"
+                className="w-full text-sm outline-none"
+                value={keyword}
+                onChange={(e) => setKeyword(e.target.value)}
+              />
+            </div>
           </div>
         </div>
       )}
@@ -980,6 +1021,7 @@ const CreateTender = () => {
 };
 
 export default CreateTender;
+
 
 
 
