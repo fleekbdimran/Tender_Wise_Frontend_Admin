@@ -268,13 +268,28 @@ function Category() {
       <h2 className="text-2xl font-semibold mb-4 text-gray-800">Categories</h2>
 
       <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-4">
-          <button
-            onClick={() => setIsAddModalOpen(true)}
-            className="bg-teal-500 text-white px-7 py-3 rounded-lg ml-4"
-          >
-            Create
-          </button>
+
+        <button
+          onClick={() => setIsAddModalOpen(true)}
+          className="bg-teal-500 text-white px-7 py-3 rounded-lg ml-4"
+        >
+          Create
+        </button>
+
+        <div className="flex items-center gap-3">
+
+          <div className="flex items-center  justify-end">
+            <input
+              type="text"
+              placeholder="Search by Name"
+              className="px-4 py-2 border border-gray-300 rounded-l-md w-[250px]"
+              value={keyword}
+              onChange={(e) => setKeyword(e.target.value)}
+            />
+            <button className="bg-teal-500 text-white px-4 py-2 rounded-r-md flex items-center">
+              <SearchOutlined />
+            </button>
+          </div>
 
           <div className="flex justify-center gap-2 items-center">
             <p className="">status:</p>
@@ -289,23 +304,8 @@ function Category() {
               <option value="0">UnAvailable</option>
             </select>
           </div>
+
         </div>
-
-
-        <div className="flex items-center mb-4 justify-end">
-          <input
-            type="text"
-            placeholder="Search by Name"
-            className="px-4 py-2 border border-gray-300 rounded-l-md w-[250px]"
-            value={keyword}
-            onChange={(e) => setKeyword(e.target.value)}
-          />
-          <button className="bg-teal-500 text-white px-4 py-2 rounded-r-md flex items-center">
-            <SearchOutlined />
-          </button>
-        </div>
-
-
 
       </div>
 

@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { EditOutlined, CloseOutlined, SendOutlined, SearchOutlined } from "@ant-design/icons";
 import Swal from "sweetalert2";
@@ -8,35 +7,77 @@ import ApiClient from "../../../Api/ApiClient";
 
 function AddCategoryModal({ isOpen, onClose }) {
   const [categoryName, setCategoryName] = useState("");
+  const [categoriesList, setCategoriesList] = useState("");
+  const [addCategoriesDropdown, setAddCategoriesDropdown] = useState([]);
+  const [suggestions, setSuggestions] = useState([]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await ApiClient.get(`/admin/tender-config/department`);
+        if (response.data?.data) {
+          const activeCategories = response.data.data.filter(
+            (category) => category.department_status === 1
+          );
+          setAddCategoriesDropdown(activeCategories);
+        }
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
+  const handleInputChange = (e) => {
+    const inputValue = e.target.value;
+    setCategoriesList(inputValue);
+
+    if (inputValue.trim() === "") {
+      setSuggestions([]);
+    } else {
+      const filteredSuggestions = addCategoriesDropdown.filter((category) =>
+        category.name.toLowerCase().includes(inputValue.toLowerCase())
+      );
+      setSuggestions(filteredSuggestions);
+    }
+  };
+
+  const handleSuggestionClick = (category) => {
+    setCategoriesList(category.name);
+    setSuggestions([]);
+  };
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
 
-    console.log(categoryName);
+    console.log(categoryName, categoriesList);
     try {
-      const response = await ApiClient.post(
-        "/admin/tender-config/sub-department",
-        {
-          name: categoryName,
-        }
-
+      const selectedCategory = addCategoriesDropdown.find(
+        (category) => category.name === categoriesList
       );
+      const response = await ApiClient.post("/admin/tender-config/sub-department", {
+        name: categoryName,
+        department_id: selectedCategory?.id || "",
+      });
       if (response.data.success === "false") {
-
         Swal.fire("Error!", response.data.message, "error");
+      } else {
+        Swal.fire({
+          title: "Success!",
+          text: response.data.message,
+          icon: "success",
+          confirmButtonText: "OK"
+        }).then(() => {
 
-      }
-      else {
-        Swal.fire("success!", response.data.message, "success");
-        window.location.reload();
+          window.location.reload(); // Reload the page
+        });
       }
     } catch (error) {
-      Swal.fire("Error!", error.response.data.message, "error");
-      console.log(error.response.data.message);
-
+      Swal.fire("Error!", error.response?.data?.message || "Something went wrong!", "error");
+      console.log(error.response?.data?.message);
     }
   };
-
 
   if (!isOpen) return null;
 
@@ -49,7 +90,7 @@ function AddCategoryModal({ isOpen, onClose }) {
         >
           <CloseOutlined />
         </button>
-        <h2 className="text-xl font-semibold mb-6">Add Category</h2>
+        <h2 className="text-xl font-semibold mb-6">Add Sector</h2>
         <form onSubmit={handleFormSubmit} className="space-y-6">
           <div>
             <label className="block text-sm font-medium text-gray-700">
@@ -64,6 +105,34 @@ function AddCategoryModal({ isOpen, onClose }) {
               required
             />
           </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              <span className="text-red-500">*</span> Category:
+            </label>
+            <input
+              type="text"
+              value={categoriesList}
+              onChange={handleInputChange}
+              placeholder="Type to search..."
+              className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md text-sm shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
+              required
+            />
+            {suggestions.length > 0 && (
+              <ul className="border border-gray-300 mt-2 rounded-md shadow-sm bg-white max-h-40 overflow-y-auto">
+                {suggestions.map((category) => (
+                  <li
+                    key={category.id}
+                    onClick={() => handleSuggestionClick(category)}
+                    className="px-4 py-2 hover:bg-teal-500 hover:text-white cursor-pointer"
+                  >
+                    {category.name}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+
           <button
             type="submit"
             className="bg-teal-500 text-white px-6 py-3 rounded-lg flex items-center justify-center w-full"
@@ -78,55 +147,129 @@ function AddCategoryModal({ isOpen, onClose }) {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 function EditCategoryModal({ isOpen, onClose, category, onSubmit }) {
-  // State to manage category name and status
   const [categoryName, setCategoryName] = useState("");
   const [categoryStatus, setCategoryStatus] = useState("1");
+  const [categoriesList, setCategoriesList] = useState([]); // Dropdown data
+  const [suggestions, setSuggestions] = useState([]);
+  const [addCategoriesDropdown, setAddCategoriesDropdown] = useState([]);
 
-  // Set the initial values when the category data is available
+
+  // Load initial category data
   useEffect(() => {
     if (category) {
-      setCategoryName(category.name || ""); // Default empty if name is missing
-      setCategoryStatus(category.sector_status?.toString() || "1"); // Convert status to string and set default
-      console.log("Category Loaded:", category.name, category.sector_status);
+      setCategoryName(category.name || "");
+
+      setCategoryStatus(category.department_status?.toString() || "1");
+      // ক্যাটেগরি ড্রপডাউন বাছাই করার জন্য
+      const selectedCategory = addCategoriesDropdown.find(
+        (cat) => cat.id === category.category_id
+      );
+      if (selectedCategory) {
+        setCategoriesList(selectedCategory.name); // পুরানো ক্যাটাগরি নামটি সেট করুন
+      }
     }
-  }, [category]);
+  }, [category, addCategoriesDropdown]); // addCategoriesDropdown যেন ফেচ হলে আপডেট হয়
+
+
+  // Fetch categories for dropdown
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await ApiClient.get(`/admin/tender-config/department`);
+        if (response.data?.data) {
+          const activeCategories = response.data.data.filter(
+            (category) => category.status === 1
+          );
+          setAddCategoriesDropdown(activeCategories);
+        }
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
+
+  const handleInputChange = (e) => {
+    const inputValue = e.target.value;
+    setCategoriesList(inputValue);
+
+    if (inputValue.trim() === "") {
+      setSuggestions([]);
+    } else {
+      const filteredSuggestions = addCategoriesDropdown.filter((category) =>
+        category.name.toLowerCase().includes(inputValue.toLowerCase())
+      );
+      setSuggestions(filteredSuggestions);
+    }
+  };
 
 
 
-  // If the modal is not open, do not render anything
-  if (!isOpen) return null;
+  const handleSuggestionClick = (category) => {
+    setCategoriesList(category.name);
+    setSuggestions([]);
+  };
 
-  // Handle form submission
+
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    console.log(categoryName, categoryStatus);
+
+    // Find the category object by name to get its ID
+    const selectedCategory = addCategoriesDropdown.find(
+      (cat) => cat.name === categoriesList
+    );
+
+    console.log(categoryName, categoryStatus, selectedCategory);
 
     try {
       const response = await ApiClient.patch(
         `/admin/tender-config/sub-department/${category.id}`,
         {
           name: categoryName,
-          status: categoryStatus,
+          status: Number(categoryStatus),
+          department_id: selectedCategory.id // Send the selected category's ID
         }
       );
 
-
       if (response.data.success === "false") {
-        Swal.fire("Error!", response.data.message, "error");
+        console.log(response.data.message);
       } else {
-        Swal.fire("Success!", response.data.message, "success");
-        onSubmit(); // Call the onSubmit function to refresh data
+        Swal.fire({
+          title: "Success!",
+          text: response.data.message,
+          icon: "success",
+          confirmButtonText: "OK"
+        }).then(() => {
+          onSubmit(); // Refresh data
+          window.location.reload(); // Reload the page
+        });
       }
     } catch (error) {
-      Swal.fire("Error!", error.response?.data?.message || "Something went wrong!", "error");
+      Swal.fire("Error!", response.data.message, "error");
     }
   };
+
+
+  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
       <div className="bg-white p-8 rounded-lg shadow-lg w-96 relative">
-        {/* Close button */}
         <button
           onClick={onClose}
           className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
@@ -134,12 +277,10 @@ function EditCategoryModal({ isOpen, onClose, category, onSubmit }) {
           <CloseOutlined />
         </button>
 
-        {/* Modal header */}
-        <h2 className="text-xl font-semibold mb-6">Edit Category</h2>
+        <h2 className="text-xl font-semibold mb-6">Edit Sector</h2>
 
-        {/* Edit form */}
         <form onSubmit={handleFormSubmit} className="space-y-6">
-          {/* Name input */}
+          {/* Name Input */}
           <div>
             <label className="block text-sm font-medium text-gray-700">
               <span className="text-red-500">*</span> Name:
@@ -154,7 +295,35 @@ function EditCategoryModal({ isOpen, onClose, category, onSubmit }) {
             />
           </div>
 
-          {/* Status input */}
+          {/* Dropdown for selecting category */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              <span className="text-red-500">*</span> Category:
+            </label>
+            <input
+              type="text"
+              value={categoriesList}
+              onChange={handleInputChange}
+              placeholder="Type to search..."
+              className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md text-sm shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
+              required
+            />
+            {suggestions.length > 0 && (
+              <ul className="border border-gray-300 mt-2 rounded-md shadow-sm bg-white max-h-40 overflow-y-auto">
+                {suggestions.map((category) => (
+                  <li
+                    key={category.id}
+                    onClick={() => handleSuggestionClick(category)}
+                    className="px-4 py-2 hover:bg-teal-500 hover:text-white cursor-pointer"
+                  >
+                    {category.name}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+
+          {/* Status Input */}
           <div>
             <label className="block text-sm font-medium text-gray-700">
               Status:
@@ -169,7 +338,6 @@ function EditCategoryModal({ isOpen, onClose, category, onSubmit }) {
             </select>
           </div>
 
-          {/* Submit button */}
           <button
             type="submit"
             className="bg-teal-500 text-white px-6 py-3 rounded-lg flex items-center justify-center w-full"
@@ -181,6 +349,11 @@ function EditCategoryModal({ isOpen, onClose, category, onSubmit }) {
     </div>
   );
 }
+
+
+
+
+
 
 
 
@@ -203,15 +376,18 @@ function SubDepartment() {
     const fetchCategories = async () => {
       const queryParams = new URLSearchParams();
       if (keyword) queryParams.append("key", keyword);
+      if (type) queryParams.append("type", type);
 
 
       try {
         const response = await ApiClient.get(
           `/admin/tender-config/sub-department?${queryParams.toString()}`
         );
+        console.log(response.data.data);
         if (response.data?.data) {
           setCategories(response.data.data);
           setFilteredCategories(response.data.data);
+          console.log(response.data.data);
 
         }
       } catch (error) {
@@ -224,30 +400,14 @@ function SubDepartment() {
   }, [keyword, type]);
 
   // Add category
-  const handleAddCategory = async (name) => {
-    try {
-      await ApiClient.post("/admin/tender-config/sub-department", { name });
-      Swal.fire("Success!", "Category added successfully!", "success");
-      setKeyword("");
+  const handleAddCategory = async () => {
 
-    } catch (error) {
-      console.error("Error adding category:", error);
-      Swal.fire("Error!", "Failed to add category!", "error");
-    }
     setIsAddModalOpen(false);
   };
 
   // Edit category
-  const handleEditCategory = async (name, id) => {
-    try {
-      await ApiClient.patch(`/admin/tender-config/sub-department/${id}`, { name });
-      Swal.fire("Success!", "Category updated successfully!", "success");
-      setKeyword("");
+  const handleEditCategory = async () => {
 
-    } catch (error) {
-      console.error("Error updating category:", error);
-      Swal.fire("Error!", "Failed to update category!", "error");
-    }
     setIsEditModalOpen(false);
   };
 
@@ -266,8 +426,9 @@ function SubDepartment() {
     });
 
     setFilteredCategories(filtered);
-    setCurrentPage(1); 
-  }, [categories, keyword, type]); 
+    setCurrentPage(1); // ফিল্টারিং করলে পেজ আবার প্রথমে আসবে
+  }, [categories, keyword, type]); // যেকোনো একটিই পরিবর্তিত হলে এটি চলবে
+
 
   // Pagination logic
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -280,16 +441,31 @@ function SubDepartment() {
 
   return (
     <div className="h-screen w-full flex flex-col p-4 bg-gray-100 gap-2">
-      <h2 className="text-2xl font-semibold mb-4 text-gray-800">Department</h2>
+      <h2 className="text-2xl font-semibold mb-4 text-gray-800">Sector</h2>
 
       <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-3">
-          <button
-            onClick={() => setIsAddModalOpen(true)}
-            className="bg-teal-500 text-white px-7 py-3 rounded-lg ml-4"
-          >
-            Create
-          </button>
+
+        <button
+          onClick={() => setIsAddModalOpen(true)}
+          className="bg-teal-500 text-white px-7 py-3 rounded-lg ml-4"
+        >
+          Create
+        </button>
+
+        <div className="flex items-center gap-4">
+         
+          <div className="flex items-center  justify-end">
+            <input
+              type="text"
+              placeholder="Search by Name"
+              className="px-4 py-2 border border-gray-300 rounded-l-md w-[250px]"
+              value={keyword}
+              onChange={(e) => setKeyword(e.target.value)}
+            />
+            <button className="bg-teal-500 text-white px-4 py-2 rounded-r-md flex items-center">
+              <SearchOutlined />
+            </button>
+          </div>
 
           <div className="flex justify-center gap-2 items-center">
             <p className="">status:</p>
@@ -304,20 +480,7 @@ function SubDepartment() {
               <option value="0">UnAvailable</option>
             </select>
           </div>
-        </div>
 
-
-        <div className="flex items-center mb-4 justify-end">
-          <input
-            type="text"
-            placeholder="Search by Name"
-            className="px-4 py-2 border border-gray-300 rounded-l-md w-[250px]"
-            value={keyword}
-            onChange={(e) => setKeyword(e.target.value)}
-          />
-          <button className="bg-teal-500 text-white px-4 py-2 rounded-r-md flex items-center">
-            <SearchOutlined />
-          </button>
         </div>
 
 
@@ -354,12 +517,12 @@ function SubDepartment() {
                 <td className="px-4 py-2 border-b">{category.name}</td>
                 <td className="px-4 py-2 border-b">
                   <span
-                    className={`px-2 py-1 rounded-full text-xs cursor-pointer ${category.sector_status === 1
+                    className={`px-2 py-1 rounded-full text-xs cursor-pointer ${category.status === 1
                       ? "bg-green-100 text-green-700"
                       : "bg-red-100 text-red-700"
                       }`}
                   >
-                    {category.sector_status === 1 ? "Available" : "Unavailable"}
+                    {category.status === 1 ? "Available" : "Unavailable"}
                   </span>
                 </td>
                 <td className="px-4 py-2 border-b">
