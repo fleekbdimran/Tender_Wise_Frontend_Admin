@@ -8,6 +8,14 @@ import { useNavigate } from 'react-router-dom';
 
 const CreateTenderForm = ({ onClose, sourceData }) => {
 
+
+  // refresh section
+  const [refreshDepartments, setRefreshDepartments] = useState(false);
+  const [refreshCategory, setRefreshCategory] = useState(false);
+  const [refreshLocation, setRefreshLocation] = useState(false);
+
+
+
   const navigate = useNavigate();
   const [categories, setCategories] = useState([]);
   const [departments, setDepartments] = useState([]);
@@ -257,7 +265,7 @@ const CreateTenderForm = ({ onClose, sourceData }) => {
       }
     };
     fetchCategories();
-  }, []);
+  }, [refreshCategory]);
 
   {/* ------------New Category search by name------------------------- */ }
 
@@ -301,7 +309,7 @@ const CreateTenderForm = ({ onClose, sourceData }) => {
       }
     };
     fetchAllSectors();
-  }, []);
+  }, [refreshCategory]);
 
   {/* ------------New Sector search by name------------------------- */ }
 
@@ -369,7 +377,7 @@ const CreateTenderForm = ({ onClose, sourceData }) => {
     };
 
     fetchSubSectors();
-  }, []); // Only run once on mount
+  }, [refreshCategory]); // Only run once on mount
 
   // Debounce the search query
   useEffect(() => {
@@ -432,7 +440,8 @@ const CreateTenderForm = ({ onClose, sourceData }) => {
       }
     };
     fetchDepartments();
-  }, []);
+  }, [refreshDepartments]);
+
 
 
   // -------------New search by name department--------------
@@ -543,7 +552,7 @@ const CreateTenderForm = ({ onClose, sourceData }) => {
       }
     };
     fetchDivisions();
-  }, []);
+  }, [refreshLocation]);
 
   // ----------------------new search by division------------------
 
@@ -637,7 +646,7 @@ const CreateTenderForm = ({ onClose, sourceData }) => {
       }
     };
     fetchDistricts();
-  }, []);
+  }, [refreshLocation]);
 
   // Filter districts based on selected division
   useEffect(() => {
@@ -794,6 +803,7 @@ const CreateTenderForm = ({ onClose, sourceData }) => {
         });
         setDepartmentName(""); // Reset the input field
         toggleDepartmentPopup(); // Close the modal
+        setRefreshDepartments((prev) => !prev);
       } else {
         Swal.fire({
           title: "Error!",
@@ -942,6 +952,8 @@ const CreateTenderForm = ({ onClose, sourceData }) => {
         // Reset form and close popup
         setSubDepartmentName(''); // Reset the input field
         toggleSubDepartmentPopup(); // Close the modal
+        fetchSubDepartments(); // Refresh the sub-department list
+        setRefreshDepartments((prev) => !prev);
       } else {
         // Show error message
         Swal.fire({
@@ -1006,7 +1018,7 @@ const CreateTenderForm = ({ onClose, sourceData }) => {
         });
         setCategoryName(""); // Reset the input field
         toggleCategoryPopup(); // Close the popup
-        // Optionally, refresh the category list or perform other actions here
+        setRefreshCategory((prev) => !prev);
       } else {
         Swal.fire({
           title: "Error!",
@@ -1085,6 +1097,7 @@ const CreateTenderForm = ({ onClose, sourceData }) => {
         });
         setSectorName("");
         toggleSectorPopup();
+        setRefreshCategory((prev) => !prev);
       } else {
         Swal.fire({
           title: "Error",
@@ -1163,6 +1176,7 @@ const CreateTenderForm = ({ onClose, sourceData }) => {
         });
         setSubSectorName(""); // Clear input field
         toggleSubSectorPopup(); // Close the popup
+        setRefreshCategory((prev) => !prev);
       } else {
         Swal.fire({
           title: "Error",
@@ -1223,7 +1237,7 @@ const CreateTenderForm = ({ onClose, sourceData }) => {
 
       setDivisionName(""); // Clear input field
       toggleDivisionPopup(); // Close the popup
-
+      setRefreshLocation((prev) => !prev);
     } catch (error) {
       Swal.fire({
         title: "Error",
@@ -1302,6 +1316,7 @@ const CreateTenderForm = ({ onClose, sourceData }) => {
         setDistrictName("");
         setSelectedDivision(null); // Clear selected division
         toggleDistrictPopup();
+        setRefreshLocation((prev) => !prev);
       } else {
         Swal.fire({
           title: "Error!",
@@ -1343,7 +1358,7 @@ const CreateTenderForm = ({ onClose, sourceData }) => {
     };
 
     fetchDistricts();
-  }, []);
+  }, [refreshLocation]);
 
   const toggleUpazilaPopup = () => {
     setIsUpazilaPopupVisible(!isUpazilaPopupVisible);
@@ -1398,6 +1413,7 @@ const CreateTenderForm = ({ onClose, sourceData }) => {
         });
         setUpazilaName("");
         toggleUpazilaPopup();
+        setRefreshLocation((prev) => !prev);
       } else {
         Swal.fire({
           title: "Error",
@@ -2382,7 +2398,7 @@ const CreateTenderForm = ({ onClose, sourceData }) => {
                 required
               />
             </div>
-           
+
             {/*  Pharchase Last Date*/}
             <div>
               <label className="block text-gray-700 font-medium mb-1">

@@ -182,7 +182,7 @@ function Category() {
   const [editingCategory, setEditingCategory] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
-
+const [totalItems, setTotalItems] = useState(0);
   // Fetch categories from API
   useEffect(() => {
     const fetchCategories = async () => {
@@ -194,6 +194,7 @@ function Category() {
         const response = await ApiClient.get(
           `/admin/tender-config/category?${queryParams.toString()}`
         );
+        setTotalItems(response.data.total);
         if (response.data?.data) {
           setCategories(response.data.data);
           setFilteredCategories(response.data.data);
@@ -265,7 +266,7 @@ function Category() {
 
   return (
     <div className="h-screen w-full flex flex-col p-4 bg-gray-100 gap-2">
-      <h2 className="text-2xl font-semibold mb-4 text-gray-800">Categories</h2>
+      <h2 className="text-2xl font-semibold mb-4 text-gray-800">Categories ={totalItems}</h2>
 
       <div className="flex items-center justify-between mb-4">
 

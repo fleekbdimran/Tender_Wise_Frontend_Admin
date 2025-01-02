@@ -1,259 +1,88 @@
+import { useState, useEffect } from "react";
+import { EditOutlined, CloseOutlined, SendOutlined, SearchOutlined } from "@ant-design/icons";
+import Swal from "sweetalert2";
+import ApiClient from "../../../Api/ApiClient";
 
-import { useEffect, useState } from 'react';
-import { EditOutlined, CloseOutlined, SendOutlined, SearchOutlined } from '@ant-design/icons';
-import ApiClient from './../../../Api/ApiClient';
-import Swal from 'sweetalert2';
 
-// function DesignationTypeModal({
-//   isOpen,
-//   onClose,
-//   title,
-//   currentStatus,
-//   onStatusChange,
-// }) {
-//   const [categories, setCategories] = useState([]);
-//   const [name, setName] = useState('');
-//   const [selectedCategory, setSelectedCategory] = useState('');
 
-//   useEffect(() => {
-//     const fetchCategories = async () => {
-//       try {
-//         const response = await ApiClient.get('/admin/tender-config/district');
-//         if (response.data.success) {
-//           const filteredCategories = response.data.data.filter(
-//             category => category.status === 1
-//           );
-//           setCategories(filteredCategories);
-//         }
-//       } catch (error) {
-//         console.error('Failed to fetch categories:', error);
-//       }
-//     };
-//     fetchCategories();
-//   }, []);
-
-//   const handleSubmit = async e => {
-//     e.preventDefault();
-
-//     if (!name || !selectedCategory) {
-//       Swal.fire({
-//         title: 'Validation Error',
-//         text: 'Please fill in all required fields.',
-//         confirmButtonText: 'Okay',
-//         customClass: {
-//           popup: 'w-72 h-auto p-3',
-//           title: 'text-lg',
-//           content: 'text-xs',
-//           confirmButton: 'bg-teal-500 text-white px-4 py-1 text-sm rounded-md',
-//         },
-//       });
-//       return;
-//     }
-
-//     const data = {
-//       name,
-//       district_id: selectedCategory,
-//     };
-
-//     try {
-//       const response = await ApiClient.post(
-//         '/admin/tender-config/upazila',
-//         data
-//       );
-//       // const result = await response.text();
-//       console.log(response.data);
-//       if (response.status === 201) {
-//         Swal.fire({
-//           title: 'Success!',
-//           text: 'Upazila created successfully!',
-//           confirmButtonText: 'Okay',
-//           customClass: {
-//             popup: 'w-72 h-auto p-3',
-//             title: 'text-lg',
-//             content: 'text-xs',
-//             confirmButton: 'bg-blue-500 text-white px-4 py-1 text-sm rounded-md',
-//           },
-//         });
-//         setName('');
-//         setSelectedCategory('');
-//         onClose();
-//       } else {
-//         Swal.fire({
-//           title: 'Failed!',
-//           text: 'Upazila creation failed!',
-//           confirmButtonText: 'Okay',
-//           customClass: {
-//             popup: 'w-72 h-auto p-3',
-//             title: 'text-lg',
-//             content: 'text-xs',
-//             confirmButton: 'bg-teal-500 text-white px-4 py-1 text-sm rounded-md',
-//           },
-//         });
-//       }
-//     } catch (error) {
-//       Swal.fire({
-//         title: 'Failed!',
-//         text: 'An error occurred. Please try again.',
-//         confirmButtonText: 'Okay',
-//         customClass: {
-//           popup: 'w-72 h-auto p-3',
-//           title: 'text-lg',
-//           content: 'text-xs',
-//           confirmButton: 'bg-teal-500 text-white px-4 py-1 text-sm rounded-md',
-//         },
-//       });
-//     }
-//   };
-
-//   if (!isOpen) return null;
-
-//   return (
-//     <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50 w-full h-full">
-//       <div className="bg-white p-8 rounded-lg shadow-lg w-96 relative">
-//         <button
-//           onClick={onClose}
-//           className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
-//         >
-//           <CloseOutlined />
-//         </button>
-//         <h2 className="text-xl font-semibold mb-6">{title}</h2>
-//         <form className="space-y-6" onSubmit={handleSubmit}>
-//           <div>
-//             <label className="block text-sm font-medium text-gray-700">
-//               <span className="text-red-500">*</span> Upazila Name:
-//             </label>
-//             <input
-//               type="text"
-//               value={name}
-//               onChange={e => setName(e.target.value)}
-//               placeholder="Enter Upazila Name"
-//               className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md text-sm shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
-//             />
-//           </div>
-//           <div>
-//             <label className="block text-sm font-medium text-gray-700">
-//               <span className="text-red-500">*</span> District Name:
-//             </label>
-//             <select
-//               value={selectedCategory}
-//               onChange={e => setSelectedCategory(e.target.value)}
-//               className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md text-sm shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
-//             >
-//               <option value="" disabled>Select a District</option>
-//               {categories.map(category => (
-//                 <option key={category.id} value={category.id}>
-//                   {category.name}
-//                 </option>
-//               ))}
-//             </select>
-//           </div>
-//           <button
-//             type="submit"
-//             className="bg-teal-500 text-white px-6 py-3 rounded-lg flex items-center justify-center w-full"
-//           >
-//             <SendOutlined className="mr-2" /> Submit
-//           </button>
-//         </form>
-//       </div>
-//     </div>
-//   );
-// }
-
-function DesignationTypeModal({
-  isOpen,
-  onClose,
-  title,
-  // currentStatus,
-  onStatusChange,
-}) {
-  const [categories, setCategories] = useState([]);
-  const [name, setName] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('');
-  const [currentStatus, setCurrentStatus] = useState("");
+function AddCategoryModal({ isOpen, onClose }) {
+  const [categoryName, setCategoryName] = useState("");
+  const [categoriesList, setCategoriesList] = useState("");
+  const [addCategoriesDropdown, setAddCategoriesDropdown] = useState([]);
+  const [suggestions, setSuggestions] = useState([]);
 
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await ApiClient.get('/admin/tender-config/district');
-        if (response.data.success) {
-          const filteredCategories = response.data.data.filter(
+        const response = await ApiClient.get(`/admin/tender-config/district`);
+        if (response.data?.data) {
+          const activeCategories = response.data.data.filter(
             (category) => category.status === 1
           );
-          setCategories(filteredCategories);
+          setAddCategoriesDropdown(activeCategories);
         }
       } catch (error) {
-        console.error('Failed to fetch categories:', error);
+        console.error("Error fetching categories:", error);
       }
     };
+
     fetchCategories();
   }, []);
 
-  const handleSubmit = async (e) => {
+  const handleInputChange = (e) => {
+    const inputValue = e.target.value;
+    setCategoriesList(inputValue);
+
+    if (inputValue.trim() === "") {
+      setSuggestions([]);
+    } else {
+      const filteredSuggestions = addCategoriesDropdown.filter((category) =>
+        category.name.toLowerCase().includes(inputValue.toLowerCase())
+      );
+      setSuggestions(filteredSuggestions);
+    }
+  };
+
+  const handleSuggestionClick = (category) => {
+    setCategoriesList(category.name);
+    setSuggestions([]);
+  };
+
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
 
-    if (!name || !selectedCategory) {
-      Swal.fire({
-        title: 'Validation Error',
-        text: 'Please fill in all required fields.',
-        confirmButtonText: 'Okay',
-        customClass: {
-          popup: 'w-72 h-auto p-3',
-          title: 'text-lg',
-          content: 'text-xs',
-          confirmButton: 'bg-teal-500 text-white px-4 py-1 text-sm rounded-md',
-        },
-      });
-      return;
-    }
-
-    const data = {
-      name,
-      district_id: selectedCategory,
-    };
-
+    console.log(categoryName, categoriesList);
     try {
-      const response = await ApiClient.post(
-        '/admin/tender-config/upazila',
-        data
+      const selectedCategory = addCategoriesDropdown.find(
+        (category) => category.name === categoriesList
       );
-      console.log(response.data);
-
-      if (response.status === 200 || response.status === 201) {
-        await Swal.fire({
-          title: 'Success!',
-          text: 'Upazila created successfully!',
-          icon: 'success',
-          confirmButtonText: 'OK',
-        });
-        setCategories((prevCategories) => [
-          ...prevCategories,
-          response.data, // Assuming the response contains the new category data
-        ]);
+      const response = await ApiClient.post("/admin/tender-config/upazila", {
+        name: categoryName,
+        district_id: selectedCategory?.id || "",
+      });
+      if (response.data.success === "false") {
+        Swal.fire("Error!", response.data.message, "error");
       } else {
         Swal.fire({
-          title: 'Error!',
-          text: response.data.message || 'Something went wrong!',
-          icon: 'error',
-          confirmButtonText: 'Try Again',
+          title: "Success!",
+          text: response.data.message,
+          icon: "success",
+          confirmButtonText: "OK"
+        }).then(() => {
+
+          window.location.reload(); // Reload the page
         });
       }
     } catch (error) {
-      console.error('Error adding category:', error);
-      Swal.fire({
-        title: 'Error!',
-        text: error.response?.data?.message || 'Something went wrong!',
-        icon: 'error',
-        confirmButtonText: 'Try Again',
-      });
+      Swal.fire("Error!", error.response?.data?.message || "Something went wrong!", "error");
+      console.log(error.response?.data?.message);
     }
-
-    onClose(); // Close modal after submission
   };
 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50 w-full h-full">
+    <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
       <div className="bg-white p-8 rounded-lg shadow-lg w-96 relative">
         <button
           onClick={onClose}
@@ -261,54 +90,49 @@ function DesignationTypeModal({
         >
           <CloseOutlined />
         </button>
-        <h2 className="text-xl font-semibold mb-6">{title}</h2>
-        <form className="space-y-6" onSubmit={handleSubmit}>
-        <div>
-            <label className="block text-sm font-medium text-gray-700">
-              <span className="text-red-500">*</span> District Name:
-            </label>
-            <select
-              value={selectedCategory}
-              onChange={(e) => setSelectedCategory(e.target.value)}
-              className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md text-sm shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
-            >
-              <option value="" disabled>
-                Select a District
-              </option>
-              {categories.map((category) => (
-                <option key={category.id} value={category.id}>
-                  {category.name}
-                </option>
-              ))}
-            </select>
-          </div>
+        <h2 className="text-xl font-semibold mb-6">Add District</h2>
+        <form onSubmit={handleFormSubmit} className="space-y-6">
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              <span className="text-red-500">*</span> Upazila Name:
+              <span className="text-red-500">*</span> Name:
             </label>
             <input
               type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              value={categoryName}
+              onChange={(e) => setCategoryName(e.target.value)}
               placeholder="Enter Upazila Name"
               className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md text-sm shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
+              required
             />
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              Availability:
+              <span className="text-red-500">*</span> District Name:
             </label>
-            <select
-              value={currentStatus}
-              onChange={(e) => setCurrentStatus(e.target.value)} // Updated to dynamically set the current status
+            <input
+              type="text"
+              value={categoriesList}
+              onChange={handleInputChange}
+              placeholder="Type to search..."
               className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md text-sm shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
-            >
-              <option value="available">Available</option>
-              <option value="unavailable">Unavailable</option>
-            </select>
+              required
+            />
+            {suggestions.length > 0 && (
+              <ul className="border border-gray-300 mt-2 rounded-md shadow-sm bg-white max-h-40 overflow-y-auto">
+                {suggestions.map((category) => (
+                  <li
+                    key={category.id}
+                    onClick={() => handleSuggestionClick(category)}
+                    className="px-4 py-2 hover:bg-teal-500 hover:text-white cursor-pointer"
+                  >
+                    {category.name}
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
-          
+
           <button
             type="submit"
             className="bg-teal-500 text-white px-6 py-3 rounded-lg flex items-center justify-center w-full"
@@ -322,94 +146,358 @@ function DesignationTypeModal({
 }
 
 
-function Upazila() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalTitle, setModalTitle] = useState('Add Designation Type');
-  const [currentStatus, setCurrentStatus] = useState('Available');
-  const [Upazila, setUpazila] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
 
-  const openModal = (title, Upazila) => {
-    setModalTitle(title);
-    setCurrentStatus(Upazila ? Upazila.status : 'Available');
-    setIsModalOpen(true);
-  };
 
-  const handleSearchChange = (e) => {
-    setSearchTerm(e.target.value);
-  };
 
+
+
+
+
+
+
+
+
+
+
+function EditCategoryModal({ isOpen, onClose, category, onSubmit }) {
+  const [categoryName, setCategoryName] = useState("");
+  const [categoryStatus, setCategoryStatus] = useState("1");
+  const [categoriesList, setCategoriesList] = useState([]); 
+  const [suggestions, setSuggestions] = useState([]);
+  const [addCategoriesDropdown, setAddCategoriesDropdown] = useState([]);
+
+
+  // Load initial category data
   useEffect(() => {
-    const fetchUpazilaData = async () => {
-      try {
-        const response = await ApiClient.get('/admin/tender-config/upazila');
-        setUpazila(response.data.data);
-      } catch (error) {
-        console.error('Error fetching data:', error);
+    if (category) {
+      console.log(category);
+      setCategoryName(category.name || "");
+
+      setCategoryStatus(category.status?.toString() || "1");
+     
+      const selectedCategory = addCategoriesDropdown.find(
+        (cat) => cat.id === category.id
+      );
+      if (selectedCategory) {
+        setCategoriesList(selectedCategory.name); 
       }
-        // Reload after 1 seconds
-        // const interval = setInterval(() => {
-        //   fetchUpazilaData();
-        // }, 1000);
-  
-        // return () => clearInterval(interval);
+    }
+  }, [category, addCategoriesDropdown]); 
+
+  // Fetch categories for dropdown
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await ApiClient.get(`/admin/tender-config/district`);
+        if (response.data?.data) {
+          const activeCategories = response.data.data.filter(
+            (category) => category.status === 1
+          );
+          setAddCategoriesDropdown(activeCategories);
+        }
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
     };
 
-    fetchUpazilaData();
-  }, [Upazila]);
+    fetchCategories();
+  }, []);
 
-  // const filteredUpazilas = Upazila.filter(amenity => 
-  //   amenity.name.toLowerCase().includes(searchTerm.toLowerCase())
-  // );
 
-  const filteredUpazila = Upazila.filter((subDept) =>
-    subDept.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const handleInputChange = (e) => {
+    const inputValue = e.target.value;
+    setCategoriesList(inputValue);
 
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
+    if (inputValue.trim() === "") {
+      setSuggestions([]);
+    } else {
+      const filteredSuggestions = addCategoriesDropdown.filter((category) =>
+        category.name.toLowerCase().includes(inputValue.toLowerCase())
+      );
+      setSuggestions(filteredSuggestions);
+    }
   };
 
-  const paginatedUpazila = filteredUpazila.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
+
+
+  const handleSuggestionClick = (category) => {
+    setCategoriesList(category.name);
+    setSuggestions([]);
+  };
+
+
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+
+    // Find the category object by name to get its ID
+    const selectedCategory = addCategoriesDropdown.find(
+      (cat) => cat.name === categoriesList
+    );
+
+    console.log(categoryName, categoryStatus, selectedCategory);
+
+    try {
+      const response = await ApiClient.patch(
+        `/admin/tender-config/upazila/${category.id}`,
+        {
+          name: categoryName,
+          status: Number(categoryStatus),
+          district_id: selectedCategory.id // Send the selected category's ID
+        }
+      );
+
+      if (response.data.success === "false") {
+        console.log(response.data.message);
+      } else {
+        Swal.fire({
+          title: "Success!",
+          text: response.data.message,
+          icon: "success",
+          confirmButtonText: "OK"
+        }).then(() => {
+          onSubmit(); // Refresh data
+          window.location.reload(); // Reload the page
+        });
+      }
+    } catch (error) {
+      Swal.fire("Error!", response.data.message, "error");
+    }
+  };
+
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
+      <div className="bg-white p-8 rounded-lg shadow-lg w-96 relative">
+        <button
+          onClick={onClose}
+          className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+        >
+          <CloseOutlined />
+        </button>
+
+        <h2 className="text-xl font-semibold mb-6">Edit Upazila</h2>
+
+        <form onSubmit={handleFormSubmit} className="space-y-6">
+          {/* Name Input */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              <span className="text-red-500">*</span> Name:
+            </label>
+            <input
+              type="text"
+              value={categoryName}
+              onChange={(e) => setCategoryName(e.target.value)}
+              placeholder="Edit Category Name"
+              className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md text-sm shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
+              required
+            />
+          </div>
+
+          {/* Dropdown for selecting category */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              <span className="text-red-500">*</span> District:
+            </label>
+            <input
+              type="text"
+              value={categoriesList}
+              onChange={handleInputChange}
+              placeholder="Type to search..."
+              className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md text-sm shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
+              required
+            />
+            {suggestions.length > 0 && (
+              <ul className="border border-gray-300 mt-2 rounded-md shadow-sm bg-white max-h-40 overflow-y-auto">
+                {suggestions.map((category) => (
+                  <li
+                    key={category.id}
+                    onClick={() => handleSuggestionClick(category)}
+                    className="px-4 py-2 hover:bg-teal-500 hover:text-white cursor-pointer"
+                  >
+                    {category.name}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+
+          {/* Status Input */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Status:
+            </label>
+            <select
+              value={categoryStatus}
+              onChange={(e) => setCategoryStatus(e.target.value)}
+              className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md text-sm shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
+            >
+              <option value="1">Available</option>
+              <option value="0">Unavailable</option>
+            </select>
+          </div>
+
+          <button
+            type="submit"
+            className="bg-teal-500 text-white px-6 py-3 rounded-lg flex items-center justify-center w-full"
+          >
+            <SendOutlined className="mr-2" /> Update
+          </button>
+        </form>
+      </div>
+    </div>
   );
+}
+
+
+
+
+
+
+
+
+
+
+function Upazila() {
+  const [categories, setCategories] = useState([]);
+  const [filteredCategories, setFilteredCategories] = useState([]);
+  const [keyword, setKeyword] = useState("");
+  const [type, setType] = useState("");
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editingCategory, setEditingCategory] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(10);
+  const [totalItems, setTotalItems] = useState(0);
+
+  // Fetch categories from API
+  useEffect(() => {
+    const fetchCategories = async () => {
+      const queryParams = new URLSearchParams();
+      if (keyword) queryParams.append("key", keyword);
+      if (type) queryParams.append("type", type);
+
+
+      try {
+        const response = await ApiClient.get(
+          `/admin/tender-config/upazila?${queryParams.toString()}`
+        );
+        setTotalItems(response.data.total);
+        if (response.data?.data) {
+          setCategories(response.data.data);
+          setFilteredCategories(response.data.data);
+           ;
+
+        }
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+
+      }
+    };
+
+    fetchCategories();
+  }, [keyword, type]);
+
+  // Add category
+  const handleAddCategory = async () => {
+
+    setIsAddModalOpen(false);
+  };
+
+  // Edit category
+  const handleEditCategory = async () => {
+
+    setIsEditModalOpen(false);
+  };
+
+  // Handle edit modal open
+  const handleCategoryNameEdit = (category) => {
+    setEditingCategory(category);
+    setIsEditModalOpen(true);
+  };
+
+  // Handle search
+  useEffect(() => {
+    const filtered = categories.filter((category) => {
+      const matchesKeyword = category.name.toLowerCase().includes(keyword.toLowerCase());
+      const matchesType = type ? category.status === parseInt(type) : true;  
+      return matchesKeyword && matchesType;
+    });
+
+    setFilteredCategories(filtered);
+    setCurrentPage(1); // ফিল্টারিং করলে পেজ আবার প্রথমে আসবে
+  }, [categories, keyword, type]); // যেকোনো একটিই পরিবর্তিত হলে এটি চলবে
+
+
+  // Pagination logic
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredCategories.slice(indexOfFirstItem, indexOfLastItem);
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
 
   return (
     <div className="h-screen w-full flex flex-col p-4 bg-gray-100 gap-2">
-      <h2 className="text-2xl font-semibold mb-4 text-gray-800">Upazila</h2>
+      <h2 className="text-2xl font-semibold mb-4 text-gray-800">Upazila={totalItems}</h2>
 
-      {/* Create button */}
       <div className="flex items-center justify-between mb-4">
+
         <button
-          onClick={() => openModal('Add Upazila')}
-          className="bg-teal-500 text-white px-7 py-3 rounded-lg"
+          onClick={() => setIsAddModalOpen(true)}
+          className="bg-teal-500 text-white px-7 py-3 rounded-lg ml-4"
         >
           Create
         </button>
 
-        {/* Search Bar */}
-        <div className="flex items-center">
-          <input
-            type="text"
-            value={searchTerm}
-            onChange={handleSearchChange}
-            placeholder="Search Upazilas"
-            className="px-4 py-2 border border-gray-300 rounded-l-md w-[400px]"
-          />
-          <button className="bg-teal-500 text-white px-4 py-2 rounded-r-md flex items-center">
-            <SearchOutlined />
-          </button>
+        <div className="flex items-center gap-4">
+         
+          <div className="flex items-center  justify-end">
+            <input
+              type="text"
+              placeholder="Search by Name"
+              className="px-4 py-2 border border-gray-300 rounded-l-md w-[250px]"
+              value={keyword}
+              onChange={(e) => setKeyword(e.target.value)}
+            />
+            <button className="bg-teal-500 text-white px-4 py-2 rounded-r-md flex items-center">
+              <SearchOutlined />
+            </button>
+          </div>
+
+          <div className="flex justify-center gap-2 items-center">
+            <p className="">status:</p>
+            <select
+              id="type"
+              className="bg-gray-50 border  border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-auto p-3"
+              value={type}
+              onChange={(e) => setType(e.target.value)}
+            >
+              <option value="">All</option>
+              <option value="1">Available</option>
+              <option value="0">UnAvailable</option>
+            </select>
+          </div>
+
         </div>
+
+
+
       </div>
 
-      <DesignationTypeModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        title={modalTitle}
-        currentStatus={currentStatus}
+      <AddCategoryModal
+        isOpen={isAddModalOpen}
+        onClose={() => setIsAddModalOpen(false)}
+        onSubmit={handleAddCategory}
+      />
+
+      <EditCategoryModal
+        isOpen={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
+        category={editingCategory}
+        onSubmit={handleEditCategory}
       />
 
       <div className="flex-grow overflow-auto">
@@ -423,22 +511,23 @@ function Upazila() {
             </tr>
           </thead>
           <tbody>
-            {paginatedUpazila.map((Upazila, index) => (
+            {currentItems.map((category, index) => (
               <tr key={index} className="hover:bg-gray-50">
-                <td className="px-4 py-2 border-b">{index + 1}</td>
-                <td className="px-4 py-2 border-b">{Upazila.name}</td>
+                <td className="px-4 py-2 border-b">{indexOfFirstItem + index + 1}</td>
+                <td className="px-4 py-2 border-b">{category.name}</td>
                 <td className="px-4 py-2 border-b">
                   <span
-                    className={`px-2 py-1 rounded-full text-xs ${
-                      Upazila.status === 1 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
-                    }`}
+                    className={`px-2 py-1 rounded-full text-xs cursor-pointer ${category.status === 1
+                      ? "bg-green-100 text-green-700"
+                      : "bg-red-100 text-red-700"
+                      }`}
                   >
-                    {Upazila.status === 1 ? 'Available' : 'Unavailable'}
+                    {category.status === 1 ? "Available" : "Unavailable"}
                   </span>
                 </td>
                 <td className="px-4 py-2 border-b">
                   <button
-                    onClick={() => openModal(`Edit ${Upazila.name}`, Upazila)}
+                    onClick={() => handleCategoryNameEdit(category)}
                     className="text-blue-500 hover:underline flex items-center"
                   >
                     <EditOutlined className="mr-1" /> Edit
@@ -449,14 +538,15 @@ function Upazila() {
           </tbody>
         </table>
       </div>
+
       <div className="flex justify-center mt-4">
         {Array.from(
-          { length: Math.ceil(filteredUpazila.length / itemsPerPage) },
+          { length: Math.ceil(filteredCategories.length / itemsPerPage) },
           (_, i) => (
             <button
               key={i}
               onClick={() => handlePageChange(i + 1)}
-              className={`px-4 py-2 mx-1 rounded ${currentPage === i + 1 ? "bg-teal-500 text-white" : "bg-gray-200"
+              className={`px-4 py-2 mx-1 rounded ${currentPage === i + 1 ? "bg-blue-500 text-white" : "bg-gray-200"
                 }`}
             >
               {i + 1}
@@ -469,264 +559,3 @@ function Upazila() {
 }
 
 export default Upazila;
-
-
-
-
-
-// import { useEffect, useState } from 'react';
-// import { EditOutlined, CloseOutlined, SendOutlined, SearchOutlined } from '@ant-design/icons';
-// import ApiClient from '../../../Api/ApiClient'; // Import ApiClient
-// import Swal from 'sweetalert2';
-
-// function DesignationTypeModal({
-//   isOpen,
-//   onClose,
-//   title,
-//   currentStatus,
-//   onStatusChange,
-// }) {
-//   const [categories, setCategories] = useState([]);
-//   const [name, setName] = useState('');
-//   const [selectedCategory, setSelectedCategory] = useState('');
-
-//   useEffect(() => {
-//     const fetchCategories = async () => {
-//       try {
-//         const response = await ApiClient.get('admin/tender-config/district');
-//         if (response.data.success) {
-//           const filteredCategories = response.data.data.filter(
-//             category => category.status === 1
-//           );
-//           setCategories(filteredCategories);
-//         }
-//       } catch (error) {
-//         console.error('Failed to fetch categories:', error);
-//       }
-//     };
-//     fetchCategories();
-//   }, []);
-
-//   const handleSubmit = async e => {
-//     e.preventDefault();
-
-//     if (!name || !selectedCategory) {
-//       Swal.fire({
-//         title: 'Validation Error',
-//         text: 'Please fill in all required fields.',
-//         confirmButtonText: 'Okay',
-//         customClass: {
-//           popup: 'w-72 h-auto p-3',
-//           title: 'text-lg',
-//           content: 'text-xs',
-//           confirmButton: 'bg-teal-500 text-white px-4 py-1 text-sm rounded-md',
-//         },
-//       });
-//       return;
-//     }
-
-//     const data = {
-//       name,
-//       district_id: selectedCategory,
-//     };
-
-//     try {
-//       const response = await ApiClient.post('admin/tender-config/upazila', data);
-//       if (response.status === 201) {
-//         Swal.fire({
-//           title: 'Success!',
-//           text: 'Upazila created successfully!',
-//           confirmButtonText: 'Okay',
-//           customClass: {
-//             popup: 'w-72 h-auto p-3',
-//             title: 'text-lg',
-//             content: 'text-xs',
-//             confirmButton: 'bg-blue-500 text-white px-4 py-1 text-sm rounded-md',
-//           },
-//         });
-//         setName('');
-//         setSelectedCategory('');
-//         onClose();
-//       } else {
-//         Swal.fire({
-//           title: 'Failed!',
-//           text: 'Upazila creation failed!',
-//           confirmButtonText: 'Okay',
-//           customClass: {
-//             popup: 'w-72 h-auto p-3',
-//             title: 'text-lg',
-//             content: 'text-xs',
-//             confirmButton: 'bg-teal-500 text-white px-4 py-1 text-sm rounded-md',
-//           },
-//         });
-//       }
-//     } catch (error) {
-//       Swal.fire({
-//         title: 'Failed!',
-//         text: 'An error occurred. Please try again.',
-//         confirmButtonText: 'Okay',
-//         customClass: {
-//           popup: 'w-72 h-auto p-3',
-//           title: 'text-lg',
-//           content: 'text-xs',
-//           confirmButton: 'bg-teal-500 text-white px-4 py-1 text-sm rounded-md',
-//         },
-//       });
-//     }
-//   };
-
-//   if (!isOpen) return null;
-
-//   return (
-//     <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50 w-full h-full">
-//       <div className="bg-white p-8 rounded-lg shadow-lg w-96 relative">
-//         <button
-//           onClick={onClose}
-//           className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
-//         >
-//           <CloseOutlined />
-//         </button>
-//         <h2 className="text-xl font-semibold mb-6">{title}</h2>
-//         <form className="space-y-6" onSubmit={handleSubmit}>
-//           <div>
-//             <label className="block text-sm font-medium text-gray-700">
-//               <span className="text-red-500">*</span> Upazila Name:
-//             </label>
-//             <input
-//               type="text"
-//               value={name}
-//               onChange={e => setName(e.target.value)}
-//               placeholder="Enter Upazila Name"
-//               className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md text-sm shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
-//             />
-//           </div>
-//           <div>
-//             <label className="block text-sm font-medium text-gray-700">
-//               <span className="text-red-500">*</span> District Name:
-//             </label>
-//             <select
-//               value={selectedCategory}
-//               onChange={e => setSelectedCategory(e.target.value)}
-//               className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md text-sm shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
-//             >
-//               <option value="" disabled>Select a District</option>
-//               {categories.map(category => (
-//                 <option key={category.id} value={category.id}>
-//                   {category.name}
-//                 </option>
-//               ))}
-//             </select>
-//           </div>
-//           <button
-//             type="submit"
-//             className="bg-teal-500 text-white px-6 py-3 rounded-lg flex items-center justify-center w-full"
-//           >
-//             <SendOutlined className="mr-2" /> Submit
-//           </button>
-//         </form>
-//       </div>
-//     </div>
-//   );
-// }
-
-// function Upazila() {
-//   const [isModalOpen, setIsModalOpen] = useState(false);
-//   const [modalTitle, setModalTitle] = useState('Add Designation Type');
-//   const [currentStatus, setCurrentStatus] = useState('Available');
-//   const [upazila, setUpazila] = useState([]);
-//   const [searchTerm, setSearchTerm] = useState('');
-
-//   const openModal = (title, Upazila) => {
-//     setModalTitle(title);
-//     setCurrentStatus(Upazila ? Upazila.status : 'Available');
-//     setIsModalOpen(true);
-//   };
-
-//   const handleSearchChange = (e) => {
-//     setSearchTerm(e.target.value);
-//   };
-
-//   useEffect(() => {
-//     const fetchUpazilaData = async () => {
-//       try {
-//         const response = await ApiClient.get('admin/tender-config/upazila');
-//         setUpazila(response.data.data);
-//       } catch (error) {
-//         console.error('Error fetching data:', error);
-//       }
-//     };
-
-//     fetchUpazilaData();
-//   }, []);
-
-//   const filteredUpazilas = upazila.filter(amenity =>
-//     amenity.name.toLowerCase().includes(searchTerm.toLowerCase())
-//   );
-
-//   return (
-//     <div className="h-screen w-full flex flex-col p-4 bg-gray-100 gap-2">
-//       <h2 className="text-2xl font-semibold mb-4 text-gray-800">Upazila</h2>
-
-//       {/* Create button */}
-//       <div className="flex items-center justify-between mb-4">
-//         <button
-//           onClick={() => openModal('Add Upazila')}
-//           className="bg-teal-500 text-white px-7 py-3 rounded-lg"
-//         >
-//           Create
-//         </button>
-
-//         {/* Search Bar */}
-//         <div className="flex items-center">
-//           <input
-//             type="text"
-//             value={searchTerm}
-//             onChange={handleSearchChange}
-//             placeholder="Search Upazilas"
-//             className="px-4 py-2 border border-gray-300 rounded-lg"
-//           />
-//           <SearchOutlined className="ml-2 text-xl text-gray-500" />
-//         </div>
-//       </div>
-
-//       {/* Table */}
-//       <table className="min-w-full table-auto">
-//         <thead>
-//           <tr className="border-b">
-//             <th className="px-6 py-3 text-left">Upazila Name</th>
-//             <th className="px-6 py-3 text-left">District Name</th>
-//             <th className="px-6 py-3 text-left">Status</th>
-//             <th className="px-6 py-3 text-left">Actions</th>
-//           </tr>
-//         </thead>
-//         <tbody>
-//           {filteredUpazilas.map(upazila => (
-//             <tr key={upazila.id}>
-//               <td className="px-6 py-4">{upazila.name}</td>
-//               <td className="px-6 py-4">{upazila.district.name}</td>
-//               <td className="px-6 py-4">{upazila.status === 1 ? 'Active' : 'Inactive'}</td>
-//               <td className="px-6 py-4">
-//                 <button
-//                   onClick={() => openModal('Edit Upazila', upazila)}
-//                   className="text-teal-500 hover:text-teal-700"
-//                 >
-//                   <EditOutlined />
-//                 </button>
-//               </td>
-//             </tr>
-//           ))}
-//         </tbody>
-//       </table>
-
-//       <DesignationTypeModal
-//         isOpen={isModalOpen}
-//         onClose={() => setIsModalOpen(false)}
-//         title={modalTitle}
-//         currentStatus={currentStatus}
-//         onStatusChange={setCurrentStatus}
-//       />
-//     </div>
-//   );
-// }
-
-// export default Upazila;

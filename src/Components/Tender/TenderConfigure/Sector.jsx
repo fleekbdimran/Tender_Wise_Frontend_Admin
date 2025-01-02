@@ -162,7 +162,7 @@ function AddCategoryModal({ isOpen, onClose }) {
 function EditCategoryModal({ isOpen, onClose, category, onSubmit }) {
   const [categoryName, setCategoryName] = useState("");
   const [categoryStatus, setCategoryStatus] = useState("1");
-  const [categoriesList, setCategoriesList] = useState([]); // Dropdown data
+  const [categoriesList, setCategoriesList] = useState([]); 
   const [suggestions, setSuggestions] = useState([]);
   const [addCategoriesDropdown, setAddCategoriesDropdown] = useState([]);
 
@@ -173,16 +173,15 @@ function EditCategoryModal({ isOpen, onClose, category, onSubmit }) {
       setCategoryName(category.name || "");
 
       setCategoryStatus(category.sector_status?.toString() || "1");
-      // ক্যাটেগরি ড্রপডাউন বাছাই করার জন্য
+     
       const selectedCategory = addCategoriesDropdown.find(
         (cat) => cat.id === category.category_id
       );
       if (selectedCategory) {
-        setCategoriesList(selectedCategory.name); // পুরানো ক্যাটাগরি নামটি সেট করুন
+        setCategoriesList(selectedCategory.name); 
       }
     }
-  }, [category, addCategoriesDropdown]); // addCategoriesDropdown যেন ফেচ হলে আপডেট হয়
-
+  }, [category, addCategoriesDropdown]); 
 
   // Fetch categories for dropdown
   useEffect(() => {
@@ -369,7 +368,7 @@ function Selector() {
   const [editingCategory, setEditingCategory] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
-
+const [totalItems, setTotalItems] = useState(0);
   // Fetch categories from API
   useEffect(() => {
     const fetchCategories = async () => {
@@ -382,10 +381,11 @@ function Selector() {
         const response = await ApiClient.get(
           `/admin/tender-config/sector?${queryParams.toString()}`
         );
+        setTotalItems(response.data.total);
         if (response.data?.data) {
           setCategories(response.data.data);
           setFilteredCategories(response.data.data);
-          console.log(response.data.data);
+           ;
 
         }
       } catch (error) {
@@ -439,7 +439,7 @@ function Selector() {
 
   return (
     <div className="h-screen w-full flex flex-col p-4 bg-gray-100 gap-2">
-      <h2 className="text-2xl font-semibold mb-4 text-gray-800">Sector</h2>
+      <h2 className="text-2xl font-semibold mb-4 text-gray-800">Sector={totalItems}</h2>
 
       <div className="flex items-center justify-between mb-4">
 

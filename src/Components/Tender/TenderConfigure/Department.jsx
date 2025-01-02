@@ -52,7 +52,7 @@ function AddCategoryModal({ isOpen, onClose }) {
         >
           <CloseOutlined />
         </button>
-        <h2 className="text-xl font-semibold mb-6">Add Category</h2>
+        <h2 className="text-xl font-semibold mb-6">Add Department</h2>
         <form onSubmit={handleFormSubmit} className="space-y-6">
           <div>
             <label className="block text-sm font-medium text-gray-700">
@@ -62,7 +62,7 @@ function AddCategoryModal({ isOpen, onClose }) {
               type="text"
               value={categoryName}
               onChange={(e) => setCategoryName(e.target.value)}
-              placeholder="Enter Category Name"
+              placeholder="Enter department Name"
               className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md text-sm shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
               required
             />
@@ -144,7 +144,7 @@ function EditCategoryModal({ isOpen, onClose, category, onSubmit }) {
         >
           <CloseOutlined />
         </button>
-        <h2 className="text-xl font-semibold mb-6">Edit Category</h2>
+        <h2 className="text-xl font-semibold mb-6">Edit Department</h2>
         <form onSubmit={handleFormSubmit} className="space-y-6">
           <div>
             <label className="block text-sm font-medium text-gray-700">
@@ -199,6 +199,7 @@ function Department() {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editingCategory, setEditingCategory] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [totalItems, setTotalItems] = useState(0);
   const [itemsPerPage] = useState(10);
 
   // Fetch categories from API
@@ -212,6 +213,7 @@ function Department() {
         const response = await ApiClient.get(
           `/admin/tender-config/department?${queryParams.toString()}`
         );
+        setTotalItems(response.data.total); 
         console.log(response.data); // ডেটা দেখার জন্য
         if (response.data?.data) {
           setCategories(response.data.data);
@@ -284,7 +286,7 @@ function Department() {
 
   return (
     <div className="h-screen w-full flex flex-col p-4 bg-gray-100 gap-2">
-      <h2 className="text-2xl font-semibold mb-4 text-gray-800">Categories</h2>
+      <h2 className="text-2xl font-semibold mb-4 text-gray-800">Department={totalItems}</h2>
 
       <div className="flex items-center justify-between mb-4">
 

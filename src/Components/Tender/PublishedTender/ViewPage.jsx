@@ -25,7 +25,7 @@ const ViewTenderDetails = () => {
         );
            setLogo(response.data.data.company_logo);
         setTender(response.data.data); // Set the actual tender data from the response
-        console.log(response.data.data); // Debug log
+         ; // Debug log
       } catch (err) {
         setError('Failed to load tender details.');
         console.error('Error fetching tender details:', err);

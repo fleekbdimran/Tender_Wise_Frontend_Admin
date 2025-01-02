@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { EditOutlined, CloseOutlined, SendOutlined, SearchOutlined } from "@ant-design/icons";
 import Swal from "sweetalert2";
 import ApiClient from "../../../Api/ApiClient";
+import { add } from "date-fns";
 
 
 
@@ -15,7 +16,6 @@ function AddCategoryModal({ isOpen, onClose }) {
     const fetchCategories = async () => {
       try {
         const response = await ApiClient.get(`/admin/tender-config/sector`);
-       console.log(response.data.data);
         if (response.data?.data) {
           const activeCategories = response.data.data.filter(
             (category) => category.sector_status === 1
@@ -101,7 +101,7 @@ function AddCategoryModal({ isOpen, onClose }) {
               type="text"
               value={categoryName}
               onChange={(e) => setCategoryName(e.target.value)}
-              placeholder="Enter Category Name"
+              placeholder="Enter sector Name"
               className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md text-sm shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
               required
             />
@@ -109,7 +109,7 @@ function AddCategoryModal({ isOpen, onClose }) {
 
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              <span className="text-red-500">*</span> Category:
+              <span className="text-red-500">*</span> Sector:
             </label>
             <input
               type="text"
@@ -160,10 +160,13 @@ function AddCategoryModal({ isOpen, onClose }) {
 
 
 
+
+
+
 function EditCategoryModal({ isOpen, onClose, category, onSubmit }) {
   const [categoryName, setCategoryName] = useState("");
   const [categoryStatus, setCategoryStatus] = useState("1");
-  const [categoriesList, setCategoriesList] = useState([]); // Dropdown data
+  const [categoriesList, setCategoriesList] = useState([]); 
   const [suggestions, setSuggestions] = useState([]);
   const [addCategoriesDropdown, setAddCategoriesDropdown] = useState([]);
 
@@ -171,19 +174,20 @@ function EditCategoryModal({ isOpen, onClose, category, onSubmit }) {
   // Load initial category data
   useEffect(() => {
     if (category) {
+      console.log(category);
+console.log(addCategoriesDropdown);
       setCategoryName(category.name || "");
 
-      setCategoryStatus(category.sector_status?.toString() || "1");
-      // ক্যাটেগরি ড্রপডাউন বাছাই করার জন্য
-      const selectedCategory = addCategoriesDropdown.find(
-        (cat) => cat.id === category.category_id
-      );
-      if (selectedCategory) {
-        setCategoriesList(selectedCategory.name); // পুরানো ক্যাটাগরি নামটি সেট করুন
-      }
-    }
-  }, [category, addCategoriesDropdown]); // addCategoriesDropdown যেন ফেচ হলে আপডেট হয়
+      setCategoryStatus(category.status?.toString() || "1");
 
+      const selectedCategory = addCategoriesDropdown.find(
+        (cat) => cat.id === category.id);
+        
+          console.log(selectedCategory);
+        
+     
+    }
+  }, [category, addCategoriesDropdown]); 
 
   // Fetch categories for dropdown
   useEffect(() => {
@@ -243,7 +247,7 @@ function EditCategoryModal({ isOpen, onClose, category, onSubmit }) {
         {
           name: categoryName,
           status: Number(categoryStatus),
-          category_id: selectedCategory.id // Send the selected category's ID
+          sector_id: selectedCategory.id // Send the selected category's ID
         }
       );
 
@@ -278,7 +282,7 @@ function EditCategoryModal({ isOpen, onClose, category, onSubmit }) {
           <CloseOutlined />
         </button>
 
-        <h2 className="text-xl font-semibold mb-6">Edit Sector</h2>
+        <h2 className="text-xl font-semibold mb-6">Edit Sub Sector</h2>
 
         <form onSubmit={handleFormSubmit} className="space-y-6">
           {/* Name Input */}
@@ -299,7 +303,7 @@ function EditCategoryModal({ isOpen, onClose, category, onSubmit }) {
           {/* Dropdown for selecting category */}
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              <span className="text-red-500">*</span> Category:
+              <span className="text-red-500">*</span> Sector:
             </label>
             <input
               type="text"
@@ -370,6 +374,7 @@ function Selector() {
   const [editingCategory, setEditingCategory] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
+  const [totalItems, setTotalItems] = useState(0);
 
   // Fetch categories from API
   useEffect(() => {
@@ -383,6 +388,7 @@ function Selector() {
         const response = await ApiClient.get(
           `/admin/tender-config/sub-sector?${queryParams.toString()}`
         );
+        setTotalItems(response.data.total);
         if (response.data?.data) {
           setCategories(response.data.data);
           setFilteredCategories(response.data.data);
@@ -440,7 +446,7 @@ function Selector() {
 
   return (
     <div className="h-screen w-full flex flex-col p-4 bg-gray-100 gap-2">
-      <h2 className="text-2xl font-semibold mb-4 text-gray-800">Sector</h2>
+      <h2 className="text-2xl font-semibold mb-4 text-gray-800">Sub Sector ={totalItems}</h2>
 
       <div className="flex items-center justify-between mb-4">
 
