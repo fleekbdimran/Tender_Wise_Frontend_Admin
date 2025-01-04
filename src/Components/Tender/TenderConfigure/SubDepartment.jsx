@@ -92,23 +92,10 @@ function AddCategoryModal({ isOpen, onClose }) {
         </button>
         <h2 className="text-xl font-semibold mb-6">Add Sector</h2>
         <form onSubmit={handleFormSubmit} className="space-y-6">
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              <span className="text-red-500">*</span> Name:
-            </label>
-            <input
-              type="text"
-              value={categoryName}
-              onChange={(e) => setCategoryName(e.target.value)}
-              placeholder="Enter Category Name"
-              className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md text-sm shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
-              required
-            />
-          </div>
 
-          <div>
+        <div>
             <label className="block text-sm font-medium text-gray-700">
-              <span className="text-red-500">*</span> Category:
+              <span className="text-red-500">*</span> Department:
             </label>
             <input
               type="text"
@@ -132,6 +119,21 @@ function AddCategoryModal({ isOpen, onClose }) {
               </ul>
             )}
           </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              <span className="text-red-500">*</span> Name:
+            </label>
+            <input
+              type="text"
+              value={categoryName}
+              onChange={(e) => setCategoryName(e.target.value)}
+              placeholder="Enter Category Name"
+              className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md text-sm shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
+              required
+            />
+          </div>
+
+          
 
           <button
             type="submit"
@@ -162,7 +164,7 @@ function AddCategoryModal({ isOpen, onClose }) {
 function EditCategoryModal({ isOpen, onClose, category, onSubmit }) {
   const [categoryName, setCategoryName] = useState("");
   const [categoryStatus, setCategoryStatus] = useState("1");
-  const [categoriesList, setCategoriesList] = useState([]); 
+  const [categoriesList, setCategoriesList] = useState([]);
   const [suggestions, setSuggestions] = useState([]);
   const [addCategoriesDropdown, setAddCategoriesDropdown] = useState([]);
 
@@ -174,15 +176,15 @@ function EditCategoryModal({ isOpen, onClose, category, onSubmit }) {
       setCategoryName(category.name || "");
 
       setCategoryStatus(category.status?.toString() || "1");
-     
+
       const selectedCategory = addCategoriesDropdown.find(
         (cat) => cat.id === category.id
       );
       if (selectedCategory) {
-        setCategoriesList(selectedCategory.name); 
+        setCategoriesList(selectedCategory.name);
       }
     }
-  }, [category, addCategoriesDropdown]); 
+  }, [category, addCategoriesDropdown]);
 
   // Fetch categories for dropdown
   useEffect(() => {
@@ -277,28 +279,14 @@ function EditCategoryModal({ isOpen, onClose, category, onSubmit }) {
           <CloseOutlined />
         </button>
 
-        <h2 className="text-xl font-semibold mb-6">Edit Sector</h2>
+        <h2 className="text-xl font-semibold mb-6">Edit Sub Sector</h2>
 
         <form onSubmit={handleFormSubmit} className="space-y-6">
-          {/* Name Input */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              <span className="text-red-500">*</span> Name:
-            </label>
-            <input
-              type="text"
-              value={categoryName}
-              onChange={(e) => setCategoryName(e.target.value)}
-              placeholder="Edit Category Name"
-              className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md text-sm shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
-              required
-            />
-          </div>
 
           {/* Dropdown for selecting category */}
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              <span className="text-red-500">*</span> Category:
+              <span className="text-red-500">*</span> Department:
             </label>
             <input
               type="text"
@@ -322,6 +310,22 @@ function EditCategoryModal({ isOpen, onClose, category, onSubmit }) {
               </ul>
             )}
           </div>
+          {/* Name Input */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              <span className="text-red-500">*</span> Name:
+            </label>
+            <input
+              type="text"
+              value={categoryName}
+              onChange={(e) => setCategoryName(e.target.value)}
+              placeholder="Edit Category Name"
+              className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md text-sm shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
+              required
+            />
+          </div>
+
+
 
           {/* Status Input */}
           <div>
@@ -369,7 +373,7 @@ function SubDepartment() {
   const [editingCategory, setEditingCategory] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
-  const [totalItems , setTotalItems] = useState(0);
+  const [totalItems, setTotalItems] = useState(0);
 
   // Fetch categories from API
   useEffect(() => {
@@ -387,7 +391,7 @@ function SubDepartment() {
         if (response.data?.data) {
           setCategories(response.data.data);
           setFilteredCategories(response.data.data);
-           ;
+          ;
 
         }
       } catch (error) {
@@ -421,7 +425,7 @@ function SubDepartment() {
   useEffect(() => {
     const filtered = categories.filter((category) => {
       const matchesKeyword = category.name.toLowerCase().includes(keyword.toLowerCase());
-      const matchesType = type ? category.status === parseInt(type) : true;  
+      const matchesType = type ? category.status === parseInt(type) : true;
       return matchesKeyword && matchesType;
     });
 
@@ -441,7 +445,7 @@ function SubDepartment() {
 
   return (
     <div className="h-screen w-full flex flex-col p-4 bg-gray-100 gap-2">
-      <h2 className="text-2xl font-semibold mb-4 text-gray-800">Sub Department={totalItems}</h2>
+      <h2 className="text-2xl font-semibold mb-4 text-gray-800">Sub Department({totalItems})</h2>
 
       <div className="flex items-center justify-between mb-4">
 
@@ -453,7 +457,7 @@ function SubDepartment() {
         </button>
 
         <div className="flex items-center gap-4">
-         
+
           <div className="flex items-center  justify-end">
             <input
               type="text"

@@ -25,8 +25,15 @@ function AddCategoryModal({ isOpen, onClose }) {
 
       }
       else {
-        Swal.fire("success!", response.data.message, "success");
-        window.location.reload();
+        Swal.fire({
+                 title: "Success!",
+                 text: response.data.message,
+                 icon: "success",
+                 confirmButtonText: "OK"
+               }).then(() => {
+                 onSubmit(); // Refresh data
+                 window.location.reload(); // Reload the page
+               });
       }
     } catch (error) {
       Swal.fire("Error!", error.response.data.message, "error");
@@ -95,7 +102,7 @@ function EditCategoryModal({ isOpen, onClose, category, onSubmit }) {
         `/admin/tender-config/category/${category.id}`,
         {
           name: categoryName,
-          status: categoryStatus
+          status: Number(categoryStatus), 
         }
       );
 
@@ -105,9 +112,16 @@ function EditCategoryModal({ isOpen, onClose, category, onSubmit }) {
         fetchCategories();
       }
       else {
-        Swal.fire("success!", response.data.message, "success");
-        fetchCategories();
-        window.location.reload();
+        Swal.fire({
+                 title: "Success!",
+                 text: response.data.message,
+                 icon: "success",
+                 confirmButtonText: "OK"
+               }).then(() => {
+                 onSubmit(); // Refresh data
+                 window.location.reload(); // Reload the page
+               });
+       
       }
     } catch (error) {
       Swal.fire("Error!", error.response.data.message, "error");
@@ -266,7 +280,7 @@ const [totalItems, setTotalItems] = useState(0);
 
   return (
     <div className="h-screen w-full flex flex-col p-4 bg-gray-100 gap-2">
-      <h2 className="text-2xl font-semibold mb-4 text-gray-800">Categories ={totalItems}</h2>
+      <h2 className="text-2xl font-semibold mb-4 text-gray-800">Categories ({totalItems})</h2>
 
       <div className="flex items-center justify-between mb-4">
 

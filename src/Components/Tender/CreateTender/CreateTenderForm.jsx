@@ -92,7 +92,7 @@ const CreateTenderForm = ({ onClose, sourceData }) => {
     documents_price: '',
     publish_on: '',
     opening_date: '',
-    end_date: '',
+    
     purchase_last_date: '',
     prebid_meeting_date: '',
     submission_date: '',
@@ -177,7 +177,6 @@ const CreateTenderForm = ({ onClose, sourceData }) => {
     formdata.append('publish_on', formDataSubmit.publish_on || '');
 
     formdata.append('opening_date', formDataSubmit.opening_date || '');
-    formdata.append('end_date', formDataSubmit.end_date || '');
     formdata.append(
       'purchase_last_date',
       formDataSubmit.purchase_last_date || ''
@@ -1519,7 +1518,7 @@ const CreateTenderForm = ({ onClose, sourceData }) => {
                 <option value="private">Private Tender</option>
                 <option value="govt">Govt. Tender</option>
                 <option value="international">International Tender</option>
-                <option value="local">Local Tender</option>
+              
               </select>
             </div>
             {/* Tender Type Dropdown */}
@@ -1809,10 +1808,12 @@ const CreateTenderForm = ({ onClose, sourceData }) => {
               {!selectedSubdepartment && searchQuerysubdepartment && filteredSubdepartments.length > 0 && (
                 <ul className="border border-gray-300 rounded-lg mt-2 max-h-48 overflow-y-auto">
                   {filteredSubdepartments.map((subdepartment) => (
+                    console.log(subdepartment),
                     <li
                       key={subdepartment.id}
                       className="p-2 cursor-pointer hover:bg-gray-200"
                       onClick={() => handleSelectSubDepartment(subdepartment.id, subdepartment.name)}
+                    
                     >
                       {subdepartment.name}
                     </li>

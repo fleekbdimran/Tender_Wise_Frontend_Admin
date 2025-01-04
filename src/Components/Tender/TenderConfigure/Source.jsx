@@ -315,21 +315,9 @@ function AddCategoryModal({ isOpen, onClose }) {
         </button>
         <h2 className="text-xl font-semibold mb-6">Add District</h2>
         <form onSubmit={handleFormSubmit} className="space-y-6">
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              <span className="text-red-500">*</span> Name:
-            </label>
-            <input
-              type="text"
-              value={categoryName}
-              onChange={(e) => setCategoryName(e.target.value)}
-              placeholder="Enter Upazila Name"
-              className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md text-sm shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
-              required
-            />
-          </div>
 
-          <div>
+          
+        <div>
             <label className="block text-sm font-medium text-gray-700">
               <span className="text-red-500">*</span> source:
             </label>
@@ -349,6 +337,20 @@ function AddCategoryModal({ isOpen, onClose }) {
 
 
           </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              <span className="text-red-500">*</span> Name:
+            </label>
+            <input
+              type="text"
+              value={categoryName}
+              onChange={(e) => setCategoryName(e.target.value)}
+              placeholder="Enter Upazila Name"
+              className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md text-sm shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
+              required
+            />
+          </div>
+
 
           <button
             type="submit"
@@ -443,26 +445,12 @@ function EditCategoryModal({ isOpen, onClose, category, onSubmit }) {
           <CloseOutlined />
         </button>
 
-        <h2 className="text-xl font-semibold mb-6">Edit Upazila</h2>
+        <h2 className="text-xl font-semibold mb-6">Edit Source</h2>
 
         <form onSubmit={handleFormSubmit} className="space-y-6">
-          {/* Name Input */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              <span className="text-red-500">*</span> Name:
-            </label>
-            <input
-              type="text"
-              value={categoryName}
-              onChange={(e) => setCategoryName(e.target.value)}
-              placeholder="Edit Category Name"
-              className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md text-sm shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
-              required
-            />
-          </div>
 
-          {/* Dropdown for selecting category */}
-          <div>
+           {/* Dropdown for selecting category */}
+           <div>
             <label className="block text-sm font-medium text-gray-700">
               <span className="text-red-500">*</span> source:
             </label>
@@ -483,6 +471,22 @@ function EditCategoryModal({ isOpen, onClose, category, onSubmit }) {
 
 
           </div>
+          {/* Name Input */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              <span className="text-red-500">*</span> Name:
+            </label>
+            <input
+              type="text"
+              value={categoryName}
+              onChange={(e) => setCategoryName(e.target.value)}
+              placeholder="Edit Category Name"
+              className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md text-sm shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
+              required
+            />
+          </div>
+
+         
 
 
           {/* Status Input */}
@@ -603,7 +607,7 @@ function Source() {
 
   return (
     <div className="h-screen w-full flex flex-col p-4 bg-gray-100 gap-2">
-      <h2 className="text-2xl font-semibold mb-4 text-gray-800">Source={totalItems}</h2>
+      <h2 className="text-2xl font-semibold mb-4 text-gray-800">Source({totalItems})</h2>
 
       <div className="flex items-center justify-between mb-4">
 

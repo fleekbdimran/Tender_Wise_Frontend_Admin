@@ -285,7 +285,7 @@ const [total, setTotal] = useState(0);
 
   return (
     <div className="h-screen w-full flex flex-col p-4 bg-gray-100 gap-2">
-      <h2 className="text-2xl font-semibold mb-4 text-gray-800">Division List ={total}</h2>
+      <h2 className="text-2xl font-semibold mb-4 text-gray-800">Division List ({total})</h2>
 
       <div className="flex items-center justify-between mb-4">
 

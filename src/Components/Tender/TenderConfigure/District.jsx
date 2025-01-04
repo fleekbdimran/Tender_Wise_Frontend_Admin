@@ -92,21 +92,8 @@ function AddCategoryModal({ isOpen, onClose }) {
         </button>
         <h2 className="text-xl font-semibold mb-6">Add District</h2>
         <form onSubmit={handleFormSubmit} className="space-y-6">
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              <span className="text-red-500">*</span> Name:
-            </label>
-            <input
-              type="text"
-              value={categoryName}
-              onChange={(e) => setCategoryName(e.target.value)}
-              placeholder="Enter District Name"
-              className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md text-sm shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
-              required
-            />
-          </div>
 
-          <div>
+        <div>
             <label className="block text-sm font-medium text-gray-700">
               <span className="text-red-500">*</span> Division Name:
             </label>
@@ -132,6 +119,22 @@ function AddCategoryModal({ isOpen, onClose }) {
               </ul>
             )}
           </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              <span className="text-red-500">*</span> Name:
+            </label>
+            <input
+              type="text"
+              value={categoryName}
+              onChange={(e) => setCategoryName(e.target.value)}
+              placeholder="Enter District Name"
+              className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md text-sm shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
+              required
+            />
+          </div>
+
+         
 
           <button
             type="submit"
@@ -280,20 +283,6 @@ function EditCategoryModal({ isOpen, onClose, category, onSubmit }) {
         <h2 className="text-xl font-semibold mb-6">Edit Sector</h2>
 
         <form onSubmit={handleFormSubmit} className="space-y-6">
-          {/* Name Input */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              <span className="text-red-500">*</span> Name:
-            </label>
-            <input
-              type="text"
-              value={categoryName}
-              onChange={(e) => setCategoryName(e.target.value)}
-              placeholder="Edit Category Name"
-              className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md text-sm shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
-              required
-            />
-          </div>
 
           {/* Dropdown for selecting category */}
           <div>
@@ -322,6 +311,23 @@ function EditCategoryModal({ isOpen, onClose, category, onSubmit }) {
               </ul>
             )}
           </div>
+          
+          {/* Name Input */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              <span className="text-red-500">*</span> Name:
+            </label>
+            <input
+              type="text"
+              value={categoryName}
+              onChange={(e) => setCategoryName(e.target.value)}
+              placeholder="Edit Category Name"
+              className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md text-sm shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
+              required
+            />
+          </div>
+
+          
 
           {/* Status Input */}
           <div>

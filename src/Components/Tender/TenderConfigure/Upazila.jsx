@@ -94,20 +94,6 @@ function AddCategoryModal({ isOpen, onClose }) {
         <form onSubmit={handleFormSubmit} className="space-y-6">
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              <span className="text-red-500">*</span> Name:
-            </label>
-            <input
-              type="text"
-              value={categoryName}
-              onChange={(e) => setCategoryName(e.target.value)}
-              placeholder="Enter Upazila Name"
-              className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md text-sm shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
-              required
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
               <span className="text-red-500">*</span> District Name:
             </label>
             <input
@@ -132,6 +118,22 @@ function AddCategoryModal({ isOpen, onClose }) {
               </ul>
             )}
           </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              <span className="text-red-500">*</span> Name:
+            </label>
+            <input
+              type="text"
+              value={categoryName}
+              onChange={(e) => setCategoryName(e.target.value)}
+              placeholder="Enter Upazila Name"
+              className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md text-sm shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
+              required
+            />
+          </div>
+
+
+
 
           <button
             type="submit"
@@ -162,7 +164,7 @@ function AddCategoryModal({ isOpen, onClose }) {
 function EditCategoryModal({ isOpen, onClose, category, onSubmit }) {
   const [categoryName, setCategoryName] = useState("");
   const [categoryStatus, setCategoryStatus] = useState("1");
-  const [categoriesList, setCategoriesList] = useState([]); 
+  const [categoriesList, setCategoriesList] = useState([]);
   const [suggestions, setSuggestions] = useState([]);
   const [addCategoriesDropdown, setAddCategoriesDropdown] = useState([]);
 
@@ -174,15 +176,15 @@ function EditCategoryModal({ isOpen, onClose, category, onSubmit }) {
       setCategoryName(category.name || "");
 
       setCategoryStatus(category.status?.toString() || "1");
-     
+
       const selectedCategory = addCategoriesDropdown.find(
         (cat) => cat.id === category.id
       );
       if (selectedCategory) {
-        setCategoriesList(selectedCategory.name); 
+        setCategoriesList(selectedCategory.name);
       }
     }
-  }, [category, addCategoriesDropdown]); 
+  }, [category, addCategoriesDropdown]);
 
   // Fetch categories for dropdown
   useEffect(() => {
@@ -280,6 +282,9 @@ function EditCategoryModal({ isOpen, onClose, category, onSubmit }) {
         <h2 className="text-xl font-semibold mb-6">Edit Upazila</h2>
 
         <form onSubmit={handleFormSubmit} className="space-y-6">
+
+
+
           {/* Name Input */}
           <div>
             <label className="block text-sm font-medium text-gray-700">
@@ -294,6 +299,7 @@ function EditCategoryModal({ isOpen, onClose, category, onSubmit }) {
               required
             />
           </div>
+
 
           {/* Dropdown for selecting category */}
           <div>
@@ -322,6 +328,10 @@ function EditCategoryModal({ isOpen, onClose, category, onSubmit }) {
               </ul>
             )}
           </div>
+
+
+
+
 
           {/* Status Input */}
           <div>
@@ -387,7 +397,7 @@ function Upazila() {
         if (response.data?.data) {
           setCategories(response.data.data);
           setFilteredCategories(response.data.data);
-           ;
+          ;
 
         }
       } catch (error) {
@@ -421,7 +431,7 @@ function Upazila() {
   useEffect(() => {
     const filtered = categories.filter((category) => {
       const matchesKeyword = category.name.toLowerCase().includes(keyword.toLowerCase());
-      const matchesType = type ? category.status === parseInt(type) : true;  
+      const matchesType = type ? category.status === parseInt(type) : true;
       return matchesKeyword && matchesType;
     });
 
@@ -441,7 +451,7 @@ function Upazila() {
 
   return (
     <div className="h-screen w-full flex flex-col p-4 bg-gray-100 gap-2">
-      <h2 className="text-2xl font-semibold mb-4 text-gray-800">Upazila={totalItems}</h2>
+      <h2 className="text-2xl font-semibold mb-4 text-gray-800">Upazila({totalItems})</h2>
 
       <div className="flex items-center justify-between mb-4">
 
@@ -453,7 +463,7 @@ function Upazila() {
         </button>
 
         <div className="flex items-center gap-4">
-         
+
           <div className="flex items-center  justify-end">
             <input
               type="text"

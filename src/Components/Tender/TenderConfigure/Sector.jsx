@@ -100,7 +100,7 @@ function AddCategoryModal({ isOpen, onClose }) {
               type="text"
               value={categoryName}
               onChange={(e) => setCategoryName(e.target.value)}
-              placeholder="Enter Category Name"
+              placeholder="Enter sector Name"
               className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md text-sm shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
               required
             />
@@ -439,7 +439,7 @@ const [totalItems, setTotalItems] = useState(0);
 
   return (
     <div className="h-screen w-full flex flex-col p-4 bg-gray-100 gap-2">
-      <h2 className="text-2xl font-semibold mb-4 text-gray-800">Sector={totalItems}</h2>
+      <h2 className="text-2xl font-semibold mb-4 text-gray-800">Sector({totalItems})</h2>
 
       <div className="flex items-center justify-between mb-4">
 
